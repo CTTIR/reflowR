@@ -24,7 +24,9 @@ A character string containing the base64 data URI (e.g.,
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 uri <- reflow_icon_base64("clinical")
-} # }
+nchar(uri)
+#> [1] 438
+# }
 ```

@@ -1,0 +1,192 @@
+<svg width="500" height="580" viewBox="0 0 500 580" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgrfl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d0d18"/>
+      <stop offset="100%" stop-color="#07070f"/>
+    </linearGradient>
+    <linearGradient id="flow1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#185FA5" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#185FA5" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="flow2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1D9E75" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#1D9E75" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="flow3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7F77DD" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#7F77DD" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="flow4" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D85A30" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#D85A30" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="flow5" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#B4B2A9" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#B4B2A9" stop-opacity="0.12"/>
+    </linearGradient>
+    <clipPath id="hexrfl">
+      <polygon points="250,30 455,145 455,375 250,490 45,375 45,145"/>
+    </clipPath>
+  </defs>
+
+  <polygon points="250,30 455,145 455,375 250,490 45,375 45,145" fill="url(#bgrfl)"/>
+
+  <g clip-path="url(#hexrfl)">
+
+    <!-- Band backgrounds -->
+    <rect x="45" y="152" width="410" height="56" fill="url(#flow1)"/>
+    <rect x="45" y="210" width="410" height="56" fill="url(#flow2)"/>
+    <rect x="45" y="268" width="410" height="56" fill="url(#flow3)"/>
+    <rect x="45" y="326" width="410" height="56" fill="url(#flow4)"/>
+    <rect x="45" y="384" width="410" height="56" fill="url(#flow5)"/>
+    <line x1="45" y1="208" x2="455" y2="208" stroke="#EEEDFE" stroke-width="0.4" opacity="0.06"/>
+    <line x1="45" y1="266" x2="455" y2="266" stroke="#EEEDFE" stroke-width="0.4" opacity="0.06"/>
+    <line x1="45" y1="324" x2="455" y2="324" stroke="#EEEDFE" stroke-width="0.4" opacity="0.06"/>
+    <line x1="45" y1="382" x2="455" y2="382" stroke="#EEEDFE" stroke-width="0.4" opacity="0.06"/>
+    <line x1="45" y1="440" x2="455" y2="440" stroke="#EEEDFE" stroke-width="0.4" opacity="0.06"/>
+
+    <!-- LEFT: project tree -->
+    <text font-family="monospace" font-size="8" fill="#B5D4F4" opacity="0.55" x="52" y="166">my_project/</text>
+    <line x1="59" y1="169" x2="59" y2="430" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+
+    <line x1="59" y1="180" x2="71" y2="180" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7.5" fill="#9FE1CB" opacity="0.7" x="74" y="183">analysis/</text>
+    <line x1="71" y1="183" x2="71" y2="242" stroke="#444441" stroke-width="0.8" opacity="0.4"/>
+    <line x1="71" y1="194" x2="81" y2="194" stroke="#444441" stroke-width="0.8" opacity="0.4"/>
+    <text font-family="monospace" font-size="7" fill="#7F77DD" opacity="0.75" x="84" y="197">01_import.Rmd</text>
+    <line x1="71" y1="206" x2="81" y2="206" stroke="#444441" stroke-width="0.8" opacity="0.4"/>
+    <text font-family="monospace" font-size="7" fill="#7F77DD" opacity="0.7"  x="84" y="209">02_qc.Rmd</text>
+    <line x1="71" y1="218" x2="81" y2="218" stroke="#444441" stroke-width="0.8" opacity="0.4"/>
+    <text font-family="monospace" font-size="7" fill="#7F77DD" opacity="0.65" x="84" y="221">03_analysis.Rmd</text>
+    <line x1="71" y1="230" x2="81" y2="230" stroke="#444441" stroke-width="0.8" opacity="0.4"/>
+    <text font-family="monospace" font-size="7" fill="#7F77DD" opacity="0.6"  x="84" y="233">04_report.Rmd</text>
+
+    <line x1="59" y1="250" x2="71" y2="250" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7.5" fill="#9FE1CB" opacity="0.65" x="74" y="253">code/</text>
+    <line x1="71" y1="255" x2="71" y2="278" stroke="#444441" stroke-width="0.8" opacity="0.35"/>
+    <line x1="71" y1="263" x2="81" y2="263" stroke="#444441" stroke-width="0.8" opacity="0.35"/>
+    <text font-family="monospace" font-size="7" fill="#5DCAA5" opacity="0.55" x="84" y="266">utils.R</text>
+    <line x1="71" y1="275" x2="81" y2="275" stroke="#444441" stroke-width="0.8" opacity="0.35"/>
+    <text font-family="monospace" font-size="7" fill="#5DCAA5" opacity="0.5"  x="84" y="278">theme.R</text>
+
+    <line x1="59" y1="294" x2="71" y2="294" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7.5" fill="#9FE1CB" opacity="0.6" x="74" y="297">docs/</text>
+    <line x1="59" y1="312" x2="71" y2="312" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7.5" fill="#9FE1CB" opacity="0.55" x="74" y="315">output/</text>
+    <line x1="59" y1="330" x2="71" y2="330" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7" fill="#FAC775" opacity="0.65" x="74" y="333">_workflowr.yml</text>
+    <line x1="59" y1="348" x2="71" y2="348" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7" fill="#EF9F27" opacity="0.8" x="74" y="351">reflow_theme.scss</text>
+    <line x1="59" y1="364" x2="71" y2="364" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7" fill="#EF9F27" opacity="0.75" x="74" y="367">reflow_ggtheme.R</text>
+    <line x1="59" y1="378" x2="71" y2="378" stroke="#444441" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="7" fill="#EF9F27" opacity="0.7" x="74" y="381">icons/</text>
+
+    <text font-family="monospace" font-size="7" fill="#EF9F27" opacity="0.3" x="52" y="415">wflow_start() +</text>
+    <text font-family="monospace" font-size="7" fill="#EF9F27" opacity="0.42" x="52" y="426">reflow_theme("clinical")</text>
+
+    <!-- RIGHT: colour swatches -->
+    <text font-family="monospace" font-size="7.5" fill="#D3D1C7" opacity="0.45" x="358" y="166">colour schemes</text>
+
+    <rect x="358" y="172" width="8" height="8" rx="1.5" fill="#378ADD" opacity="0.9"/>
+    <rect x="368" y="172" width="8" height="8" rx="1.5" fill="#185FA5" opacity="0.9"/>
+    <rect x="378" y="172" width="8" height="8" rx="1.5" fill="#B5D4F4" opacity="0.85"/>
+    <text font-family="monospace" font-size="6.5" fill="#378ADD" opacity="0.6" x="390" y="179">clinical</text>
+
+    <rect x="358" y="184" width="8" height="8" rx="1.5" fill="#1D9E75" opacity="0.9"/>
+    <rect x="368" y="184" width="8" height="8" rx="1.5" fill="#0F6E56" opacity="0.9"/>
+    <rect x="378" y="184" width="8" height="8" rx="1.5" fill="#9FE1CB" opacity="0.85"/>
+    <text font-family="monospace" font-size="6.5" fill="#1D9E75" opacity="0.6" x="390" y="191">research</text>
+
+    <rect x="358" y="196" width="8" height="8" rx="1.5" fill="#7F77DD" opacity="0.9"/>
+    <rect x="368" y="196" width="8" height="8" rx="1.5" fill="#534AB7" opacity="0.9"/>
+    <rect x="378" y="196" width="8" height="8" rx="1.5" fill="#CECBF6" opacity="0.85"/>
+    <text font-family="monospace" font-size="6.5" fill="#7F77DD" opacity="0.6" x="390" y="203">code</text>
+
+    <rect x="358" y="208" width="8" height="8" rx="1.5" fill="#D85A30" opacity="0.9"/>
+    <rect x="368" y="208" width="8" height="8" rx="1.5" fill="#D4537E" opacity="0.9"/>
+    <rect x="378" y="208" width="8" height="8" rx="1.5" fill="#F5C4B3" opacity="0.85"/>
+    <text font-family="monospace" font-size="6.5" fill="#D85A30" opacity="0.6" x="390" y="215">special</text>
+
+    <rect x="358" y="220" width="8" height="8" rx="1.5" fill="#888780" opacity="0.9"/>
+    <rect x="368" y="220" width="8" height="8" rx="1.5" fill="#444441" opacity="0.9"/>
+    <rect x="378" y="220" width="8" height="8" rx="1.5" fill="#D3D1C7" opacity="0.85"/>
+    <text font-family="monospace" font-size="6.5" fill="#888780" opacity="0.6" x="390" y="227">neutral</text>
+
+    <!-- depth presets -->
+    <text font-family="monospace" font-size="7.5" fill="#D3D1C7" opacity="0.45" x="358" y="250">depth presets</text>
+    <line x1="358" y1="257" x2="378" y2="257" stroke="#888780" stroke-width="1.5" stroke-linecap="round" opacity="0.65"/>
+    <text font-family="monospace" font-size="6.5" fill="#888780" opacity="0.55" x="382" y="260">minimal</text>
+
+    <line x1="358" y1="268" x2="358" y2="282" stroke="#5DCAA5" stroke-width="0.8" opacity="0.5"/>
+    <line x1="358" y1="268" x2="370" y2="268" stroke="#5DCAA5" stroke-width="0.8" opacity="0.5"/>
+    <line x1="358" y1="275" x2="370" y2="275" stroke="#5DCAA5" stroke-width="0.8" opacity="0.5"/>
+    <line x1="358" y1="282" x2="370" y2="282" stroke="#5DCAA5" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="6.5" fill="#5DCAA5" opacity="0.55" x="374" y="278">standard</text>
+
+    <line x1="358" y1="292" x2="358" y2="312" stroke="#7F77DD" stroke-width="0.8" opacity="0.5"/>
+    <line x1="358" y1="292" x2="370" y2="292" stroke="#7F77DD" stroke-width="0.8" opacity="0.5"/>
+    <line x1="358" y1="299" x2="370" y2="299" stroke="#7F77DD" stroke-width="0.8" opacity="0.5"/>
+    <line x1="358" y1="306" x2="370" y2="306" stroke="#7F77DD" stroke-width="0.8" opacity="0.5"/>
+    <line x1="358" y1="312" x2="370" y2="312" stroke="#7F77DD" stroke-width="0.8" opacity="0.5"/>
+    <text font-family="monospace" font-size="6.5" fill="#7F77DD" opacity="0.55" x="374" y="306">extended</text>
+
+    <!-- ggplot mini preview -->
+    <text font-family="monospace" font-size="6.5" fill="#D3D1C7" opacity="0.4" x="355" y="340">theme_reflow()</text>
+    <line x1="358" y1="380" x2="358" y2="350" stroke="#D3D1C7" stroke-width="0.7" opacity="0.35"/>
+    <line x1="358" y1="380" x2="445" y2="380" stroke="#D3D1C7" stroke-width="0.7" opacity="0.35"/>
+    <path d="M362,378 Q375,360 390,364 Q408,368 422,352 Q434,340 442,344"
+      fill="none" stroke="#378ADD" stroke-width="1.4" opacity="0.65" stroke-linecap="round"/>
+    <path d="M362,378 Q375,368 390,372 Q408,376 422,366 Q434,358 442,360"
+      fill="none" stroke="#1D9E75" stroke-width="1.4" opacity="0.55" stroke-linecap="round"/>
+    <rect x="356" y="348" width="90" height="34" rx="2" fill="none" stroke="#444441" stroke-width="0.5" opacity="0.4"/>
+
+    <!-- file list -->
+    <text font-family="monospace" font-size="6.5" fill="#EF9F27" opacity="0.6"  x="358" y="400">reflow_theme.scss</text>
+    <text font-family="monospace" font-size="6.5" fill="#EF9F27" opacity="0.55" x="358" y="411">reflow_ggtheme.R</text>
+    <text font-family="monospace" font-size="6.5" fill="#FAC775" opacity="0.45" x="358" y="422">_workflowr.yml</text>
+    <text font-family="monospace" font-size="6.5" fill="#5DCAA5" opacity="0.45" x="358" y="433">report.qmd</text>
+
+    <!-- CENTRE FLOWER -->
+    <ellipse cx="250" cy="252" rx="13" ry="40" fill="#185FA5" opacity="0.8" transform="rotate(0 250 310)"/>
+    <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#B5D4F4" opacity="0.2"  transform="rotate(0 250 310)"/>
+    <ellipse cx="250" cy="252" rx="13" ry="40" fill="#1D9E75" opacity="0.8" transform="rotate(72 250 310)"/>
+    <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#9FE1CB" opacity="0.2"  transform="rotate(72 250 310)"/>
+    <ellipse cx="250" cy="252" rx="13" ry="40" fill="#7F77DD" opacity="0.8" transform="rotate(144 250 310)"/>
+    <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#CECBF6" opacity="0.2"  transform="rotate(144 250 310)"/>
+    <ellipse cx="250" cy="252" rx="13" ry="40" fill="#D85A30" opacity="0.8" transform="rotate(216 250 310)"/>
+    <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#F5C4B3" opacity="0.2"  transform="rotate(216 250 310)"/>
+    <ellipse cx="250" cy="252" rx="13" ry="40" fill="#888780" opacity="0.75" transform="rotate(288 250 310)"/>
+    <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#D3D1C7" opacity="0.18" transform="rotate(288 250 310)"/>
+
+    <!-- Rotating arrows -->
+    <path d="M 272,264 A 58 58 0 0 1 306,330" fill="none" stroke="#378ADD" stroke-width="1.6" stroke-linecap="round" opacity="0.72"/>
+    <polygon points="302,333 308,326 312,334" fill="#378ADD" opacity="0.72"/>
+    <path d="M 304,342 A 58 58 0 0 1 250,368" fill="none" stroke="#1D9E75" stroke-width="1.6" stroke-linecap="round" opacity="0.72"/>
+    <polygon points="246,365 250,373 254,365" fill="#1D9E75" opacity="0.72"/>
+    <path d="M 238,366 A 58 58 0 0 1 194,338" fill="none" stroke="#7F77DD" stroke-width="1.6" stroke-linecap="round" opacity="0.72"/>
+    <polygon points="190,341 192,333 198,339" fill="#7F77DD" opacity="0.72"/>
+    <path d="M 194,322 A 58 58 0 0 1 202,264" fill="none" stroke="#D85A30" stroke-width="1.6" stroke-linecap="round" opacity="0.72"/>
+    <polygon points="198,261 206,260 204,268" fill="#D85A30" opacity="0.72"/>
+    <path d="M 214,256 A 58 58 0 0 1 258,254" fill="none" stroke="#888780" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
+    <polygon points="255,250 262,255 256,260" fill="#888780" opacity="0.65"/>
+
+    <!-- Flower centre -->
+    <circle cx="250" cy="310" r="22" fill="#1a1530" opacity="0.98"/>
+    <circle cx="250" cy="310" r="17" fill="#26215C" opacity="0.95"/>
+    <circle cx="250" cy="310" r="11" fill="#534AB7" opacity="0.9"/>
+    <circle cx="250" cy="310" r="6"  fill="#CECBF6" opacity="0.75"/>
+    <circle cx="250" cy="310" r="2.5" fill="#EEEDFE" opacity="0.9"/>
+
+  </g>
+
+  <!-- Hex border -->
+  <polygon points="250,30 455,145 455,375 250,490 45,375 45,145"
+    fill="none" stroke="#534AB7" stroke-width="11" stroke-linejoin="round"/>
+  <polygon points="250,44 441,153 441,367 250,476 59,367 59,153"
+    fill="none" stroke="#3C3489" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
+
+  <!-- Package name -->
+  <text font-family="monospace" font-weight="700" font-size="26"
+    fill="#CECBF6" text-anchor="middle" x="250" y="545" letter-spacing="1">reflowR</text>
+</svg>

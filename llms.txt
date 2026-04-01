@@ -1,4 +1,4 @@
-# reflowR ![](reference/figures/logo.png)
+# reflowR
 
 > Themed extensions for workflowr research workflows
 
