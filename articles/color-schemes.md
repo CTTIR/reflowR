@@ -1,0 +1,123 @@
+# Color Schemes Reference
+
+## Available Schemes
+
+reflowR includes five color schemes, each with a unique SVG icon,
+8-color palette, and complete CSS theme.
+
+### Clinical Research (Red)
+
+- **Primary:** `#C8102E`
+- **Use case:** Clinical trials, patient data, medical research
+- **Icon:** Medical cross
+
+``` r
+reflow_preview("clinical")
+```
+
+### Basic Research (Steelblue)
+
+- **Primary:** `#4682B4`
+- **Use case:** Lab research, general science, default choice
+- **Icon:** Microscope
+
+``` r
+reflow_preview("basic")
+```
+
+### Code & Statistics (Forest Green)
+
+- **Primary:** `#228B22`
+- **Use case:** Software development, statistical methods, simulation
+  studies
+- **Icon:** Code brackets
+
+``` r
+reflow_preview("code")
+```
+
+### Special (Purple)
+
+- **Primary:** `#6A0DAD`
+- **Use case:** Special projects, systematic reviews, meta-analyses
+- **Icon:** Star
+
+``` r
+reflow_preview("special")
+```
+
+### Other (Grey)
+
+- **Primary:** `#2C2C2C`
+- **Use case:** Neutral projects, multipurpose, when color is not needed
+- **Icon:** Folder
+
+``` r
+reflow_preview("other")
+```
+
+## Recommended Use Cases
+
+| Context               | Recommended Scheme |
+|-----------------------|--------------------|
+| Clinical trial        | `clinical`         |
+| Lab experiment        | `basic`            |
+| R package development | `code`             |
+| Simulation study      | `code`             |
+| Systematic review     | `special`          |
+| Teaching material     | `basic`            |
+| General purpose       | `other`            |
+
+## How CSS Variables Map to UI Elements
+
+Each scheme defines CSS custom properties that style the rendered site:
+
+| CSS Variable      | Used In                                                     |
+|-------------------|-------------------------------------------------------------|
+| `--primary`       | Navbar gradient, headings, links, active TOC, table headers |
+| `--primary-light` | H2 borders, hover states, badges                            |
+| `--accent`        | H3 color, link hover, button hover, code color              |
+| `--secondary`     | Gradient endpoint, button borders                           |
+| `--light-grey`    | Body backgrounds, table striping, blockquotes               |
+| `--grey`          | Muted text, axis labels, captions                           |
+| `--dark`          | Heading color, body text                                    |
+
+## Using `reflow_preview()`
+
+``` r
+library(reflowR)
+
+# Preview in RStudio viewer
+reflow_preview("clinical")
+
+# List all schemes
+reflow_schemes()
+
+# Get scheme details programmatically
+s <- reflow_scheme("basic")
+s$primary
+s$palette
+```
+
+## Advanced: Using Scheme Colors in Your Code
+
+The `code/00_setup.R` script provides:
+
+``` r
+# Color list
+wf_colors$primary
+wf_colors$accent
+
+# 8-color palette
+wf_palette
+
+# ggplot2 scales
+ggplot(df, aes(x, y, color = group)) + scale_color_wf()
+ggplot(df, aes(x, y, fill = group)) + scale_fill_wf()
+
+# Gradient scales
+ggplot(df, aes(x, y, color = value)) + scale_color_wf_gradient()
+
+# Theme
+ggplot(df, aes(x, y)) + geom_point() + theme_wf()
+```

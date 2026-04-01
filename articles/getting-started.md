@@ -1,0 +1,113 @@
+# Getting Started with reflowR
+
+## What is reflowR?
+
+**reflowR** extends the
+[workflowr](https://workflowr.github.io/workflowr/) package with themed
+color schemes, structured analysis pipeline templates, and utility
+scripts for reproducible research. It wraps
+[`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
+and layers on additional structure and theming.
+
+## Installation
+
+``` r
+# Install from GitHub (workflowr is installed automatically)
+remotes::install_github("rabanheller/reflowR")
+```
+
+## Quick Start
+
+``` r
+library(reflowR)
+
+# Create a clinical research project with the standard 8-step pipeline
+reflow_init(
+  directory = "~/projects/sepsis_trial",
+  author    = "Raban Heller",
+  email     = "raban.heller@outlook.com",
+  scheme    = "clinical",
+  depth     = "standard"
+)
+```
+
+## Choosing a Scheme
+
+reflowR provides five color schemes:
+
+| Scheme     | Label             | Primary Color          | Best For                          |
+|------------|-------------------|------------------------|-----------------------------------|
+| `clinical` | Clinical Research | Red (#C8102E)          | Clinical trials, patient data     |
+| `basic`    | Basic Research    | Steelblue (#4682B4)    | Lab research, general science     |
+| `code`     | Code & Statistics | Forest Green (#228B22) | Software dev, statistical methods |
+| `special`  | Special           | Purple (#6A0DAD)       | Special projects, reviews         |
+| `other`    | Other             | Grey (#2C2C2C)         | Neutral, multipurpose             |
+
+Preview any scheme:
+
+``` r
+reflow_preview("clinical")
+```
+
+## Choosing a Depth
+
+| Preset     | Steps | Best For                                 |
+|------------|-------|------------------------------------------|
+| `minimal`  | 3     | Quick explorations, side analyses        |
+| `standard` | 8     | Standard research projects, publications |
+| `extended` | 12    | Clinical trials, comprehensive studies   |
+
+## Project Structure
+
+After
+[`reflow_init()`](https://rabanheller.github.io/reflowR/reference/reflow_init.md),
+your project contains:
+
+    my_project/
+    +-- analysis/        # Rmd pipeline files (rendered to docs/)
+    |   +-- _site.yml    # Themed navbar + output config
+    |   +-- index.Rmd    # Home page with pipeline table
+    |   +-- about.Rmd    # Author card + pipeline docs
+    |   +-- 01_read_data.Rmd  # ... pipeline steps
+    |   +-- ...
+    +-- assets/          # Theme CSS, SCSS, and SVG icon
+    +-- code/            # R scripts
+    |   +-- 00_setup.R   # Packages, paths, colors, ggplot theme
+    |   +-- utils.R      # Helper functions
+    |   +-- formulary.R  # Reusable analysis recipes
+    |   +-- data_io.R    # Data import/export
+    |   +-- table_helpers.R  # Table builders
+    |   +-- plot_helpers.R   # Plot constructors
+    +-- data/raw/        # Raw data (never modify)
+    +-- data/processed/  # Cleaned data
+    +-- docs/            # Rendered HTML site
+    +-- output/          # Figures, tables, models
+    +-- report/          # Quarto report template
+
+## Working with Your Project
+
+After creation, use standard workflowr commands:
+
+``` r
+# Render all Rmd files
+workflowr::wflow_build()
+
+# Commit and publish
+workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
+
+# Check status
+workflowr::wflow_status()
+
+# View the site
+workflowr::wflow_view()
+
+# Set up GitHub Pages
+workflowr::wflow_use_github("username", "repo")
+```
+
+## Customization
+
+- **CSS**: Edit `assets/theme.css` to customize styling
+- **New Rmd files**: Add to `analysis/` and update `_site.yml` navbar
+- **Navbar**: Edit `analysis/_site.yml`
+- **ggplot theme**: Modify `theme_wf()` in `code/00_setup.R`
