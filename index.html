@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Themed Extensions for Workflowr Research Workflows • reflowR</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -13,7 +18,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Themed Extensions for Workflowr Research Workflows">
 <meta name="description" content="Extends the workflowr package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. Wraps workflowr::wflow_start() and adds five color schemes (clinical, basic research, code/statistics, special, and neutral), three depth presets for the Rmd pipeline (minimal, standard, extended), custom CSS/SCSS theming, SVG icons, ggplot2 theme functions, and a Quarto report template. All generated projects remain fully compatible with standard workflowr commands.">
 <meta property="og:description" content="Extends the workflowr package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. Wraps workflowr::wflow_start() and adds five color schemes (clinical, basic research, code/statistics, special, and neutral), three depth presets for the Rmd pipeline (minimal, standard, extended), custom CSS/SCSS theming, SVG icons, ggplot2 theme functions, and a Quarto report template. All generated projects remain fully compatible with standard workflowr commands.">
-<meta property="og:image" content="https://rabanheller.github.io/reflowR/logo.svg">
+<meta property="og:image" content="https://r-heller.github.io/reflowR/logo.svg">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -42,7 +47,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/rabanheller/reflowR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/r-heller/reflowR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -95,17 +100,17 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"rabanheller/reflowR"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"r-heller/reflowR"</span><span class="op">)</span></span>
 <span><span class="co"># workflowr is installed automatically as a dependency</span></span></code></pre></div>
 <p>Or using remotes:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"rabanheller/reflowR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-heller/reflowR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rabanheller/reflowR" class="external-link">reflowR</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-heller/reflowR" class="external-link">reflowR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a clinical research project with the standard 8-step pipeline</span></span>
 <span><span class="fu"><a href="reference/reflow_init.html">reflow_init</a></span><span class="op">(</span></span>
@@ -213,11 +218,11 @@
 <h2 id="getting-help">Getting Help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
 </h2>
 <ul>
-<li>Browse the <a href="https://rabanheller.github.io/reflowR/reference/index.html">function reference</a>
+<li>Browse the <a href="https://r-heller.github.io/reflowR/reference/index.html">function reference</a>
 </li>
-<li>Read the <a href="https://rabanheller.github.io/reflowR/articles/getting-started.html">Getting Started vignette</a>
+<li>Read the <a href="https://r-heller.github.io/reflowR/articles/getting-started.html">Getting Started vignette</a>
 </li>
-<li>File issues at <a href="https://github.com/rabanheller/reflowR/issues" class="external-link">GitHub Issues</a>
+<li>File issues at <a href="https://github.com/r-heller/reflowR/issues" class="external-link">GitHub Issues</a>
 </li>
 </ul>
 </div>
@@ -241,8 +246,8 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/rabanheller/reflowR/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/rabanheller/reflowR/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/r-heller/reflowR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/r-heller/reflowR/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -273,7 +278,9 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://github.com/rabanheller/reflowR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/rabanheller/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/r-heller/reflowR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/r-heller/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://r-heller.github.io/reflowR/"><img src="https://github.com/r-heller/reflowR/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
+<li><a href="https://app.codecov.io/gh/r-heller/reflowR" class="external-link"><img src="https://app.codecov.io/gh/r-heller/reflowR/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 

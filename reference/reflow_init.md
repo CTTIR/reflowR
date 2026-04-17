@@ -140,9 +140,9 @@ for the underlying project creation,
 to render Rmd files,
 [`wflow_publish`](https://workflowr.github.io/workflowr/reference/wflow_publish.html)
 to commit + build + commit,
-[`reflow_schemes`](https://rabanheller.github.io/reflowR/reference/reflow_schemes.md)
+[`reflow_schemes`](https://r-heller.github.io/reflowR/reference/reflow_schemes.md)
 and
-[`reflow_presets`](https://rabanheller.github.io/reflowR/reference/reflow_presets.md)
+[`reflow_presets`](https://r-heller.github.io/reflowR/reference/reflow_presets.md)
 for available options.
 
 ## Examples

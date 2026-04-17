@@ -30,12 +30,12 @@ generate_rmd(project_dir, file_name, author, description, scheme, preset)
 - scheme:
 
   A scheme list from
-  [`reflow_scheme()`](https://rabanheller.github.io/reflowR/reference/reflow_scheme.md).
+  [`reflow_scheme()`](https://r-heller.github.io/reflowR/reference/reflow_scheme.md).
 
 - preset:
 
   A preset list from
-  [`reflow_preset()`](https://rabanheller.github.io/reflowR/reference/reflow_preset.md).
+  [`reflow_preset()`](https://r-heller.github.io/reflowR/reference/reflow_preset.md).
 
 ## Value
 

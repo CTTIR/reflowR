@@ -18,7 +18,7 @@ generate_setup_script(project_dir, scheme)
 - scheme:
 
   A scheme list from
-  [`reflow_scheme()`](https://rabanheller.github.io/reflowR/reference/reflow_scheme.md).
+  [`reflow_scheme()`](https://r-heller.github.io/reflowR/reference/reflow_scheme.md).
 
 ## Value
 

@@ -21,7 +21,7 @@ descriptions.
 
 ## See also
 
-[`reflow_presets()`](https://rabanheller.github.io/reflowR/reference/reflow_presets.md)
+[`reflow_presets()`](https://r-heller.github.io/reflowR/reference/reflow_presets.md)
 for listing all available presets.
 
 ## Examples

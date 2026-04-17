@@ -14,7 +14,7 @@ generate_css(scheme, output_path)
 - scheme:
 
   A scheme list from
-  [`reflow_scheme()`](https://rabanheller.github.io/reflowR/reference/reflow_scheme.md).
+  [`reflow_scheme()`](https://r-heller.github.io/reflowR/reference/reflow_scheme.md).
 
 - output_path:
 

@@ -4,7 +4,7 @@
 
 Initial release.
 
-- [`reflow_init()`](https://rabanheller.github.io/reflowR/reference/reflow_init.md)
+- [`reflow_init()`](https://r-heller.github.io/reflowR/reference/reflow_init.md)
   – main function wrapping
   [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
   with theming.
@@ -14,11 +14,11 @@ Initial release.
   (12 steps).
 - Custom SVG icons per scheme embedded in navbar.
 - CSS/SCSS theme generation from color scheme definitions.
-- [`reflow_preview()`](https://rabanheller.github.io/reflowR/reference/reflow_preview.md)
+- [`reflow_preview()`](https://r-heller.github.io/reflowR/reference/reflow_preview.md)
   for interactive color preview.
-- [`reflow_schemes()`](https://rabanheller.github.io/reflowR/reference/reflow_schemes.md)
+- [`reflow_schemes()`](https://r-heller.github.io/reflowR/reference/reflow_schemes.md)
   and
-  [`reflow_presets()`](https://rabanheller.github.io/reflowR/reference/reflow_presets.md)
+  [`reflow_presets()`](https://r-heller.github.io/reflowR/reference/reflow_presets.md)
   convenience functions.
 - Full compatibility with workflowr commands (wflow_build,
   wflow_publish, etc.).

@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/rabanheller/reflowR/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/r-heller/reflowR/blob/main/DESCRIPTION)
 
 Heller R (2026). *reflowR: Themed Extensions for Workflowr Research
 Workflows*. R package version 0.1.0,
-<https://github.com/rabanheller/reflowR>.
+<https://github.com/r-heller/reflowR>.
 
     @Manual{,
       title = {reflowR: Themed Extensions for Workflowr Research Workflows},
       author = {Raban Heller},
       year = {2026},
       note = {R package version 0.1.0},
-      url = {https://github.com/rabanheller/reflowR},
+      url = {https://github.com/r-heller/reflowR},
     }

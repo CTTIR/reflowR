@@ -36,14 +36,14 @@ commands (`wflow_build()`, `wflow_publish()`, etc.).
 
 ``` r
 # install.packages("pak")
-pak::pak("rabanheller/reflowR")
+pak::pak("r-heller/reflowR")
 # workflowr is installed automatically as a dependency
 ```
 
 Or using remotes:
 
 ``` r
-remotes::install_github("rabanheller/reflowR")
+remotes::install_github("r-heller/reflowR")
 ```
 
 ## Quick Start
@@ -105,11 +105,11 @@ commands work as expected.
 ## Getting Help
 
 - Browse the [function
-  reference](https://rabanheller.github.io/reflowR/reference/index.html)
+  reference](https://r-heller.github.io/reflowR/reference/index.html)
 - Read the [Getting Started
-  vignette](https://rabanheller.github.io/reflowR/articles/getting-started.html)
+  vignette](https://r-heller.github.io/reflowR/articles/getting-started.html)
 - File issues at [GitHub
-  Issues](https://github.com/rabanheller/reflowR/issues)
+  Issues](https://github.com/r-heller/reflowR/issues)
 
 ## Citation
 

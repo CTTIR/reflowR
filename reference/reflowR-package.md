@@ -13,11 +13,11 @@ standard workflowr commands.
 
 Useful links:
 
-- <https://github.com/rabanheller/reflowR>
+- <https://github.com/r-heller/reflowR>
 
-- <https://rabanheller.github.io/reflowR/>
+- <https://r-heller.github.io/reflowR/>
 
-- Report bugs at <https://github.com/rabanheller/reflowR/issues>
+- Report bugs at <https://github.com/r-heller/reflowR/issues>
 
 ## Author
 

@@ -13,7 +13,7 @@ and layers on additional structure and theming.
 
 ``` r
 # Install from GitHub (workflowr is installed automatically)
-remotes::install_github("rabanheller/reflowR")
+remotes::install_github("r-heller/reflowR")
 ```
 
 ## Quick Start
@@ -60,7 +60,7 @@ reflow_preview("clinical")
 ## Project Structure
 
 After
-[`reflow_init()`](https://rabanheller.github.io/reflowR/reference/reflow_init.md),
+[`reflow_init()`](https://r-heller.github.io/reflowR/reference/reflow_init.md),
 your project contains:
 
     my_project/

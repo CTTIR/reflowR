@@ -36,14 +36,14 @@ commands (`wflow_build()`, `wflow_publish()`, etc.).
 
 ``` r
 # install.packages("pak")
-pak::pak("rabanheller/reflowR")
+pak::pak("r-heller/reflowR")
 # workflowr is installed automatically as a dependency
 ```
 
 Or using remotes:
 
 ``` r
-remotes::install_github("rabanheller/reflowR")
+remotes::install_github("r-heller/reflowR")
 ```
 
 ## Quick Start
@@ -105,11 +105,11 @@ commands work as expected.
 ## Getting Help
 
 - Browse the [function
-  reference](https://rabanheller.github.io/reflowR/reference/index.html)
+  reference](https://r-heller.github.io/reflowR/reference/index.html)
 - Read the [Getting Started
-  vignette](https://rabanheller.github.io/reflowR/articles/getting-started.html)
+  vignette](https://r-heller.github.io/reflowR/articles/getting-started.html)
 - File issues at [GitHub
-  Issues](https://github.com/rabanheller/reflowR/issues)
+  Issues](https://github.com/r-heller/reflowR/issues)
 
 ## Citation
 
@@ -132,29 +132,29 @@ MIT
 
 Create and initialize themed workflowr projects.
 
-- [`reflow_init()`](https://rabanheller.github.io/reflowR/reference/reflow_init.md)
+- [`reflow_init()`](https://r-heller.github.io/reflowR/reference/reflow_init.md)
   : Initialize a Themed Workflowr Project
 
 ## Schemes and presets
 
 Explore available color schemes and pipeline depth presets.
 
-- [`reflow_scheme()`](https://rabanheller.github.io/reflowR/reference/reflow_scheme.md)
+- [`reflow_scheme()`](https://r-heller.github.io/reflowR/reference/reflow_scheme.md)
   : Get a Color Scheme Definition
-- [`reflow_schemes()`](https://rabanheller.github.io/reflowR/reference/reflow_schemes.md)
+- [`reflow_schemes()`](https://r-heller.github.io/reflowR/reference/reflow_schemes.md)
   : List Available Color Schemes
-- [`reflow_preset()`](https://rabanheller.github.io/reflowR/reference/reflow_preset.md)
+- [`reflow_preset()`](https://r-heller.github.io/reflowR/reference/reflow_preset.md)
   : Get a Depth Preset Definition
-- [`reflow_presets()`](https://rabanheller.github.io/reflowR/reference/reflow_presets.md)
+- [`reflow_presets()`](https://r-heller.github.io/reflowR/reference/reflow_presets.md)
   : List Available Depth Presets
-- [`reflow_preview()`](https://rabanheller.github.io/reflowR/reference/reflow_preview.md)
+- [`reflow_preview()`](https://r-heller.github.io/reflowR/reference/reflow_preview.md)
   : Preview a Color Scheme
 
 ## Utilities
 
 Internal helpers for icon embedding.
 
-- [`reflow_icon_base64()`](https://rabanheller.github.io/reflowR/reference/reflow_icon_base64.md)
+- [`reflow_icon_base64()`](https://r-heller.github.io/reflowR/reference/reflow_icon_base64.md)
   : Get Base64-Encoded SVG Icon for a Scheme
 
 # Articles
@@ -164,6 +164,6 @@ Internal helpers for icon embedding.
 Learn how to create themed workflowr projects with reflowR.
 
 - [Getting Started with
-  reflowR](https://rabanheller.github.io/reflowR/articles/getting-started.md):
+  reflowR](https://r-heller.github.io/reflowR/articles/getting-started.md):
 - [Color Schemes
-  Reference](https://rabanheller.github.io/reflowR/articles/color-schemes.md):
+  Reference](https://r-heller.github.io/reflowR/articles/color-schemes.md):
