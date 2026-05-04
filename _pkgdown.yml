@@ -1,0 +1,46 @@
+url: https://r-heller.github.io/reflowR/
+
+template:
+  bootstrap: 5
+  bootswatch: cosmo
+
+navbar:
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Getting started"
+      href: articles/getting-started.html
+    - text: "Vignettes"
+      href: articles/index.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "News"
+      href: news/index.html
+
+articles:
+  - title: "Vignettes"
+    desc: >
+      Learn how to create themed workflowr projects with reflowR.
+    contents:
+      - getting-started
+      - color-schemes
+
+reference:
+  - title: "Project creation"
+    desc: "Create and initialize themed workflowr projects."
+    contents:
+      - reflow_init
+
+  - title: "Schemes and presets"
+    desc: "Explore available color schemes and pipeline depth presets."
+    contents:
+      - reflow_scheme
+      - reflow_schemes
+      - reflow_preset
+      - reflow_presets
+      - reflow_preview
+
+  - title: "Utilities"
+    desc: "Internal helpers for icon embedding."
+    contents:
+      - reflow_icon_base64

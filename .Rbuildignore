@@ -1,0 +1,15 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^\.github$
+^codecov\.yml$
+^_pkgdown\.ya?ml$
+^docs$
+^pkgdown$
+^_build\.R$
+^cran-comments\.md$
+^reflowR_icon\.svg$
+^doc$
+^Meta$
+^\.lintr$
