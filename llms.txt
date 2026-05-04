@@ -35,6 +35,7 @@ commands (`wflow_build()`, `wflow_publish()`, etc.).
 ## Installation
 
 ``` r
+
 # install.packages("pak")
 pak::pak("r-heller/reflowR")
 # workflowr is installed automatically as a dependency
@@ -43,12 +44,14 @@ pak::pak("r-heller/reflowR")
 Or using remotes:
 
 ``` r
+
 remotes::install_github("r-heller/reflowR")
 ```
 
 ## Quick Start
 
 ``` r
+
 library(reflowR)
 
 # Create a clinical research project with the standard 8-step pipeline
@@ -78,6 +81,7 @@ workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
 Preview any scheme interactively:
 
 ``` r
+
 reflow_preview("clinical")
 reflow_schemes()
 ```
@@ -91,6 +95,7 @@ reflow_schemes()
 | `extended` | 12    | Clinical trials, comprehensive studies   |
 
 ``` r
+
 reflow_presets()
 ```
 
@@ -114,6 +119,7 @@ commands work as expected.
 ## Citation
 
 ``` r
+
 citation("reflowR")
 ```
 

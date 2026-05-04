@@ -1,10 +1,10 @@
-pandoc: 3.1.11
+pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   color-schemes: color-schemes.html
   getting-started: getting-started.html
-last_built: 2026-04-17T15:05Z
+last_built: 2026-05-04T18:21Z
 urls:
   reference: https://r-heller.github.io/reflowR/reference
   article: https://r-heller.github.io/reflowR/articles

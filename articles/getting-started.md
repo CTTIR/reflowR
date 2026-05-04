@@ -12,6 +12,7 @@ and layers on additional structure and theming.
 ## Installation
 
 ``` r
+
 # Install from GitHub (workflowr is installed automatically)
 remotes::install_github("r-heller/reflowR")
 ```
@@ -19,6 +20,7 @@ remotes::install_github("r-heller/reflowR")
 ## Quick Start
 
 ``` r
+
 library(reflowR)
 
 # Create a clinical research project with the standard 8-step pipeline
@@ -35,17 +37,18 @@ reflow_init(
 
 reflowR provides five color schemes:
 
-| Scheme     | Label             | Primary Color          | Best For                          |
-|------------|-------------------|------------------------|-----------------------------------|
-| `clinical` | Clinical Research | Red (#C8102E)          | Clinical trials, patient data     |
-| `basic`    | Basic Research    | Steelblue (#4682B4)    | Lab research, general science     |
-| `code`     | Code & Statistics | Forest Green (#228B22) | Software dev, statistical methods |
-| `special`  | Special           | Purple (#6A0DAD)       | Special projects, reviews         |
-| `other`    | Other             | Grey (#2C2C2C)         | Neutral, multipurpose             |
+| Scheme | Label | Primary Color | Best For |
+|----|----|----|----|
+| `clinical` | Clinical Research | Red (#C8102E) | Clinical trials, patient data |
+| `basic` | Basic Research | Steelblue (#4682B4) | Lab research, general science |
+| `code` | Code & Statistics | Forest Green (#228B22) | Software dev, statistical methods |
+| `special` | Special | Purple (#6A0DAD) | Special projects, reviews |
+| `other` | Other | Grey (#2C2C2C) | Neutral, multipurpose |
 
 Preview any scheme:
 
 ``` r
+
 reflow_preview("clinical")
 ```
 
@@ -89,6 +92,7 @@ your project contains:
 After creation, use standard workflowr commands:
 
 ``` r
+
 # Render all Rmd files
 workflowr::wflow_build()
 

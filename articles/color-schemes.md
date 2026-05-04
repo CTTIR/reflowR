@@ -12,6 +12,7 @@ reflowR includes five color schemes, each with a unique SVG icon,
 - **Icon:** Medical cross
 
 ``` r
+
 reflow_preview("clinical")
 ```
 
@@ -22,6 +23,7 @@ reflow_preview("clinical")
 - **Icon:** Microscope
 
 ``` r
+
 reflow_preview("basic")
 ```
 
@@ -33,6 +35,7 @@ reflow_preview("basic")
 - **Icon:** Code brackets
 
 ``` r
+
 reflow_preview("code")
 ```
 
@@ -43,6 +46,7 @@ reflow_preview("code")
 - **Icon:** Star
 
 ``` r
+
 reflow_preview("special")
 ```
 
@@ -53,6 +57,7 @@ reflow_preview("special")
 - **Icon:** Folder
 
 ``` r
+
 reflow_preview("other")
 ```
 
@@ -72,19 +77,20 @@ reflow_preview("other")
 
 Each scheme defines CSS custom properties that style the rendered site:
 
-| CSS Variable      | Used In                                                     |
-|-------------------|-------------------------------------------------------------|
-| `--primary`       | Navbar gradient, headings, links, active TOC, table headers |
-| `--primary-light` | H2 borders, hover states, badges                            |
-| `--accent`        | H3 color, link hover, button hover, code color              |
-| `--secondary`     | Gradient endpoint, button borders                           |
-| `--light-grey`    | Body backgrounds, table striping, blockquotes               |
-| `--grey`          | Muted text, axis labels, captions                           |
-| `--dark`          | Heading color, body text                                    |
+| CSS Variable | Used In |
+|----|----|
+| `--primary` | Navbar gradient, headings, links, active TOC, table headers |
+| `--primary-light` | H2 borders, hover states, badges |
+| `--accent` | H3 color, link hover, button hover, code color |
+| `--secondary` | Gradient endpoint, button borders |
+| `--light-grey` | Body backgrounds, table striping, blockquotes |
+| `--grey` | Muted text, axis labels, captions |
+| `--dark` | Heading color, body text |
 
 ## Using `reflow_preview()`
 
 ``` r
+
 library(reflowR)
 
 # Preview in RStudio viewer
@@ -104,6 +110,7 @@ s$palette
 The `code/00_setup.R` script provides:
 
 ``` r
+
 # Color list
 wf_colors$primary
 wf_colors$accent
