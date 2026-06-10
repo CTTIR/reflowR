@@ -4,9 +4,9 @@
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/r-heller/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-heller/reflowR/actions/workflows/R-CMD-check.yaml)
-[![pkgdown](https://github.com/r-heller/reflowR/actions/workflows/pkgdown.yaml/badge.svg)](https://r-heller.github.io/reflowR/)
-[![Codecov test coverage](https://app.codecov.io/gh/r-heller/reflowR/graph/badge.svg)](https://app.codecov.io/gh/r-heller/reflowR)
+[![R-CMD-check](https://github.com/cttir/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cttir/reflowR/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/cttir/reflowR/actions/workflows/pkgdown.yaml/badge.svg)](https://cttir.github.io/reflowR/)
+[![Codecov test coverage](https://app.codecov.io/gh/cttir/reflowR/graph/badge.svg)](https://app.codecov.io/gh/cttir/reflowR)
 <!-- badges: end -->
 
 ## Overview
@@ -31,14 +31,14 @@ All generated projects remain fully compatible with standard workflowr commands 
 
 ```r
 # install.packages("pak")
-pak::pak("r-heller/reflowR")
+pak::pak("cttir/reflowR")
 # workflowr is installed automatically as a dependency
 ```
 
 Or using remotes:
 
 ```r
-remotes::install_github("r-heller/reflowR")
+remotes::install_github("cttir/reflowR")
 ```
 
 ## Quick Start
@@ -95,9 +95,9 @@ reflowR calls `workflowr::wflow_start()` to create the standard workflowr scaffo
 
 ## Getting Help
 
-- Browse the [function reference](https://r-heller.github.io/reflowR/reference/index.html)
-- Read the [Getting Started vignette](https://r-heller.github.io/reflowR/articles/getting-started.html)
-- File issues at [GitHub Issues](https://github.com/r-heller/reflowR/issues)
+- Browse the [function reference](https://cttir.github.io/reflowR/reference/index.html)
+- Read the [Getting Started vignette](https://cttir.github.io/reflowR/articles/getting-started.html)
+- File issues at [GitHub Issues](https://github.com/cttir/reflowR/issues)
 
 ## Citation
 
@@ -108,6 +108,19 @@ citation("reflowR")
 ## Contributing
 
 Contributions are welcome. Please open an issue first to discuss what you would like to change, then submit a pull request.
+
+## Use of LLM tools
+
+Portions of this package were prepared with assistance from large language model tooling for
+narrowly defined, non-authorial tasks: copyediting, prose smoothing, Markdown/LaTeX formatting,
+scaffolding of boilerplate files (CI configs, build scripts), code refactoring. The tools used were [Chat AI](https://kisski.gwdg.de/leistungen/2-02-llm-service/),
+the LLM service of KISSKI (GWDG), and a self-hosted **Mistral Small (24B, Apache-2.0)** run locally via
+[Ollama](https://ollama.com/) and the `ollamar` R package — local inference only, with no data sent to
+third parties for the self-hosted model.
+
+All scientific claims, methodological choices, analyses, interpretations, and conclusions are the
+author's own. No LLM-generated text was incorporated without review and revision, and every reference
+was verified against its DOI, arXiv ID, or ISBN.
 
 ## License
 

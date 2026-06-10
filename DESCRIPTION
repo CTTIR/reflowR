@@ -37,6 +37,6 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/Needs/website: pkgdown
-URL: https://github.com/r-heller/reflowR,
-    https://r-heller.github.io/reflowR/
-BugReports: https://github.com/r-heller/reflowR/issues
+URL: https://github.com/cttir/reflowR,
+    https://cttir.github.io/reflowR/
+BugReports: https://github.com/cttir/reflowR/issues
