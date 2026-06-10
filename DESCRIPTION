@@ -36,7 +36,7 @@ Suggests:
     withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-Config/Needs/website: pkgdown
+Config/Needs/website: CTTIR/themakR, pkgdown
 URL: https://github.com/cttir/reflowR,
     https://cttir.github.io/reflowR/
 BugReports: https://github.com/cttir/reflowR/issues
