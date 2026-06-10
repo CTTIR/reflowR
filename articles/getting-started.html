@@ -11,9 +11,11 @@
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Inter-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started with reflowR">
 </head>
@@ -21,7 +23,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">reflowR</a>
 
@@ -44,7 +46,15 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/r-heller/reflowR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/cttir/reflowR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -60,33 +70,33 @@
       <img src="../logo.svg" class="logo" alt=""><h1>Getting Started with reflowR</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-heller/reflowR/blob/main/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/cttir/reflowR/blob/main/vignettes/getting-started.Rmd" class="external-link"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="d-none name"><code>getting-started.Rmd</code></div>
     </div>
 
     
     
-<div class="section level2">
-<h2 id="what-is-reflowr">What is reflowR?<a class="anchor" aria-label="anchor" href="#what-is-reflowr"></a>
-</h2>
+<div class="section level3">
+<h3 id="what-is-reflowr">What is reflowR?<a class="anchor" aria-label="anchor" href="#what-is-reflowr"></a>
+</h3>
 <p><strong>reflowR</strong> extends the <a href="https://workflowr.github.io/workflowr/" class="external-link">workflowr</a> package with
 themed color schemes, structured analysis pipeline templates, and
 utility scripts for reproducible research. It wraps
 <code><a href="https://workflowr.github.io/workflowr/reference/wflow_start.html" class="external-link">workflowr::wflow_start()</a></code> and layers on additional structure
 and theming.</p>
 </div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
+<div class="section level3">
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install from GitHub (workflowr is installed automatically)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-heller/reflowR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"cttir/reflowR"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
-</h2>
+<div class="section level3">
+<h3 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-heller/reflowR" class="external-link">reflowR</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cttir/reflowR" class="external-link">reflowR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a clinical research project with the standard 8-step pipeline</span></span>
 <span><span class="fu"><a href="../reference/reflow_init.html">reflow_init</a></span><span class="op">(</span></span>
@@ -97,9 +107,9 @@ and theming.</p>
 <span>  depth     <span class="op">=</span> <span class="st">"standard"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="choosing-a-scheme">Choosing a Scheme<a class="anchor" aria-label="anchor" href="#choosing-a-scheme"></a>
-</h2>
+<div class="section level3">
+<h3 id="choosing-a-scheme">Choosing a Scheme<a class="anchor" aria-label="anchor" href="#choosing-a-scheme"></a>
+</h3>
 <p>reflowR provides five color schemes:</p>
 <table class="table">
 <colgroup>
@@ -151,9 +161,9 @@ and theming.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/reflow_preview.html">reflow_preview</a></span><span class="op">(</span><span class="st">"clinical"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="choosing-a-depth">Choosing a Depth<a class="anchor" aria-label="anchor" href="#choosing-a-depth"></a>
-</h2>
+<div class="section level3">
+<h3 id="choosing-a-depth">Choosing a Depth<a class="anchor" aria-label="anchor" href="#choosing-a-depth"></a>
+</h3>
 <table class="table">
 <thead><tr class="header">
 <th>Preset</th>
@@ -179,9 +189,9 @@ and theming.</p>
 </tbody>
 </table>
 </div>
-<div class="section level2">
-<h2 id="project-structure">Project Structure<a class="anchor" aria-label="anchor" href="#project-structure"></a>
-</h2>
+<div class="section level3">
+<h3 id="project-structure">Project Structure<a class="anchor" aria-label="anchor" href="#project-structure"></a>
+</h3>
 <p>After <code><a href="../reference/reflow_init.html">reflow_init()</a></code>, your project contains:</p>
 <pre><code>my_project/
 +-- analysis/        # Rmd pipeline files (rendered to docs/)
@@ -204,9 +214,9 @@ and theming.</p>
 +-- output/          # Figures, tables, models
 +-- report/          # Quarto report template</code></pre>
 </div>
-<div class="section level2">
-<h2 id="working-with-your-project">Working with Your Project<a class="anchor" aria-label="anchor" href="#working-with-your-project"></a>
-</h2>
+<div class="section level3">
+<h3 id="working-with-your-project">Working with Your Project<a class="anchor" aria-label="anchor" href="#working-with-your-project"></a>
+</h3>
 <p>After creation, use standard workflowr commands:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Render all Rmd files</span></span>
@@ -224,9 +234,9 @@ and theming.</p>
 <span><span class="co"># Set up GitHub Pages</span></span>
 <span><span class="fu">workflowr</span><span class="fu">::</span><span class="fu"><a href="https://workflowr.github.io/workflowr/reference/wflow_use_github.html" class="external-link">wflow_use_github</a></span><span class="op">(</span><span class="st">"username"</span>, <span class="st">"repo"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="customization">Customization<a class="anchor" aria-label="anchor" href="#customization"></a>
-</h2>
+<div class="section level3">
+<h3 id="customization">Customization<a class="anchor" aria-label="anchor" href="#customization"></a>
+</h3>
 <ul>
 <li>
 <strong>CSS</strong>: Edit <code>assets/theme.css</code> to
@@ -242,6 +252,23 @@ update <code>_site.yml</code> navbar</li>
 <code>code/00_setup.R</code>
 </li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="use-of-llm-tools">Use of LLM tools<a class="anchor" aria-label="anchor" href="#use-of-llm-tools"></a>
+</h2>
+<p>Portions of this package were prepared with assistance from large
+language model tooling for narrowly defined, non-authorial tasks:
+copyediting, prose smoothing, Markdown/LaTeX formatting, scaffolding of
+boilerplate files (CI configs, build scripts), code refactoring. The
+tools used were <a href="https://kisski.gwdg.de/leistungen/2-02-llm-service/" class="external-link">Chat AI</a>,
+the LLM service of KISSKI (GWDG), and a self-hosted <strong>Mistral
+Small (24B, Apache-2.0)</strong> run locally via <a href="https://ollama.com/" class="external-link">Ollama</a> and the <code>ollamar</code> R
+package — local inference only, with no data sent to third parties for
+the self-hosted model.</p>
+<p>All scientific claims, methodological choices, analyses,
+interpretations, and conclusions are the author’s own. No LLM-generated
+text was incorporated without review and revision, and every reference
+was verified against its DOI, arXiv ID, or ISBN.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -1,6 +1,6 @@
 # Getting Started with reflowR
 
-## What is reflowR?
+### What is reflowR?
 
 **reflowR** extends the
 [workflowr](https://workflowr.github.io/workflowr/) package with themed
@@ -9,15 +9,15 @@ scripts for reproducible research. It wraps
 [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
 and layers on additional structure and theming.
 
-## Installation
+### Installation
 
 ``` r
 
 # Install from GitHub (workflowr is installed automatically)
-remotes::install_github("r-heller/reflowR")
+remotes::install_github("cttir/reflowR")
 ```
 
-## Quick Start
+### Quick Start
 
 ``` r
 
@@ -33,7 +33,7 @@ reflow_init(
 )
 ```
 
-## Choosing a Scheme
+### Choosing a Scheme
 
 reflowR provides five color schemes:
 
@@ -52,7 +52,7 @@ Preview any scheme:
 reflow_preview("clinical")
 ```
 
-## Choosing a Depth
+### Choosing a Depth
 
 | Preset     | Steps | Best For                                 |
 |------------|-------|------------------------------------------|
@@ -60,10 +60,10 @@ reflow_preview("clinical")
 | `standard` | 8     | Standard research projects, publications |
 | `extended` | 12    | Clinical trials, comprehensive studies   |
 
-## Project Structure
+### Project Structure
 
 After
-[`reflow_init()`](https://r-heller.github.io/reflowR/reference/reflow_init.md),
+[`reflow_init()`](https://cttir.github.io/reflowR/reference/reflow_init.md),
 your project contains:
 
     my_project/
@@ -87,7 +87,7 @@ your project contains:
     +-- output/          # Figures, tables, models
     +-- report/          # Quarto report template
 
-## Working with Your Project
+### Working with Your Project
 
 After creation, use standard workflowr commands:
 
@@ -109,9 +109,27 @@ workflowr::wflow_view()
 workflowr::wflow_use_github("username", "repo")
 ```
 
-## Customization
+### Customization
 
 - **CSS**: Edit `assets/theme.css` to customize styling
 - **New Rmd files**: Add to `analysis/` and update `_site.yml` navbar
 - **Navbar**: Edit `analysis/_site.yml`
 - **ggplot theme**: Modify `theme_wf()` in `code/00_setup.R`
+
+## Use of LLM tools
+
+Portions of this package were prepared with assistance from large
+language model tooling for narrowly defined, non-authorial tasks:
+copyediting, prose smoothing, Markdown/LaTeX formatting, scaffolding of
+boilerplate files (CI configs, build scripts), code refactoring. The
+tools used were [Chat
+AI](https://kisski.gwdg.de/leistungen/2-02-llm-service/), the LLM
+service of KISSKI (GWDG), and a self-hosted **Mistral Small (24B,
+Apache-2.0)** run locally via [Ollama](https://ollama.com/) and the
+`ollamar` R package — local inference only, with no data sent to third
+parties for the self-hosted model.
+
+All scientific claims, methodological choices, analyses,
+interpretations, and conclusions are the author’s own. No LLM-generated
+text was incorporated without review and revision, and every reference
+was verified against its DOI, arXiv ID, or ISBN.

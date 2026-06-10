@@ -26,12 +26,12 @@ generate_report_qmd(project_dir, name, author, scheme, preset)
 - scheme:
 
   A scheme list from
-  [`reflow_scheme()`](https://r-heller.github.io/reflowR/reference/reflow_scheme.md).
+  [`reflow_scheme()`](https://cttir.github.io/reflowR/reference/reflow_scheme.md).
 
 - preset:
 
   A preset list from
-  [`reflow_preset()`](https://r-heller.github.io/reflowR/reference/reflow_preset.md).
+  [`reflow_preset()`](https://cttir.github.io/reflowR/reference/reflow_preset.md).
 
 ## Value
 

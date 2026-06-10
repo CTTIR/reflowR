@@ -21,7 +21,7 @@ A named list containing color values, palette, label, and icon info.
 
 ## See also
 
-[`reflow_schemes()`](https://r-heller.github.io/reflowR/reference/reflow_schemes.md)
+[`reflow_schemes()`](https://cttir.github.io/reflowR/reference/reflow_schemes.md)
 for listing all available schemes.
 
 ## Examples
