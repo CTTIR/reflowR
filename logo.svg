@@ -99,8 +99,8 @@
     <text font-family="monospace" font-size="6.5" fill="#1D9E75" opacity="0.6" x="390" y="191">research</text>
 
     <rect x="358" y="196" width="8" height="8" rx="1.5" fill="#7F77DD" opacity="0.9"/>
-    <rect x="368" y="196" width="8" height="8" rx="1.5" fill="#534AB7" opacity="0.9"/>
-    <rect x="378" y="196" width="8" height="8" rx="1.5" fill="#CECBF6" opacity="0.85"/>
+    <rect x="368" y="196" width="8" height="8" rx="1.5" fill="#1A5C22" opacity="0.9"/>
+    <rect x="378" y="196" width="8" height="8" rx="1.5" fill="#86EFAC" opacity="0.85"/>
     <text font-family="monospace" font-size="6.5" fill="#7F77DD" opacity="0.6" x="390" y="203">code</text>
 
     <rect x="358" y="208" width="8" height="8" rx="1.5" fill="#D85A30" opacity="0.9"/>
@@ -153,7 +153,7 @@
     <ellipse cx="250" cy="252" rx="13" ry="40" fill="#1D9E75" opacity="0.8" transform="rotate(72 250 310)"/>
     <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#9FE1CB" opacity="0.2"  transform="rotate(72 250 310)"/>
     <ellipse cx="250" cy="252" rx="13" ry="40" fill="#7F77DD" opacity="0.8" transform="rotate(144 250 310)"/>
-    <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#CECBF6" opacity="0.2"  transform="rotate(144 250 310)"/>
+    <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#86EFAC" opacity="0.2"  transform="rotate(144 250 310)"/>
     <ellipse cx="250" cy="252" rx="13" ry="40" fill="#D85A30" opacity="0.8" transform="rotate(216 250 310)"/>
     <ellipse cx="250" cy="256" rx="6"  ry="18" fill="#F5C4B3" opacity="0.2"  transform="rotate(216 250 310)"/>
     <ellipse cx="250" cy="252" rx="13" ry="40" fill="#888780" opacity="0.75" transform="rotate(288 250 310)"/>
@@ -174,19 +174,16 @@
     <!-- Flower centre -->
     <circle cx="250" cy="310" r="22" fill="#1a1530" opacity="0.98"/>
     <circle cx="250" cy="310" r="17" fill="#26215C" opacity="0.95"/>
-    <circle cx="250" cy="310" r="11" fill="#534AB7" opacity="0.9"/>
-    <circle cx="250" cy="310" r="6"  fill="#CECBF6" opacity="0.75"/>
+    <circle cx="250" cy="310" r="11" fill="#1A5C22" opacity="0.9"/>
+    <circle cx="250" cy="310" r="6"  fill="#86EFAC" opacity="0.75"/>
     <circle cx="250" cy="310" r="2.5" fill="#EEEDFE" opacity="0.9"/>
 
   </g>
 
   <!-- Hex border -->
   <polygon points="250,30 455,145 455,375 250,490 45,375 45,145"
-    fill="none" stroke="#534AB7" stroke-width="11" stroke-linejoin="round"/>
+    fill="none" stroke="#1A5C22" stroke-width="11" stroke-linejoin="round"/>
   <polygon points="250,44 441,153 441,367 250,476 59,367 59,153"
-    fill="none" stroke="#3C3489" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
-
-  <!-- Package name -->
-  <text font-family="monospace" font-weight="700" font-size="26"
-    fill="#CECBF6" text-anchor="middle" x="250" y="545" letter-spacing="1">reflowR</text>
+    fill="none" stroke="#0E3A15" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>
+  
 </svg>
