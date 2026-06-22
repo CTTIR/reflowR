@@ -16,3 +16,4 @@ docs/
 *.bak
 *.orig
 *.Rcheck/
+_coverage/

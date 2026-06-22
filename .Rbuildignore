@@ -12,5 +12,6 @@
 ^reflowR_icon\.svg$
 ^doc$
 ^Meta$
+^_coverage$
 ^\.lintr$
 ^_pkgdown\.yml$

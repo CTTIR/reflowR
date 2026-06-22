@@ -81,6 +81,62 @@ test_that("reflow_init errors on invalid scheme", {
   )
 })
 
+test_that("reflow_init derives project name from directory basename when name is NULL", {
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "derived_name_proj")
+  reflow_init(directory = proj, name = NULL, author = "A",
+              scheme = "basic", depth = "minimal",
+              git = FALSE, change_wd = FALSE, open = FALSE)
+  # the derived name appears in the generated index.Rmd title
+  idx <- readLines(file.path(proj, "analysis", "index.Rmd"), warn = FALSE)
+  expect_true(any(grepl("derived_name_proj", idx, fixed = TRUE)))
+  # and the .Rproj is named after the basename
+  expect_true(file.exists(file.path(proj, "derived_name_proj.Rproj")))
+})
+
+test_that("reflow_init passes github_url and website into the navbar", {
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "nav_proj")
+  reflow_init(directory = proj, author = "A", scheme = "code", depth = "minimal",
+              github_url = "https://github.com/foo/bar",
+              website = "https://example.org",
+              git = FALSE, change_wd = FALSE, open = FALSE)
+  yml <- readLines(file.path(proj, "analysis", "_site.yml"), warn = FALSE)
+  expect_true(any(grepl("https://github.com/foo/bar", yml, fixed = TRUE)))
+  expect_true(any(grepl("https://example.org", yml, fixed = TRUE)))
+})
+
+test_that("reflow_init with git = TRUE creates a repository and initial commit", {
+  skip_if_not_installed("git2r")
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "git_proj")
+  reflow_init(directory = proj, author = "A", scheme = "basic", depth = "minimal",
+              git = TRUE, change_wd = FALSE, open = FALSE,
+              user.name = "Test User", user.email = "test@example.org")
+  expect_true(dir.exists(file.path(proj, ".git")))
+  repo <- git2r::repository(proj)
+  commits <- git2r::commits(repo)
+  expect_gte(length(commits), 1L)
+  expect_match(commits[[1]]$message, "reflowR")
+})
+
+test_that("reflow_init writes _workflowr.yml with the requested seed", {
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "seed_proj")
+  reflow_init(directory = proj, author = "A", scheme = "basic", depth = "minimal",
+              seed = 12345L, git = FALSE, change_wd = FALSE, open = FALSE)
+  wf <- readLines(file.path(proj, "_workflowr.yml"), warn = FALSE)
+  expect_true(any(grepl("seed: 12345", wf, fixed = TRUE)))
+})
+
+test_that("reflow_init errors on invalid depth", {
+  tmp <- withr::local_tempdir()
+  expect_error(
+    reflow_init(directory = file.path(tmp, "baddepth"), author = "A",
+                depth = "ultra", git = FALSE, change_wd = FALSE, open = FALSE)
+  )
+})
+
 test_that("existing = TRUE works on pre-existing directory", {
   skip_on_cran()
   tmp <- withr::local_tempdir()

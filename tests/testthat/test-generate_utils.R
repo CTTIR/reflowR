@@ -1,0 +1,30 @@
+test_that("generate_utils_script writes utils.R with helper functions", {
+  root <- withr::local_tempdir()
+  dir.create(file.path(root, "code"))
+  scheme <- reflow_scheme("clinical")
+  ret <- generate_utils_script(root, scheme = scheme)
+  expect_true(file.exists(ret))
+  expect_match(basename(ret), "utils.R", fixed = TRUE)
+  code <- paste(readLines(ret, warn = FALSE), collapse = "\n")
+  expect_match(code, "save_wf_plot <- function", fixed = TRUE)
+  expect_match(code, "wf_cor_heatmap <- function", fixed = TRUE)
+  expect_match(code, "missing_summary <- function", fixed = TRUE)
+  expect_match(code, "numeric_summary <- function", fixed = TRUE)
+  expect_match(code, "export_xlsx <- function", fixed = TRUE)
+  # scheme label embedded in header
+  expect_match(code, scheme$label, fixed = TRUE)
+})
+
+test_that("generate_utils_script is scheme-agnostic in body but labels header", {
+  root1 <- withr::local_tempdir()
+  root2 <- withr::local_tempdir()
+  dir.create(file.path(root1, "code"))
+  dir.create(file.path(root2, "code"))
+  generate_utils_script(root1, scheme = reflow_scheme("basic"))
+  generate_utils_script(root2, scheme = reflow_scheme("code"))
+  c1 <- readLines(file.path(root1, "code", "utils.R"), warn = FALSE)
+  c2 <- readLines(file.path(root2, "code", "utils.R"), warn = FALSE)
+  # both contain the Basic / Code labels respectively
+  expect_true(any(grepl("Basic Research", c1, fixed = TRUE)))
+  expect_true(any(grepl("Code & Statistics", c2, fixed = TRUE)))
+})

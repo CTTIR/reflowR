@@ -3,10 +3,14 @@
 > Themed extensions for workflowr research workflows
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/CTTIR/reflowR/actions/workflows/pkgdown.yaml/badge.svg)](https://cttir.github.io/reflowR/)
+[![CRAN status](https://www.r-pkg.org/badges/version/reflowR)](https://CRAN.R-project.org/package=reflowR)
+[![Codecov test coverage](https://codecov.io/gh/CTTIR/reflowR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CTTIR/reflowR?branch=main)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/reflowR)](https://cran.r-project.org/package=reflowR)
+[![CRAN downloads total](https://cranlogs.r-pkg.org/badges/grand-total/reflowR)](https://cran.r-project.org/package=reflowR)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/cttir/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cttir/reflowR/actions/workflows/R-CMD-check.yaml)
-[![pkgdown](https://github.com/cttir/reflowR/actions/workflows/pkgdown.yaml/badge.svg)](https://cttir.github.io/reflowR/)
-[![Codecov test coverage](https://app.codecov.io/gh/cttir/reflowR/graph/badge.svg)](https://app.codecov.io/gh/cttir/reflowR)
 <!-- badges: end -->
 
 ## Overview
