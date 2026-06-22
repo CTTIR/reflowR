@@ -10,3 +10,9 @@ _build.R
 docs/
 /doc/
 /Meta/
+*.tmp
+*.log
+*~
+*.bak
+*.orig
+*.Rcheck/
