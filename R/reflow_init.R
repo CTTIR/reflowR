@@ -209,6 +209,7 @@ reflow_init <- function(
     git2r::add(repo, path = ".")
     tryCatch({
       if (!is.null(user.name) && !is.null(user.email)) {
+        git2r::config(repo, user.name = user.name, user.email = user.email)
         sig <- git2r::default_signature(repo)
         git2r::commit(repo, message = "Initial reflowR project", author = sig)
       } else {
