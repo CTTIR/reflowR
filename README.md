@@ -1,5 +1,7 @@
 # reflowR <img src="man/figures/logo.png" align="right" height="139" alt="reflowR logo" />
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889956.svg)](https://doi.org/10.5281/zenodo.21889956)
+
 > Themed extensions for workflowr research workflows
 
 <!-- badges: start -->

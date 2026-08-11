@@ -1,0 +1,35 @@
+{
+  "upload_type": "software",
+  "title": "reflowR: Themed extensions and templates for workflowr research projects",
+  "version": "0.1.0",
+  "publication_date": "2026-08-11",
+  "description": "<p>reflowR extends the workflowr reproducible research framework with themed colour schemes, structured analysis pipeline templates and supporting utilities. It wraps project creation and adds five colour schemes oriented towards clinical work, basic research, code and statistics, special cases and neutral presentation, together with three depth presets for the analysis pipeline. Custom stylesheets, SVG icons, plotting theme functions and a report template are included so that a project looks consistent from the first commit. Projects generated with reflowR remain fully compatible with the standard workflowr commands. It is aimed at researchers who want a house style for reproducible analysis websites.</p>",
+  "creators": [
+    {
+      "name": "Heller, Raban",
+      "orcid": "0000-0001-8006-9742"
+    }
+  ],
+  "contributors": [],
+  "license": "mit",
+  "access_right": "open",
+  "language": "eng",
+  "keywords": [
+    "workflowr",
+    "reproducible-research",
+    "rmarkdown",
+    "themes",
+    "templates",
+    "r-package",
+    "rstats"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/CTTIR/reflowR",
+      "relation": "isSupplementTo",
+      "scheme": "url",
+      "resource_type": "software"
+    }
+  ],
+  "notes": "Prepared draft. Not yet published."
+}
