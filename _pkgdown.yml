@@ -27,6 +27,14 @@ articles:
       - color-schemes
 
 reference:
+  - title: "Recorded imaging workflows"
+    desc: "Declare package calls and execute or resume verified object workflows."
+    contents:
+      - reflow_imaging_stage
+      - reflow_imaging_ref
+      - reflow_imaging_plan
+      - reflow_imaging_run
+
   - title: "Project creation"
     desc: "Create and initialize themed workflowr projects."
     contents:
