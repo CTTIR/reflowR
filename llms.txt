@@ -179,13 +179,16 @@ calls with a stage `seed`.
 
 Receipts record configuration, input, installed code, runtime and output
 hashes. Resume verifies completed results; changed inputs or corrupt
-results require a new run directory. Failed or interrupted calls retry
-in new attempt directories. A lock prevents concurrent execution; stale
-locks require manual inspection. Inputs must remain immutable during
-execution. Calls must be trusted, return plain serializable R objects,
-and avoid external side effects: this is not a sandbox. Resource
-scheduling, file-producing stages, external engine provenance, review
-dashboards and report recipes are not yet implemented by this API.
+results require a new run directory. Common numerical thread environment
+settings are recorded and changes invalidate resume; this does not
+measure effective backend thread counts or capture in-process thread
+setters. Failed or interrupted calls retry in new attempt directories. A
+lock prevents concurrent execution; stale locks require manual
+inspection. Inputs must remain immutable during execution. Calls must be
+trusted, return plain serializable R objects, and avoid external side
+effects: this is not a sandbox. Resource scheduling, file-producing
+stages, external engine provenance, review dashboards and report recipes
+are not yet implemented by this API.
 
 # Package index
 
