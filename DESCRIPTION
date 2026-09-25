@@ -19,6 +19,7 @@ Depends:
 Imports:
     workflowr (>= 1.7.0),
     cli,
+    digest,
     fs,
     glue,
     rlang,

@@ -15,3 +15,7 @@
 ^_coverage$
 ^\.lintr$
 ^_pkgdown\.yml$
+^instructions$
+
+^CITATION\.cff$
+^\.zenodo\.json$
