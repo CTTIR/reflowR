@@ -1,5 +1,20 @@
 # Package index
 
+## Recorded imaging workflows
+
+Declare package calls and execute or resume verified object workflows.
+
+- [`reflow_imaging_stage()`](https://cttir.github.io/reflowR/reference/reflow_imaging_stage.md)
+  : Declare an imaging workflow stage
+- [`reflow_imaging_ref()`](https://cttir.github.io/reflowR/reference/reflow_imaging_ref.md)
+  [`reflow_imaging_input()`](https://cttir.github.io/reflowR/reference/reflow_imaging_ref.md)
+  : Reference an upstream result or an input file
+- [`reflow_imaging_plan()`](https://cttir.github.io/reflowR/reference/reflow_imaging_plan.md)
+  : Assemble a sequential imaging dependency graph
+- [`reflow_imaging_run()`](https://cttir.github.io/reflowR/reference/reflow_imaging_run.md)
+  [`reflow_imaging_resume()`](https://cttir.github.io/reflowR/reference/reflow_imaging_run.md)
+  : Execute or resume a recorded imaging plan
+
 ## Project creation
 
 Create and initialize themed workflowr projects.

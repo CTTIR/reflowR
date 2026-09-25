@@ -151,3 +151,38 @@ was verified against its DOI, arXiv ID, or ISBN.
 ## License
 
 MIT
+
+## Recorded imaging workflows
+
+The imaging API runs a sequential graph of exported package functions,
+with explicit references to upstream R objects. It is independent of
+workflowr scaffolding and does not create Git repositories or publish
+anything.
+
+``` r
+
+plan <- reflow_imaging_plan(
+  reflow_imaging_stage("summary", "base", "summary", list(object = 1:4)),
+  reflow_imaging_stage("mean", "base", "mean",
+                      list(x = reflow_imaging_ref("summary")))
+)
+run_dir <- tempfile("imaging-run-")
+results <- reflow_imaging_run(plan, run_dir)
+verified <- reflow_imaging_resume(plan, run_dir)
+```
+
+Use `reflow_imaging_input(path)` for tracked files or directories, or
+set `read = TRUE` to pass an RDS input as an object. Use the reference’s
+`select` argument to extract named nested components. Declare optional
+package backends with the plan’s `packages` argument and stochastic
+calls with a stage `seed`.
+
+Receipts record configuration, input, installed code, runtime and output
+hashes. Resume verifies completed results; changed inputs or corrupt
+results require a new run directory. Failed or interrupted calls retry
+in new attempt directories. A lock prevents concurrent execution; stale
+locks require manual inspection. Inputs must remain immutable during
+execution. Calls must be trusted, return plain serializable R objects,
+and avoid external side effects: this is not a sandbox. Resource
+scheduling, file-producing stages, external engine provenance, review
+dashboards and report recipes are not yet implemented by this API.
