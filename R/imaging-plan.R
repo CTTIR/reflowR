@@ -191,13 +191,20 @@ rf_signature <- function(plan) {
     }
     x
   })
+  numerical_environment <- Sys.getenv(c(
+    "OMP_NUM_THREADS", "OMP_THREAD_LIMIT", "OMP_DYNAMIC",
+    "OPENBLAS_NUM_THREADS", "GOTO_NUM_THREADS", "MKL_NUM_THREADS",
+    "MKL_DYNAMIC", "MKL_CBWR", "VECLIB_MAXIMUM_THREADS",
+    "BLIS_NUM_THREADS", "RCPP_PARALLEL_NUM_THREADS"
+  ), unset = NA_character_)
   list(
     plan = plan, plan_hash = rf_hash(plan),
+    numerical_environment = numerical_environment,
     inputs = inputs, input_hash = rf_hash(inputs),
     package_hash = rf_hash(packages), packages = packages, calls = calls,
     runtime_hash = rf_hash(list(
       R.version, Sys.info()[c("sysname", "release", "machine")],
-      extSoftVersion(), Sys.getlocale(), RNGkind()
+      extSoftVersion(), Sys.getlocale(), RNGkind(), numerical_environment
     ))
   )
 }

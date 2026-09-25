@@ -1,5 +1,8 @@
 # reflowR (development version)
 
+* Record common numerical thread environment settings in imaging definitions
+  and runtime fingerprints; reject resume when those settings change.
+
 * Add a sequential imaging plan/run/resume API for explicit exported package calls,
   upstream object references and tracked file or directory inputs.
 * Record content, configuration, installed code, runtime and result hashes in

@@ -32,6 +32,10 @@ data. Called functions are trusted and can have side effects; this API does
 not sandbox them. File-producing, distributed and resource-scheduled stages
 are outside this initial object-returning contract. Package fingerprints cover
 installed code, native libraries and dependency metadata, not external engines.
+Common OpenMP/BLAS/MKL/Accelerate/BLIS/RcppParallel thread environment
+settings are recorded, including unset values, and changes invalidate resume.
+These are declared environment settings, not measured effective thread counts;
+backend-specific in-process thread setters still require explicit configuration.
 
 A directory lock prevents concurrent execution. After an interrupted process,
 inspect the lock's owner receipt and verify that process has stopped before

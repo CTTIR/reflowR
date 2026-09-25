@@ -240,3 +240,19 @@ test_that("stochastic stages require recorded seeds and restore caller RNG", {
   expect_identical(.Random.seed, before)
   expect_error(reflow_imaging_stage("a", "stats", "rnorm", seed = 1.5), "integer")
 })
+
+
+test_that("numerical thread environment changes invalidate resume", {
+  withr::local_envvar(c(OPENBLAS_NUM_THREADS = "1", OMP_NUM_THREADS = NA))
+  path <- file.path(withr::local_tempdir(), "thread-run")
+  plan <- image_plan()
+  original <- reflow_imaging_run(plan, path)
+  definition <- readRDS(file.path(path, "definition.rds"))
+  expect_identical(definition$numerical_environment[["OPENBLAS_NUM_THREADS"]], "1")
+  expect_identical(definition$numerical_environment[["OMP_NUM_THREADS"]], NA_character_)
+  withr::with_envvar(c(OPENBLAS_NUM_THREADS = "2"), {
+    expect_error(reflow_imaging_resume(plan, path), "changed")
+    expect_false(file.exists(file.path(path, "READY")))
+  })
+  expect_identical(reflow_imaging_resume(plan, path), original)
+})
