@@ -23,6 +23,7 @@ Imports:
     fs,
     glue,
     rlang,
+    ggplot2 (>= 3.4.0),
     base64enc,
     git2r
 Suggests:

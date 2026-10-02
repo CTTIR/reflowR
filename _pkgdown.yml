@@ -27,6 +27,12 @@ articles:
       - color-schemes
 
 reference:
+  - title: "Finalized-value figures"
+    desc: "Render supplied values with explicit levels and no numerical reductions."
+    contents:
+      - reflow_figure_recipe
+      - reflow_figure_plot
+
   - title: "Recorded imaging workflows"
     desc: "Declare package calls and execute or resume verified object workflows."
     contents:
