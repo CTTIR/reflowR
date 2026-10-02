@@ -220,6 +220,15 @@ Declare package calls and execute or resume verified object workflows.
 - [`reflow_artifact_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
   [`reflow_artifact_resume()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
   : Execute or verify one declared artifact bundle
+- [`reflow_artifact_ref()`](https://cttir.github.io/reflowR/reference/reflow_artifact_ref.md)
+  : Reference a declared artifact in a dependency plan
+- [`reflow_artifact_stage()`](https://cttir.github.io/reflowR/reference/reflow_artifact_stage.md)
+  : Declare a deferred artifact writer
+- [`reflow_artifact_plan()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan.md)
+  : Declare a serial artifact dependency plan
+- [`reflow_artifact_plan_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan_run.md)
+  [`reflow_artifact_plan_resume()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan_run.md)
+  : Execute or verify an immutable artifact graph generation
 
 ## Project creation
 
