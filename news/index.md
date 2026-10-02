@@ -2,6 +2,15 @@
 
 ## reflowR (development version)
 
+- Allow an explicit right-side facet-strip text angle in finalized
+  figure recipes; the default preserves the existing -90-degree
+  presentation.
+
+- Build finalized tile heatmaps and effect-point plots from explicit
+  keyed recipes, supplied categorical orders and midpoints, without
+  aggregation or filtering. Keep scientific payload hashes separate from
+  styling/provenance.
+
 - Record common numerical thread environment settings in imaging
   definitions and runtime fingerprints; reject resume when those
   settings change.

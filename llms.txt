@@ -192,6 +192,15 @@ are not yet implemented by this API.
 
 # Package index
 
+## Finalized-value figures
+
+Render supplied values with explicit levels and no numerical reductions.
+
+- [`reflow_figure_recipe()`](https://cttir.github.io/reflowR/reference/reflow_figure_recipe.md)
+  : Declare a Finalized-Value Figure Recipe
+- [`reflow_figure_plot()`](https://cttir.github.io/reflowR/reference/reflow_figure_plot.md)
+  : Build a Plot from a Finalized-Value Figure Recipe
+
 ## Recorded imaging workflows
 
 Declare package calls and execute or resume verified object workflows.
