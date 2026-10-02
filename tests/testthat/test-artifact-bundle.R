@@ -541,7 +541,9 @@ test_that("incomplete and conflicting declarations are refused", {
   expect_error(declare(list(list(path = "x", type = "file")),
                        c(x = "x")), "unique nonempty names")
   expect_error(artifact_example(runtime_files = NA_character_), "runtime_files")
-  expect_error(artifact_example(runtime_files = tempdir()), "regular files")
+  expect_error(artifact_example(runtime_files = normalizePath(
+    tempdir(), winslash = "/", mustWork = TRUE
+  )), "regular files")
 })
 
 test_that("tracked RDS values and relative destinations preserve literal output", {
