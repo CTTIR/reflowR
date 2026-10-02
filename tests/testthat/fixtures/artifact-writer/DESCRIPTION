@@ -1,0 +1,7 @@
+Package: artifactfixture
+Version: 0.0.1
+Title: Anonymous Artifact Lifecycle Fixture
+Description: Small exported writers for lifecycle qualification.
+License: MIT
+Author: R. Heller
+Maintainer: R. Heller <58561665+r-heller@users.noreply.github.com>

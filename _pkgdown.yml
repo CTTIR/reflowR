@@ -40,6 +40,8 @@ reference:
       - reflow_imaging_ref
       - reflow_imaging_plan
       - reflow_imaging_run
+      - reflow_artifact_spec
+      - reflow_artifact_run
 
   - title: "Project creation"
     desc: "Create and initialize themed workflowr projects."

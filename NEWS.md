@@ -1,5 +1,10 @@
 # reflowR (development version)
 
+* Add a separate declared artifact bundle API for trusted installed writers,
+  complete file/resource fingerprints, immutable accepted receipts and verified
+  reuse. Failed attempts require explicit process reconciliation before retry;
+  this is not a scheduler, sandbox or complete artifact DAG.
+
 * Allow an explicit right-side facet-strip text angle in finalized figure
   recipes; the default preserves the existing -90-degree presentation.
 
