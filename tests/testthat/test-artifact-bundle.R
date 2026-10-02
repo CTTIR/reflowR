@@ -1,3 +1,8 @@
+# Resolve system temporary-root aliases without relaxing artifact link guards.
+artifact_tempfile <- function(...) {
+  tempfile(..., tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
+}
+
 artifact_example <- function(text = "literal", ...) {
   reflow_artifact_spec(
     "base", "writeLines", args = list(text = text),
@@ -10,7 +15,7 @@ artifact_example <- function(text = "literal", ...) {
 test_that(
   "declared exported writer produces authenticated bytes and immutable reuse",
   {
-    root <- tempfile("bundle space ")
+    root <- artifact_tempfile("bundle space ")
     dir.create(root)
     on.exit(
       unlink(root, recursive = TRUE),
@@ -23,10 +28,11 @@ test_that(
       readLines(file.path(answer$bundle, "result.txt")),
       "literal"
     )
-    expect_identical(answer$inventory$bytes, 8)
+    expected_bytes <- charToRaw(if (.Platform$OS.type == "windows") "literal\r\n" else "literal\n")
+    expect_identical(answer$inventory$bytes, as.double(length(expected_bytes)))
     expect_identical(
       answer$inventory$sha256, digest::digest(
-        charToRaw("literal\n"),
+        expected_bytes,
         algo = "sha256", serialize = FALSE
       )
     )
@@ -132,7 +138,7 @@ test_that(
 
 test_that(
   "empty files and runtime mutation are explicit", {
-    root <- tempfile()
+    root <- artifact_tempfile()
     dir.create(root)
     on.exit(
       unlink(root, recursive = TRUE),
@@ -187,7 +193,7 @@ test_that(
 test_that(
   "strict inventories and receipt links fail without altering accepted state",
   {
-    root <- tempfile()
+    root <- artifact_tempfile()
     dir.create(root)
     on.exit(
       unlink(root, recursive = TRUE),
@@ -232,7 +238,7 @@ test_that(
 test_that(
   "installed exported writer failures, RNG and resources are authenticated",
   {
-    root <- tempfile()
+    root <- artifact_tempfile()
     dir.create(root)
     on.exit(
       unlink(root, recursive = TRUE),
@@ -351,7 +357,7 @@ test_that(
 
 test_that(
   "input destinations, links and named Unicode paths are guarded", {
-    root <- tempfile()
+    root <- artifact_tempfile()
     dir.create(root)
     on.exit(
       unlink(root, recursive = TRUE),
@@ -385,10 +391,12 @@ test_that(
     unlink(target)
     linked <- suppressWarnings(file.symlink(copied, target))
     if (linked) {
+      ready_before <- readRDS(file.path(run, "READY.rds"))
       expect_error(
         reflow_artifact_resume(spec, run),
-        "Symbolic links"
+        "Symbolic links|Only regular files"
       )
+      expect_identical(readRDS(file.path(run, "READY.rds")), ready_before)
     } else {
       expect_false(file.exists(target))
     }
@@ -406,7 +414,7 @@ test_that(
       ),
       "ancestors"
     )
-    root <- tempfile()
+    root <- artifact_tempfile()
     dir.create(root)
     on.exit(
       unlink(root, recursive = TRUE),
@@ -444,7 +452,7 @@ test_that("array declarations and extra fields fail before execution", {
 })
 
 test_that("lost attempt state cannot start another writer", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   run <- file.path(root, "run")
@@ -475,7 +483,7 @@ test_that("ancestor checks normalize separators and root boundaries", {
   expect_false(within("C:/input-other", "C:/input", TRUE))
   expect_true(within("/new", "/", FALSE))
   expect_false(within("/A/new", "/a", FALSE))
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   ancestor <- normalizePath(dirname(root), winslash = "/")
@@ -489,7 +497,7 @@ test_that("ancestor checks normalize separators and root boundaries", {
 
 
 test_that("file and directory type predicates are distinct", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   file <- file.path(root, "file")
@@ -501,7 +509,7 @@ test_that("file and directory type predicates are distinct", {
 })
 
 test_that("non-file attempt state is refused before receipt reading", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   spec <- artifact_example(character())
@@ -537,7 +545,7 @@ test_that("incomplete and conflicting declarations are refused", {
 })
 
 test_that("tracked RDS values and relative destinations preserve literal output", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   input <- file.path(root, "input.rds")
@@ -554,7 +562,7 @@ test_that("tracked RDS values and relative destinations preserve literal output"
 })
 
 test_that("altered declarations fail before writing a definition", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   spec <- artifact_example()
@@ -567,7 +575,7 @@ test_that("altered declarations fail before writing a definition", {
 })
 
 test_that("failed-state corruption cannot authorize another attempt", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   spec <- artifact_example(character())
@@ -592,7 +600,7 @@ test_that("failed-state corruption cannot authorize another attempt", {
 })
 
 test_that("accepted attempt disagreement cannot mutate accepted bytes", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   spec <- artifact_example()
@@ -609,7 +617,7 @@ test_that("accepted attempt disagreement cannot mutate accepted bytes", {
 })
 
 test_that("definition changes across initialization are rejected", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   original_signature <- reflowR:::rfa_signature
@@ -628,7 +636,7 @@ test_that("definition changes across initialization are rejected", {
 })
 
 test_that("a resource change during reuse leaves accepted evidence untouched", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   spec <- artifact_example()
@@ -649,7 +657,7 @@ test_that("a resource change during reuse leaves accepted evidence untouched", {
 })
 
 test_that("failed final verification retracts the accepted pointer", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   original_descriptor <- reflowR:::rfa_descriptor
@@ -671,7 +679,7 @@ test_that("failed final verification retracts the accepted pointer", {
 })
 
 test_that("reordered declaration fields are noncanonical", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   spec <- artifact_example()
@@ -680,7 +688,7 @@ test_that("reordered declaration fields are noncanonical", {
 })
 
 test_that("disappeared inputs and missing declared packages fail before attempts", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   input <- file.path(root, "source.txt")
@@ -697,7 +705,7 @@ test_that("disappeared inputs and missing declared packages fail before attempts
 })
 
 test_that("missing resource trees and actual FIFOs fail without reading streams", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   expect_error(reflowR:::rfa_tree(file.path(root, "absent")), "Missing directory")
@@ -713,7 +721,7 @@ test_that("missing resource trees and actual FIFOs fail without reading streams"
 })
 
 test_that("package closure changes stop initialization before any attempt", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   original <- reflowR:::rf_signature
@@ -730,7 +738,7 @@ test_that("package closure changes stop initialization before any attempt", {
 test_that("filesystem creation failures never accept a partial attempt", {
   for (failure in c("attempt", "bundle", "parent")) {
     local({
-      root <- tempfile()
+      root <- artifact_tempfile()
       dir.create(root)
       on.exit(unlink(root, recursive = TRUE), add = TRUE)
       spec <- artifact_example()
@@ -763,7 +771,7 @@ test_that("filesystem creation failures never accept a partial attempt", {
 })
 
 test_that("a foreign READY inserted during the writer is never overwritten", {
-  root <- tempfile()
+  root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
   run <- file.path(root, "run")
