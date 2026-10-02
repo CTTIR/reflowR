@@ -1,3 +1,10 @@
+# Development version
+
+- Added a serial artifact dependency core with deferred logical references,
+  authenticated producer lineage and immutable generations that reuse unchanged
+  bundles in place. Failed attempts require explicit reconciliation. Resource
+  enforcement and targets integration remain outside this dependency core.
+
 # reflowR (development version)
 
 * Add a separate declared artifact bundle API for trusted installed writers,

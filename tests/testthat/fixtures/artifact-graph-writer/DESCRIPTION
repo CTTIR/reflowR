@@ -1,0 +1,7 @@
+Package: graphfixture
+Version: 0.0.1
+Title: Anonymous Artifact Dependency Fixtures
+Description: Literal file consumption and lifecycle fixtures for package tests.
+License: MIT
+Author: R. Heller
+Maintainer: R. Heller <raban.heller@uni-ulm.de>
