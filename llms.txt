@@ -215,6 +215,11 @@ Declare package calls and execute or resume verified object workflows.
 - [`reflow_imaging_run()`](https://cttir.github.io/reflowR/reference/reflow_imaging_run.md)
   [`reflow_imaging_resume()`](https://cttir.github.io/reflowR/reference/reflow_imaging_run.md)
   : Execute or resume a recorded imaging plan
+- [`reflow_artifact_spec()`](https://cttir.github.io/reflowR/reference/reflow_artifact_spec.md)
+  : Declare one immutable file-producing bundle
+- [`reflow_artifact_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
+  [`reflow_artifact_resume()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
+  : Execute or verify one declared artifact bundle
 
 ## Project creation
 
