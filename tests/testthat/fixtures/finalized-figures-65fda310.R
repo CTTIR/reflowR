@@ -11,71 +11,43 @@
 
 #' Declare a Finalized-Value Figure Recipe
 #'
-#' Supports tile heatmaps, effect points and supplied numeric points. Values,
-#' categorical orders and scales are supplied by the caller. No observations are
-#' filtered, aggregated, fitted, jittered or interpreted as independent units.
-#' @param type `tile_heatmap`, `effect_points` or `numeric_points`.
-#' @param mapping Named character vector of data column names. Heatmaps require
-#'   `x`, `y`, `value`; effects and numeric points require `x`, `y`, `colour`.
+#' Supports tile heatmaps and effect points only. All values, categorical level
+#' orders and the heatmap midpoint are supplied by the caller. No observations
+#' are filtered, aggregated or interpreted as independent units.
+#' @param type Either `tile_heatmap` or `effect_points`.
+#' @param mapping Named character vector: heatmaps require `x`, `y`, `value`;
+#'   effects require `x`, `y`, `colour`. Values are data column names.
 #' @param row_key Nonempty character vector of complete unique-key columns.
-#' @param levels Named list of explicit unique character levels: x/y for heatmaps,
-#'   y/colour for effects, colour for numeric points, plus facet_rows/facet_columns
-#'   for requested facets. Nonempty data require exact coverage of observed levels.
-#' @param facets Named list with optional rows/columns column names. Heatmap and
-#'   effect facets use free y scales and space. Numeric-point facets use fixed
-#'   scales and space in both directions. Facets do not aggregate values.
-#' @param labels Named list of optional title/x/y/fill/colour/caption text;
-#'   numeric points also accept subtitle. Explicit NULL removes a label;
-#'   empty text remains a distinct label.
+#' @param levels Named list of explicit unique character levels. Required entries
+#'   are x/y for heatmaps, y/colour for effects, plus facet_rows/facet_columns
+#'   whenever those facets are requested. Nonempty data require exact coverage.
+#' @param facets Named list with optional rows/columns column names. Facets use
+#'   free y scales and free y space. They do not change numerical payloads.
+#' @param labels Named list of optional title/x/y/fill/colour/caption text.
+#'   Explicit NULL removes a label; empty text remains a distinct label.
 #' @param midpoint Required finite scalar for available heatmaps; empty heatmaps
-#'   may supply NULL. Must be NULL for effects and numeric points.
-#' @param reference Finite vertical reference for effects; NULL for heatmaps.
-#'   Numeric points accept NULL or a finite horizontal reference within y limits.
-#' @param style Named list of presentation overrides: base_size, family, low, mid,
-#'   high, point_size, tile_linewidth, x_angle, strip_y_angle (default -90).
-#'   Optional positive finite text_size overrides only root text, preserving geom
-#'   defaults and explicit child text sizes. Omission preserves legacy recipes.
-#'   No expressions allowed.
-#' @param status Explicit available or empty for heatmaps/effects, agreeing with
-#'   supplied rows. Numeric points require available and nonempty data.
+#'   may supply NULL. Must be NULL for effects.
+#' @param reference Finite effect reference line; NULL for heatmaps.
+#' @param style Named list of presentation overrides: base_size, family,
+#'   low, mid, high, point_size, tile_linewidth, x_angle, strip_y_angle
+#'   (right-side facet text, default -90).
+#'   Optional text_size overrides only the root text size, leaving geom defaults
+#'   unchanged. It must be positive and finite; omission preserves the recipe.
+#'   Explicit child text sizes remain unchanged. No expressions allowed.
+#' @param status Explicit available or empty. Must agree with the supplied rows.
 #' @param provenance Named character vector of caller declarations, not verified
 #'   evidence. It is excluded from the scientific payload hash.
-#' @param display_labels Optional complete named plaintext maps for categorical
-#'   x/y axes or facet_rows/facet_columns. Numeric points permit only facet maps;
-#'   numeric axis labels come from numeric_axes. Map keys are original levels.
-#'   Newlines and repeated display text are allowed without merging categories.
-#'   Omitted roles use identity labels; colour labels are not mapped here.
-#' @param numeric_axes Numeric points only: named x/y lists, each containing limits
-#'   (two strictly increasing finite values), breaks (unique increasing finite
-#'   values within limits), and an equally long character labels vector. Both
-#'   axes are required. Coordinates outside the declared limits are refused.
-#' @param colour_values Numeric points only: complete named colour vector whose
-#'   unique names exactly match levels$colour. Colour order follows those levels.
-#' @param annotation Numeric points only: NULL or a named list with column,
-#'   nudge_x, nudge_y, size_pt, check_overlap and show_legend. Nudges must be finite;
-#'   size_pt must be finite and at least 7; both policies must be logical scalars.
-#'   Text size uses ggplot2's 72.27 points per inch conversion. Annotation records
-#'   are retained; clipping and overlap suppression can hide text. Actual visible
-#'   label coverage and exported glyph sizes require device and visual checks.
-#' @details The three numeric-only arguments must remain NULL for existing types.
-#'   Their default omission preserves existing recipe structure and behavior.
-#'   Numeric coordinates are supplied directly: no aggregation, filtering, jitter,
-#'   automatic offsets or implicit reordering is performed. Plotted rows retain
-#'   input order; categorical display order follows the declared levels.
+#' @param display_labels Optional named list of complete named character maps for
+#'   categorical x/y axes or facet_rows/facet_columns. Map names are original
+#'   levels; values are literal display text, including optional newlines.
+#'   Repeated display text is allowed without merging underlying categories.
+#'   Omitted roles use identity labels. Numeric axes and colour are not mapped.
 #' @return A versioned recipe; no data are processed or files written.
 #' @export
 reflow_figure_recipe <- function(type, mapping, row_key, levels,
     facets = list(), labels = list(), midpoint = NULL, reference = NULL,
     style = list(), status = "available", provenance = character(),
-    display_labels = list(), numeric_axes = NULL, colour_values = NULL,
-    annotation = NULL) {
-  if (identical(type, "numeric_points")) {
-    return(.rf_numeric_recipe(mapping, row_key, levels, facets, labels, midpoint,
-      reference, style, status, provenance, display_labels, numeric_axes,
-      colour_values, annotation))
-  }
-  .rf_figure_assert(is.null(numeric_axes) && is.null(colour_values) &&
-    is.null(annotation), "Numeric options require numeric_points")
+    display_labels = list()) {
   a <- .rf_figure_assert
   a(.rf_figure_text(type) && length(type) == 1L &&
       type %in% c("tile_heatmap", "effect_points"), "Unsupported figure type")
@@ -162,29 +134,15 @@ reflow_figure_recipe <- function(type, mapping, row_key, levels,
 #' Build a Plot from a Finalized-Value Figure Recipe
 #' @param data Data frame with plain finite numeric plotted values and nonblank
 #'   character keys/categories. Complete row keys must be unique. Extra columns
-#'   are ignored without modifying caller input. Repeated display positions remain
-#'   distinct keyed rows. Numeric points require nonempty data and preserve input
-#'   row order, with complete colour/facet levels and fixed numeric scales.
+#'   are ignored. Repeated display positions are retained as distinct keyed rows.
 #' @param recipe A recipe from [reflow_figure_recipe()].
-#' @return Versioned list with plot (ggplot, or NULL for explicitly empty legacy
-#'   input), status, rows, selected_columns, payload_sha256 and recipe_sha256.
-#'   Numeric points additionally return annotation_records (zero when absent)
-#'   and visible_annotations = NA_integer_: retained records do not establish
-#'   device-visible labels. Clipping and check_overlap can suppress visibility.
-#'   The payload hash binds key-sorted selected values and mapping, row keys,
-#'   and supplied midpoint/reference as applicable. Styling, level orders, numeric
-#'   axis declarations, colour maps and unverified provenance bind the recipe hash.
-#'   Extra unselected status columns are not authenticated by these hashes.
-#'   Hashes use R version-2 serialization, not a cross-language protocol.
-#' @details Numeric points draw the supplied coordinates without aggregation,
-#'   filtering, fitting, jitter or automatic offsets. Text nudges affect annotations
-#'   only. Device-specific visible-label coverage, clipping and minimum exported
-#'   font sizes require separate render and visual qualification. No files are written.
+#' @return Versioned list with ggplot or NULL for explicit empty input, status,
+#'   row count, selected columns, payload SHA-256 and recipe SHA-256. The payload
+#'   hash binds key-sorted selected values/mapping and supplied midpoint/reference;
+#'   styling, order declarations and unverified provenance affect only recipe hash.
+#'   Hashes use R version-2 serialization and are not a cross-language protocol.
 #' @export
 reflow_figure_plot <- function(data, recipe) {
-  if (is.list(recipe) && identical(recipe$type, "numeric_points")) {
-    return(.rf_numeric_plot(data, recipe))
-  }
   a <- .rf_figure_assert
   a(inherits(recipe, "reflow_figure_recipe") &&
       identical(recipe$schema, "reflow_finalized_figure_1"), "Invalid recipe schema")
