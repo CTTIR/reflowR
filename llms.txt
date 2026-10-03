@@ -232,6 +232,9 @@ Declare package calls and execute or resume verified object workflows.
 - [`reflow_artifact_plan_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan_run.md)
   [`reflow_artifact_plan_resume()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan_run.md)
   : Execute or verify an immutable artifact graph generation
+- [`reflow_artifact_plan_run_bounded()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan_run_bounded.md)
+  [`reflow_artifact_plan_resume_bounded()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan_run_bounded.md)
+  : Run or resume a serial graph with per-node Linux guardians
 - [`reflow_artifact_select()`](https://cttir.github.io/reflowR/reference/reflow_artifact_select.md)
   : Select an immutable artifact graph generation
 - [`reflow_artifact_selection_verify()`](https://cttir.github.io/reflowR/reference/reflow_artifact_selection_verify.md)
