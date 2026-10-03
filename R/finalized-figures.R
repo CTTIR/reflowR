@@ -35,11 +35,17 @@
 #' @param status Explicit available or empty. Must agree with the supplied rows.
 #' @param provenance Named character vector of caller declarations, not verified
 #'   evidence. It is excluded from the scientific payload hash.
+#' @param display_labels Optional named list of complete named character maps for
+#'   categorical x/y axes or facet_rows/facet_columns. Map names are original
+#'   levels; values are literal display text, including optional newlines.
+#'   Repeated display text is allowed without merging underlying categories.
+#'   Omitted roles use identity labels. Numeric axes and colour are not mapped.
 #' @return A versioned recipe; no data are processed or files written.
 #' @export
 reflow_figure_recipe <- function(type, mapping, row_key, levels,
     facets = list(), labels = list(), midpoint = NULL, reference = NULL,
-    style = list(), status = "available", provenance = character()) {
+    style = list(), status = "available", provenance = character(),
+    display_labels = list()) {
   a <- .rf_figure_assert
   a(.rf_figure_text(type) && length(type) == 1L &&
       type %in% c("tile_heatmap", "effect_points"), "Unsupported figure type")
@@ -100,11 +106,23 @@ reflow_figure_recipe <- function(type, mapping, row_key, levels,
   a(.rf_figure_text(provenance, TRUE) && (length(provenance) == 0L ||
       (!is.null(names(provenance)) && .rf_figure_text(names(provenance)) &&
         !anyDuplicated(names(provenance)))), "Invalid provenance declarations")
-  structure(list(schema = "reflow_finalized_figure_1", type = type,
+  display_roles <- intersect(c("x", "y", "facet_rows", "facet_columns"), required_levels)
+  a(named_list(display_labels, display_roles), "Invalid display label roles")
+  for (role in names(display_labels)) {
+    map <- display_labels[[role]]
+    a(.rf_figure_text(map) && !is.null(names(map)) &&
+        .rf_figure_text(names(map)) && !anyDuplicated(names(map)) &&
+        setequal(names(map), levels[[role]]), "Display labels must cover exact levels")
+    display_labels[[role]] <- map[levels[[role]]]
+  }
+  display_labels <- display_labels[intersect(display_roles, names(display_labels))]
+  recipe <- structure(list(schema = "reflow_finalized_figure_1", type = type,
     mapping = mapping, row_key = row_key, levels = levels[required_levels],
     facets = facets, labels = labels, midpoint = midpoint, reference = reference,
     style = defaults, status = status, provenance = provenance),
     class = "reflow_figure_recipe")
+  if (length(display_labels)) recipe$display_labels <- display_labels
+  recipe
 }
 
 #' Build a Plot from a Finalized-Value Figure Recipe
@@ -124,6 +142,7 @@ reflow_figure_plot <- function(data, recipe) {
       identical(recipe$schema, "reflow_finalized_figure_1"), "Invalid recipe schema")
   expected <- c("schema", "type", "mapping", "row_key", "levels", "facets", "labels",
     "midpoint", "reference", "style", "status", "provenance")
+  if ("display_labels" %in% names(recipe)) expected <- c(expected, "display_labels")
   a(identical(names(recipe), expected), "Unexpected recipe fields")
   rebuilt <- do.call(reflow_figure_recipe, unclass(recipe)[setdiff(expected, "schema")])
   a(identical(recipe, rebuilt), "Recipe failed revalidation")
@@ -192,8 +211,18 @@ reflow_figure_plot <- function(data, recipe) {
   if (length(recipe$facets)) {
     rows <- if ("rows" %in% names(recipe$facets)) ggplot2::vars(.data$facet_rows) else NULL
     cols <- if ("columns" %in% names(recipe$facets)) ggplot2::vars(.data$facet_columns) else NULL
-    plot <- plot + ggplot2::facet_grid(rows = rows, cols = cols, scales = "free_y",
-      space = "free_y")
+    facet_maps <- recipe$display_labels[intersect(
+      c("facet_rows", "facet_columns"), names(recipe$display_labels)
+    )]
+    facet_args <- list(rows = rows, cols = cols, scales = "free_y", space = "free_y")
+    if (length(facet_maps)) facet_args$labeller <- do.call(ggplot2::labeller, facet_maps)
+    plot <- plot + do.call(ggplot2::facet_grid, facet_args)
+  }
+  if ("x" %in% names(recipe$display_labels)) {
+    plot <- plot + ggplot2::scale_x_discrete(labels = recipe$display_labels$x)
+  }
+  if ("y" %in% names(recipe$display_labels)) {
+    plot <- plot + ggplot2::scale_y_discrete(labels = recipe$display_labels$y)
   }
   plot <- plot + do.call(ggplot2::labs, recipe$labels) +
     ggplot2::theme_bw(base_size = recipe$style$base_size, base_family = recipe$style$family) +

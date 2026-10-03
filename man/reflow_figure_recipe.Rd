@@ -15,7 +15,8 @@ reflow_figure_recipe(
   reference = NULL,
   style = list(),
   status = "available",
-  provenance = character()
+  provenance = character(),
+  display_labels = list()
 )
 }
 \arguments{
@@ -49,6 +50,12 @@ No expressions allowed.}
 
 \item{provenance}{Named character vector of caller declarations, not verified
 evidence. It is excluded from the scientific payload hash.}
+
+\item{display_labels}{Optional named list of complete named character maps for
+categorical x/y axes or facet_rows/facet_columns. Map names are original
+levels; values are literal display text, including optional newlines.
+Repeated display text is allowed without merging underlying categories.
+Omitted roles use identity labels. Numeric axes and colour are not mapped.}
 }
 \value{
 A versioned recipe; no data are processed or files written.
