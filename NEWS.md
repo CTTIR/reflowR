@@ -1,5 +1,7 @@
 # Development
 
+- Add an explicit immutable generation registry and compact always-verified targets adapter. Interrupted selections require reconciliation; cached pointers remain unverified until consumption checks. Every completed generation remains verified even if explicitly closed failed before publication. This serial Linux-local increment does not add resource supervision or complete workflow orchestration.
+
 - Add optional Linux guardian-backed artifact run and explicit resume APIs.
   Address-space limits are per process and thread settings are requests;
   guardian loss remains an unresolved failure requiring external cleanup.

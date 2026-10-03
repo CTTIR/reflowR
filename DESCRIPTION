@@ -37,7 +37,8 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    withr
+    withr,
+    targets
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/Needs/website: CTTIR/themakR, pkgdown
