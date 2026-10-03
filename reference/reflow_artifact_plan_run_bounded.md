@@ -63,8 +63,9 @@ outcomes and changed policies fail closed. Ordinary parent unwind
 releases its graph/control locks; stale locks after process death
 require external inspection. Guardian death is unqualified and requires
 external cleanup. Linux only, trusted descendants, per-process address
-space, requested threads, and 1–60 seconds per node; no graph-wide
-deadline, parallel scheduler, selector or targets integration.
+space, requested threads, and explicit finite deadlines of 1–86400
+seconds per node; no graph-wide deadline, parallel scheduler, selector
+or targets integration.
 
 ## See also
 

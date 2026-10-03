@@ -28,8 +28,8 @@ reflow_artifact_resume_bounded(spec, directory, supervisor_directory,
 
 - resources:
 
-  Exact list: timeout_seconds (1–60), address_space_bytes, nice
-  (absolute 0–19), threads (1–2), temp_directory, cache_directory,
+  Exact list: timeout_seconds (finite, 1–86400), address_space_bytes,
+  nice (absolute 0–19), threads (1–2), temp_directory, cache_directory,
   rscript, prlimit, nice_command. Paths are canonical and link-free.
 
 - runtime_files:
