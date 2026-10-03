@@ -1,5 +1,7 @@
 # Development
 
+* Finalized figure recipes accept an optional root text size without changing geometry defaults.
+
 - Add optional literal categorical axis and facet display-label maps to finalized figure recipes without changing scientific payloads or default recipes.
 
 - Add an explicit immutable generation registry and compact always-verified targets adapter. Interrupted selections require reconciliation; cached pointers remain unverified until consumption checks. Every completed generation remains verified even if explicitly closed failed before publication. This serial Linux-local increment does not add resource supervision or complete workflow orchestration.

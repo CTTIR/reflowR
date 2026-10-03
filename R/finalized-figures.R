@@ -31,7 +31,9 @@
 #' @param style Named list of presentation overrides: base_size, family,
 #'   low, mid, high, point_size, tile_linewidth, x_angle, strip_y_angle
 #'   (right-side facet text, default -90).
-#'   No expressions allowed.
+#'   Optional text_size overrides only the root text size, leaving geom defaults
+#'   unchanged. It must be positive and finite; omission preserves the recipe.
+#'   Explicit child text sizes remain unchanged. No expressions allowed.
 #' @param status Explicit available or empty. Must agree with the supplied rows.
 #' @param provenance Named character vector of caller declarations, not verified
 #'   evidence. It is excluded from the scientific payload hash.
@@ -81,7 +83,11 @@ reflow_figure_recipe <- function(type, mapping, row_key, levels,
     low = "#2166AC", mid = "white", high = "#B2182B", point_size = 2,
     tile_linewidth = 0.15, x_angle = if (type == "tile_heatmap") 55 else 0,
     strip_y_angle = -90)
-  a(named_list(style, names(defaults)), "Invalid style fields")
+  a(named_list(style, c(names(defaults), "text_size")), "Invalid style fields")
+  if ("text_size" %in% names(style)) {
+    a(.rf_figure_scalar(style$text_size) && style$text_size > 0,
+      "Invalid text size")
+  }
   for (k in names(style)) defaults[[k]] <- style[[k]]
   for (k in c("base_size", "point_size", "tile_linewidth")) {
     a(.rf_figure_scalar(defaults[[k]]) && defaults[[k]] > 0, "Invalid style size")
@@ -235,5 +241,8 @@ reflow_figure_plot <- function(data, recipe) {
     }
   plot <- plot + ggplot2::theme(
     strip.text.y.right = ggplot2::element_text(angle = recipe$style$strip_y_angle))
+  if ("text_size" %in% names(recipe$style)) {
+    plot <- plot + ggplot2::theme(text = ggplot2::element_text(size = recipe$style$text_size))
+  }
   c(list(plot = plot), audit)
 }
