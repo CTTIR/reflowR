@@ -28,6 +28,9 @@ Declare package calls and execute or resume verified object workflows.
 - [`reflow_artifact_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
   [`reflow_artifact_resume()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
   : Execute or verify one declared artifact bundle
+- [`reflow_artifact_run_bounded()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run_bounded.md)
+  [`reflow_artifact_resume_bounded()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run_bounded.md)
+  : Run an artifact with an optional Linux guardian
 - [`reflow_artifact_ref()`](https://cttir.github.io/reflowR/reference/reflow_artifact_ref.md)
   : Reference a declared artifact in a dependency plan
 - [`reflow_artifact_stage()`](https://cttir.github.io/reflowR/reference/reflow_artifact_stage.md)
