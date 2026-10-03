@@ -18,7 +18,8 @@
 #' locks after process death are never stolen. Guardian death remains an
 #' unqualified failure requiring external cleanup. Limits and trusted-child
 #' assumptions are those of [reflow_artifact_run_bounded()]: per-process address
-#' space, requested threads, Linux only, and 1 to 60 seconds per node. There is
+#' space, requested threads, Linux only, and explicit finite deadlines of
+#' 1 to 86400 seconds per node. There is
 #' no graph-wide time budget, parallel scheduler, selector or targets adapter.
 #' @param plan A [reflow_artifact_plan()].
 #' @param directory Fresh graph directory, or existing directory for resume.

@@ -8,7 +8,8 @@
 #'
 #' Address space is limited per process, not across the tree. Thread variables
 #' are requests, not CPU quotas. Priority is absolute and cannot be elevated.
-#' The first backend supports deadlines of 1 to 60 seconds. Cleanup can take
+#' The first backend supports explicit finite deadlines of 1 to 86400 seconds.
+#' Cleanup can take
 #' up to two additional five-second intervals. Unknown ownership retains locks.
 #' Runtime pins cover declared files, not an inferred complete ELF closure.
 #' Parent OPENBLAS_NUM_THREADS, OMP_NUM_THREADS and MKL_NUM_THREADS must
@@ -80,7 +81,7 @@ rfb_resources <- function(x) {
       is.null(dim(z)) && length(z) == 1L && is.finite(z) &&
       z >= lo && z <= hi && (!integral || z == floor(z))
   }
-  if (!num(x$timeout_seconds, 1, 60) ||
+  if (!num(x$timeout_seconds, 1, 86400) ||
     !num(x$address_space_bytes, 1, 2^53, TRUE) ||
     !num(x$nice, 0, 19, TRUE) || !num(x$threads, 1, 2, TRUE)) {
     stop("Invalid bounded resource limits.")

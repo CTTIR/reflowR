@@ -15,7 +15,7 @@ test_that("bounded resource declaration is exact and scalar", {
   }
   expect_error(rfb_resources(c(valid, list(extra = TRUE))), "Exact")
   expect_error(rfb_resources(valid[-1]), "Exact")
-  valid$timeout_seconds <- 61
+  valid$timeout_seconds <- 86401
   expect_error(rfb_resources(valid), "Invalid")
 })
 

@@ -1,5 +1,7 @@
 # Development
 
+* Allow explicitly declared finite bounded-stage deadlines from 1 through 86400 seconds. Guardian liveness, transport and cleanup intervals remain unchanged; this ceiling is not a long-duration reliability guarantee.
+
 - Preserve the authenticated legacy figure fixture bytes across Git checkout line-ending settings.
 
 - Add supplied numeric-point recipes with explicit fixed axes, categorical colours and facets, optional horizontal references and annotation policies. Existing recipe defaults remain unchanged; device-visible annotation coverage requires separate rendering checks.

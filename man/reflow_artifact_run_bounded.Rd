@@ -13,7 +13,7 @@ reflow_artifact_resume_bounded(spec, directory, supervisor_directory,
 \item{spec}{A declared artifact specification.}
 \item{directory}{Artifact run directory.}
 \item{supervisor_directory}{Fresh separate supervisor directory.}
-\item{resources}{Exact list: timeout_seconds (1--60), address_space_bytes,
+\item{resources}{Exact list: timeout_seconds (finite, 1--86400), address_space_bytes,
  nice (absolute 0--19), threads (1--2), temp_directory, cache_directory,
  rscript, prlimit, nice_command. Paths are canonical and link-free.}
 \item{runtime_files}{Named SHA-256 vector including installed backend scripts,
