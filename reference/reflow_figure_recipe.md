@@ -1,26 +1,19 @@
 # Declare a Finalized-Value Figure Recipe
 
-Supports tile heatmaps and effect points only. All values, categorical
-level orders and the heatmap midpoint are supplied by the caller. No
-observations are filtered, aggregated or interpreted as independent
-units.
+Supports tile heatmaps, effect points and supplied numeric points.
+Values, categorical orders and scales are supplied by the caller. No
+observations are filtered, aggregated, fitted, jittered or interpreted
+as independent units.
 
 ## Usage
 
 ``` r
 reflow_figure_recipe(
-  type,
-  mapping,
-  row_key,
-  levels,
-  facets = list(),
-  labels = list(),
-  midpoint = NULL,
-  reference = NULL,
-  style = list(),
-  status = "available",
-  provenance = character(),
-  display_labels = list()
+  type, mapping, row_key, levels,
+  facets = list(), labels = list(), midpoint = NULL, reference = NULL,
+  style = list(), status = "available", provenance = character(),
+  display_labels = list(), numeric_axes = NULL, colour_values = NULL,
+  annotation = NULL
 )
 ```
 
@@ -28,12 +21,12 @@ reflow_figure_recipe(
 
 - type:
 
-  Either `tile_heatmap` or `effect_points`.
+  `tile_heatmap`, `effect_points` or `numeric_points`.
 
 - mapping:
 
-  Named character vector: heatmaps require `x`, `y`, `value`; effects
-  require `x`, `y`, `colour`. Values are data column names.
+  Named character vector of data column names. Heatmaps require `x`,
+  `y`, `value`; effects and numeric points require `x`, `y`, `colour`.
 
 - row_key:
 
@@ -41,42 +34,45 @@ reflow_figure_recipe(
 
 - levels:
 
-  Named list of explicit unique character levels. Required entries are
-  x/y for heatmaps, y/colour for effects, plus facet_rows/facet_columns
-  whenever those facets are requested. Nonempty data require exact
-  coverage.
+  Named list of explicit unique character levels: x/y for heatmaps,
+  y/colour for effects, colour for numeric points, plus
+  facet_rows/facet_columns for requested facets. Nonempty data require
+  exact coverage of observed levels.
 
 - facets:
 
-  Named list with optional rows/columns column names. Facets use free y
-  scales and free y space. They do not change numerical payloads.
+  Named list with optional rows/columns column names. Heatmap and effect
+  facets use free y scales and space. Numeric-point facets use fixed
+  scales and space in both directions. Facets do not aggregate values.
 
 - labels:
 
-  Named list of optional title/x/y/fill/colour/caption text. Explicit
-  NULL removes a label; empty text remains a distinct label.
+  Named list of optional title/x/y/fill/colour/caption text; numeric
+  points also accept subtitle. Explicit NULL removes a label; empty text
+  remains a distinct label.
 
 - midpoint:
 
   Required finite scalar for available heatmaps; empty heatmaps may
-  supply NULL. Must be NULL for effects.
+  supply NULL. Must be NULL for effects and numeric points.
 
 - reference:
 
-  Finite effect reference line; NULL for heatmaps.
+  Finite vertical reference for effects; NULL for heatmaps. Numeric
+  points accept NULL or a finite horizontal reference within y limits.
 
 - style:
 
   Named list of presentation overrides: base_size, family, low, mid,
-  high, point_size, tile_linewidth, x_angle, strip_y_angle (right-side
-  facet text, default -90). Optional text_size overrides only the root
-  text size, leaving geom defaults unchanged. It must be positive and
-  finite; omission preserves the recipe. Explicit child text sizes
-  remain unchanged. No expressions allowed.
+  high, point_size, tile_linewidth, x_angle, strip_y_angle (default
+  -90). Optional positive finite text_size overrides only root text,
+  preserving geom defaults and explicit child text sizes. Omission
+  preserves legacy recipes. No expressions allowed.
 
 - status:
 
-  Explicit available or empty. Must agree with the supplied rows.
+  Explicit available or empty for heatmaps/effects, agreeing with
+  supplied rows. Numeric points require available and nonempty data.
 
 - provenance:
 
@@ -85,12 +81,45 @@ reflow_figure_recipe(
 
 - display_labels:
 
-  Optional named list of complete named character maps for categorical
-  x/y axes or facet_rows/facet_columns. Map names are original levels;
-  values are literal display text, including optional newlines. Repeated
-  display text is allowed without merging underlying categories. Omitted
-  roles use identity labels. Numeric axes and colour are not mapped.
+  Optional complete named plaintext maps for categorical x/y axes or
+  facet_rows/facet_columns. Numeric points permit only facet maps;
+  numeric axis labels come from numeric_axes. Map keys are original
+  levels. Newlines and repeated display text are allowed without merging
+  categories. Omitted roles use identity labels; colour labels are not
+  mapped here.
+
+- numeric_axes:
+
+  Numeric points only: named x/y lists, each containing limits (two
+  strictly increasing finite values), breaks (unique increasing finite
+  values within limits), and an equally long character labels vector.
+  Both axes are required. Coordinates outside the declared limits are
+  refused.
+
+- colour_values:
+
+  Numeric points only: complete named colour vector whose unique names
+  exactly match `levels$colour`. Colour order follows those levels.
+
+- annotation:
+
+  Numeric points only: NULL or a named list with column, nudge_x,
+  nudge_y, size_pt, check_overlap and show_legend. Nudges must be
+  finite; size_pt must be finite and at least 7; both policies must be
+  logical scalars. Text size uses ggplot2's 72.27 points per inch
+  conversion. Annotation records are retained; clipping and overlap
+  suppression can hide text. Actual visible label coverage and exported
+  glyph sizes require device and visual checks.
 
 ## Value
 
 A versioned recipe; no data are processed or files written.
+
+## Details
+
+The three numeric-only arguments must remain NULL for existing types.
+Their default omission preserves existing recipe structure and behavior.
+Numeric coordinates are supplied directly: no aggregation, filtering,
+jitter, automatic offsets or implicit reordering is performed. Plotted
+rows retain input order; categorical display order follows the declared
+levels.

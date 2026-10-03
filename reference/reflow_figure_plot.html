@@ -40,7 +40,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Build a Plot from a Finalized-Value Figure Recipe</h1>
-      <small class="dont-index">Source: <a href="https://github.com/cttir/reflowR/blob/main/R/finalized-figures.R" class="external-link"><code>R/finalized-figures.R</code></a></small>
+
       <div class="d-none name"><code>reflow_figure_plot.Rd</code></div>
     </div>
 
@@ -60,7 +60,9 @@
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>Data frame with plain finite numeric plotted values and nonblank
 character keys/categories. Complete row keys must be unique. Extra columns
-are ignored. Repeated display positions are retained as distinct keyed rows.</p></dd>
+are ignored without modifying caller input. Repeated display positions remain
+distinct keyed rows. Numeric points require nonempty data and preserve input
+row order, with complete colour/facet levels and fixed numeric scales.</p></dd>
 
 
 <dt id="arg-recipe">recipe<a class="anchor" aria-label="anchor" href="#arg-recipe"></a></dt>
@@ -69,11 +71,23 @@ are ignored. Repeated display positions are retained as distinct keyed rows.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Versioned list with ggplot or NULL for explicit empty input, status,
-row count, selected columns, payload SHA-256 and recipe SHA-256. The payload
-hash binds key-sorted selected values/mapping and supplied midpoint/reference;
-styling, order declarations and unverified provenance affect only recipe hash.
-Hashes use R version-2 serialization and are not a cross-language protocol.</p>
+    <p>Versioned list with plot (ggplot, or NULL for explicitly empty legacy
+input), status, rows, selected_columns, payload_sha256 and recipe_sha256.
+Numeric points additionally return annotation_records (zero when absent)
+and visible_annotations = <code>NA_integer_</code>: retained records do not establish
+device-visible labels. Clipping and check_overlap can suppress visibility.
+The payload hash binds key-sorted selected values and mapping, row keys,
+and supplied midpoint/reference as applicable. Styling, level orders, numeric
+axis declarations, colour maps and unverified provenance bind the recipe hash.
+Extra unselected status columns are not authenticated by these hashes.
+Hashes use R version-2 serialization, not a cross-language protocol.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Numeric points draw the supplied coordinates without aggregation,
+filtering, fitting, jitter or automatic offsets. Text nudges affect annotations
+only. Device-specific visible-label coverage, clipping and minimum exported
+font sizes require separate render and visual qualification. No files are written.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
