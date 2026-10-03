@@ -47,6 +47,8 @@ reference:
       - reflow_artifact_stage
       - reflow_artifact_plan
       - reflow_artifact_plan_run
+      - reflow_artifact_plan_run_bounded
+      - reflow_artifact_plan_resume_bounded
       - reflow_artifact_select
       - reflow_artifact_selection_verify
       - reflow_artifact_target

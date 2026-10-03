@@ -106,47 +106,20 @@ rfb_ready_only <- function(spec, directory, expected_definition) {
 
 rfb_run <- function(spec, directory, supervisor_directory, resources,
                     runtime_files, cancel, resume, reconciled_attempt,
-                    reconciliation) {
+                    reconciliation, expected_definition = NULL) {
   rfb_capability()
-  resources <- rfb_resources(resources)
-  rfb_thread_preflight(resources$threads)
   if (!is.function(cancel)) stop("Cancellation callback required.")
-  scripts <- system.file("bounded", package = "reflowR", mustWork = TRUE)
-  files <- file.path(scripts, c(
-    "executor.R", "channel.R", "client.R",
-    "guardian.R", "worker.R", "schema.R"
-  ))
-  package_path <- find.package("reflowR")
-  expected_definition <- rfa_signature(spec)
-  packages <- rfb_packages(unique(c(
-    "reflowR", "processx", "ps", "digest",
-    spec$package, spec$packages
-  )))
-  package_files <- unlist(lapply(packages, list.files,
-    recursive = TRUE,
-    full.names = TRUE, all.files = TRUE
-  ), use.names = FALSE)
-  expected <- c(files, package_files, resources$rscript, resources$prlimit, resources$nice_command)
-  if (!is.character(runtime_files) || is.object(runtime_files) ||
-    !is.null(dim(runtime_files)) || is.null(names(runtime_files)) ||
-    anyNA(runtime_files) || anyNA(names(runtime_files)) ||
-    anyDuplicated(names(runtime_files)) ||
-    !all(grepl("^[0-9a-f]{64}$", runtime_files)) ||
-    !all(expected %in% names(runtime_files))) {
-    stop("Complete declared runtime pins required.")
+  current_definition <- rfa_signature(spec)
+  if (is.null(expected_definition)) expected_definition <- current_definition
+  if (!identical(current_definition, expected_definition)) {
+    stop("Captured artifact definition changed before bounded preflight.")
   }
-  for (file in names(runtime_files)) {
-    rfa_no_links(file)
-    if (!rfa_regular(file) || !identical(rfa_canonical(file), file) ||
-      !identical(
-        digest::digest(file = file, algo = "sha256", serialize = FALSE),
-        runtime_files[[file]]
-      )) {
-      stop("Runtime pin mismatch.")
-    }
-  }
-  e <- new.env(parent = baseenv())
-  for (file in files[c(1:3, 6)]) sys.source(file, envir = e)
+  preflight <- rfb_preflight(spec, resources, runtime_files)
+  resources <- preflight$resources
+  files <- preflight$files
+  packages <- preflight$packages
+  package_path <- preflight$package_path
+  e <- preflight$environment
   verify <- function() {
     if (!identical(e$rfx_hashes(names(runtime_files)), runtime_files)) stop("Runtime changed.")
   }
@@ -319,4 +292,56 @@ rfb_thread_preflight <- function(threads) {
     stop("Parent numerical thread environment differs from requested child settings.")
   }
   invisible(TRUE)
+}
+
+rfb_preflight <- function(spec, resources, runtime_files) {
+  rfb_capability()
+  resources <- rfb_resources(resources)
+  rfb_thread_preflight(resources$threads)
+  scripts <- system.file("bounded", package = "reflowR", mustWork = TRUE)
+  files <- file.path(scripts, c(
+    "executor.R", "channel.R", "client.R",
+    "guardian.R", "worker.R", "schema.R"
+  ))
+  package_path <- find.package("reflowR")
+  packages <- rfb_packages(unique(c(
+    "reflowR", "processx", "ps", "digest",
+    spec$package, spec$packages
+  )))
+  package_files <- unlist(lapply(packages, list.files,
+    recursive = TRUE,
+    full.names = TRUE, all.files = TRUE
+  ), use.names = FALSE)
+  expected <- c(files, package_files, resources$rscript, resources$prlimit, resources$nice_command)
+  if (!is.character(runtime_files) || is.object(runtime_files) ||
+    !is.null(dim(runtime_files)) || is.null(names(runtime_files)) ||
+    anyNA(runtime_files) || anyNA(names(runtime_files)) ||
+    anyDuplicated(names(runtime_files)) ||
+    !all(grepl("^[0-9a-f]{64}$", runtime_files)) ||
+    !all(expected %in% names(runtime_files))) {
+    stop("Complete declared runtime pins required.")
+  }
+  for (file in names(runtime_files)) {
+    rfa_no_links(file)
+    if (!rfa_regular(file) || !identical(rfa_canonical(file), file) ||
+      !identical(
+        digest::digest(file = file, algo = "sha256", serialize = FALSE),
+        runtime_files[[file]]
+      )) {
+      stop("Runtime pin mismatch.")
+    }
+  }
+  e <- new.env(parent = baseenv())
+  for (file in files[c(1:3, 6)]) sys.source(file, envir = e)
+  for (name in c("temp_directory", "cache_directory")) {
+    e$rfx_path(resources[[name]], directory = TRUE)
+  }
+  for (name in c("rscript", "prlimit", "nice_command")) {
+    e$rfx_path(resources[[name]])
+    if (file.access(resources[[name]], 1) != 0) stop("Executable unavailable.")
+  }
+  e$rfx_nice_plan(ps::ps_get_nice(ps::ps_handle()), resources$nice)
+  if (!e$rb_plain(spec)) stop("Data-only artifact declaration required.")
+  list(resources = resources, files = files, package_path = package_path,
+       packages = packages, environment = e)
 }

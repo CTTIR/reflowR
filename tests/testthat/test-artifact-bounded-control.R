@@ -38,7 +38,7 @@ bounded_control_fixture <- function(frame = parent.frame()) {
   state$plain <- TRUE
   original_source <- base::sys.source
   control <- new.env(parent = asNamespace("reflowR"))
-  for (name in c("rfb_run", "reflow_artifact_run_bounded",
+  for (name in c("rfb_preflight", "rfb_run", "reflow_artifact_run_bounded",
     "reflow_artifact_resume_bounded")) {
     original <- get(name, envir = asNamespace("reflowR"))
     copied <- original
@@ -404,4 +404,60 @@ test_that("client cleanup waits for controlled guardian exit and keeps failure",
   expect_identical(failure$error, "literal READY failure")
   expect_false(failure$guardian_alive)
   expect_false(file.exists(file.path(f$supervisor, "artifact-verified.rds")))
+})
+
+test_that("interpreter losing executability after preflight never launches", {
+  f <- bounded_control_fixture()
+  executable <- file.path(f$root, "owned-interpreter")
+  writeLines("#!/bin/sh", executable)
+  Sys.chmod(executable, "0700")
+  f$resources$rscript <- executable
+  f$pins[[executable]] <- digest::digest(file = executable, algo = "sha256",
+    serialize = FALSE)
+  preflight <- f$control$rfb_preflight
+  f$control$rfb_preflight <- function(...) {
+    result <- preflight(...)
+    Sys.chmod(executable, "0600")
+    result
+  }
+  expect_error(bounded_control_run(f), "Executable unavailable", fixed = TRUE)
+  expect_identical(f$state$started, 0L)
+  expect_false(dir.exists(f$supervisor))
+  expect_false(dir.exists(f$directory))
+})
+
+test_that("tracked input changed after preflight refuses before START", {
+  f <- bounded_control_fixture()
+  input <- file.path(f$root, "input.txt")
+  writeLines("before", input)
+  f$spec$args$text <- reflow_imaging_input(input)
+  preflight <- f$control$rfb_preflight
+  f$control$rfb_preflight <- function(...) {
+    result <- preflight(...)
+    writeLines("after", input)
+    result
+  }
+  expect_error(bounded_control_run(f), "Artifact changed during preflight", fixed = TRUE)
+  expect_identical(readLines(input), "after")
+  expect_identical(f$state$started, 0L)
+  expect_identical(f$state$messages, character())
+  expect_false(dir.exists(f$supervisor))
+  expect_false(dir.exists(f$directory))
+})
+
+# Controlled validator change exercises defensive revalidation after preflight.
+test_that("late data-only refusal never launches or allocates output", {
+  f <- bounded_control_fixture()
+  preflight <- f$control$rfb_preflight
+  f$control$rfb_preflight <- function(...) {
+    result <- preflight(...)
+    f$state$plain <- FALSE
+    result
+  }
+  expect_error(bounded_control_run(f), "Data-only artifact declaration required",
+    fixed = TRUE)
+  expect_identical(f$state$started, 0L)
+  expect_identical(f$state$messages, character())
+  expect_false(dir.exists(f$supervisor))
+  expect_false(dir.exists(f$directory))
 })

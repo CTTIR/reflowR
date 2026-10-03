@@ -1,5 +1,7 @@
 # Development
 
+* Add optional serial bounded graph run/resume entry points with per-stage resource policies and separately bound guardian provenance. Graph and control locks retain explicit recovery requirements.
+
 * Finalized figure recipes accept an optional root text size without changing geometry defaults.
 
 - Add optional literal categorical axis and facet display-label maps to finalized figure recipes without changing scientific payloads or default recipes.
