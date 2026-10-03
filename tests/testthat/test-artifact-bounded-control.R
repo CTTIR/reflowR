@@ -261,7 +261,38 @@ test_that("namespace selection refuses a loaded package at a different path", {
   expect_error(selected("base"), "Loaded namespace differs")
 })
 
-test_that("dependency traversal deduplicates roots and includes declared imports", {
+test_that("dependency traversal follows declared fields and deduplicates graph roots", {
+  control <- new.env(parent = asNamespace("reflowR"))
+  selected <- rfb_packages
+  environment(selected) <- control
+  expect_identical(body(selected), body(rfb_packages))
+  expect_identical(formals(selected), formals(rfb_packages))
+  graph <- list(
+    alpha = c(
+      Depends = "R (>= 4.1), beta", Imports = "gamma (>= 1)", LinkingTo = "beta"
+    ),
+    beta = c(Imports = "gamma"),
+    gamma = c(Depends = "R")
+  )
+  observed <- new.env(parent = emptyenv())
+  observed$reads <- character()
+  control$find.package <- function(name) paste0("library/", name)
+  control$isNamespaceLoaded <- function(name) TRUE
+  control$asNamespace <- function(name) name
+  control$getNamespaceInfo <- function(name, what) paste0("library/", name)
+  control$read.dcf <- function(path) {
+    name <- basename(dirname(path))
+    observed$reads <- c(observed$reads, name)
+    fields <- graph[[name]]
+    matrix(unname(fields), nrow = 1L, dimnames = list(NULL, names(fields)))
+  }
+  expect_identical(selected(c("alpha", "alpha", "beta")),
+    c(alpha = "library/alpha", beta = "library/beta", gamma = "library/gamma"))
+  expect_identical(observed$reads, c("alpha", "beta", "gamma"))
+})
+
+test_that("Linux installed dependency paths match selected packages", {
+  skip_if_not(identical(Sys.info()[["sysname"]], "Linux"))
   skip_if_not_installed("digest")
   paths <- rfb_packages(c("digest", "base", "digest"))
   expect_false(anyDuplicated(names(paths)) > 0L)

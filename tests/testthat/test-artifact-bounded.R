@@ -30,7 +30,17 @@ test_that("READY-only revalidation cannot launch a writer on missing READY", {
   run <- file.path(root, "run")
   expected <- rfa_signature(spec)
   descriptor <- reflow_artifact_run(spec, run)
-  expect_identical(rfb_ready_only(spec, run, expected), descriptor)
+  verified <- rfb_ready_only(spec, run, expected)
+  # Compare path identity while preserving every other descriptor field exactly.
+  for (field in c("directory", "bundle")) {
+    verified[[field]] <- normalizePath(
+      verified[[field]], winslash = "/", mustWork = TRUE
+    )
+    descriptor[[field]] <- normalizePath(
+      descriptor[[field]], winslash = "/", mustWork = TRUE
+    )
+  }
+  expect_identical(verified, descriptor)
   old <- list.files(run, recursive = TRUE, all.files = TRUE)
   unlink(file.path(run, "READY.rds"))
   expect_error(rfb_ready_only(spec, run, expected))
