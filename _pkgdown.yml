@@ -42,6 +42,7 @@ reference:
       - reflow_imaging_run
       - reflow_artifact_spec
       - reflow_artifact_run
+      - reflow_artifact_run_bounded
       - reflow_artifact_ref
       - reflow_artifact_stage
       - reflow_artifact_plan

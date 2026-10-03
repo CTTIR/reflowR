@@ -1,3 +1,9 @@
+# Development
+
+- Add optional Linux guardian-backed artifact run and explicit resume APIs.
+  Address-space limits are per process and thread settings are requests;
+  guardian loss remains an unresolved failure requiring external cleanup.
+
 # Development version
 
 - Added a serial artifact dependency core with deferred logical references,

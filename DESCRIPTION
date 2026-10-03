@@ -27,6 +27,9 @@ Imports:
     base64enc,
     git2r
 Suggests:
+    codetools,
+    processx (>= 3.9.0),
+    ps (>= 1.9.3),
     rstudioapi,
     htmltools,
     here,
