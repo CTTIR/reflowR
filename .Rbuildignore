@@ -21,3 +21,4 @@
 ^\.zenodo\.json$
 
 ^\.git$
+^\.gitattributes$

@@ -1,5 +1,7 @@
 # Development
 
+- Preserve the authenticated legacy figure fixture bytes across Git checkout line-ending settings.
+
 - Add supplied numeric-point recipes with explicit fixed axes, categorical colours and facets, optional horizontal references and annotation policies. Existing recipe defaults remain unchanged; device-visible annotation coverage requires separate rendering checks.
 
 * Add optional serial bounded graph run/resume entry points with per-stage resource policies and separately bound guardian provenance. Graph and control locks retain explicit recovery requirements.
