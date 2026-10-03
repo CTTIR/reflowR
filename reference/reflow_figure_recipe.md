@@ -69,7 +69,10 @@ reflow_figure_recipe(
 
   Named list of presentation overrides: base_size, family, low, mid,
   high, point_size, tile_linewidth, x_angle, strip_y_angle (right-side
-  facet text, default -90). No expressions allowed.
+  facet text, default -90). Optional text_size overrides only the root
+  text size, leaving geom defaults unchanged. It must be positive and
+  finite; omission preserves the recipe. Explicit child text sizes
+  remain unchanged. No expressions allowed.
 
 - status:
 
