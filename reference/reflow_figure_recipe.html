@@ -67,7 +67,8 @@ are filtered, aggregated or interpreted as independent units.</p>
 <span>  reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  status <span class="op">=</span> <span class="st">"available"</span>,</span>
-<span>  provenance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  provenance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  display_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -126,6 +127,14 @@ No expressions allowed.</p></dd>
 <dt id="arg-provenance">provenance<a class="anchor" aria-label="anchor" href="#arg-provenance"></a></dt>
 <dd><p>Named character vector of caller declarations, not verified
 evidence. It is excluded from the scientific payload hash.</p></dd>
+
+
+<dt id="arg-display-labels">display_labels<a class="anchor" aria-label="anchor" href="#arg-display-labels"></a></dt>
+<dd><p>Optional named list of complete named character maps for
+categorical x/y axes or facet_rows/facet_columns. Map names are original
+levels; values are literal display text, including optional newlines.
+Repeated display text is allowed without merging underlying categories.
+Omitted roles use identity labels. Numeric axes and colour are not mapped.</p></dd>
 
 </dl></div>
     <div class="section level2">
