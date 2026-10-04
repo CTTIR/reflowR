@@ -61,7 +61,8 @@ filtered, aggregated, fitted, jittered or interpreted as independent units.</p>
 <span>  facets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, midpoint <span class="op">=</span> <span class="cn">NULL</span>, reference <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, status <span class="op">=</span> <span class="st">"available"</span>, provenance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  display_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, numeric_axes <span class="op">=</span> <span class="cn">NULL</span>, colour_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  annotation <span class="op">=</span> <span class="cn">NULL</span>, scatter <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  annotation <span class="op">=</span> <span class="cn">NULL</span>, scatter <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tile <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -70,12 +71,13 @@ filtered, aggregated, fitted, jittered or interpreted as independent units.</p>
 
 
 <dl><dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p><code>tile_heatmap</code>, <code>effect_points</code> or <code>numeric_points</code>.</p></dd>
+<dd><p><code>tile_heatmap</code>, <code>effect_points</code>, <code>numeric_points</code> or <code>numeric_tiles</code>.</p></dd>
 
 
 <dt id="arg-mapping">mapping<a class="anchor" aria-label="anchor" href="#arg-mapping"></a></dt>
 <dd><p>Named character vector of data column names. Heatmaps require
-<code>x</code>, <code>y</code>, <code>value</code>; effects and numeric points require <code>x</code>, <code>y</code>, <code>colour</code>.</p></dd>
+<code>x</code>, <code>y</code>, <code>value</code>; effects and numeric points require <code>x</code>, <code>y</code>, <code>colour</code>.
+Numeric tiles require <code>x</code>, <code>y</code>, <code>fill</code>.</p></dd>
 
 
 <dt id="arg-row-key">row_key<a class="anchor" aria-label="anchor" href="#arg-row-key"></a></dt>
@@ -85,7 +87,8 @@ filtered, aggregated, fitted, jittered or interpreted as independent units.</p>
 <dt id="arg-levels">levels<a class="anchor" aria-label="anchor" href="#arg-levels"></a></dt>
 <dd><p>Named list of explicit unique character levels: x/y for heatmaps,
 y/colour for effects, colour for numeric points, plus facet_rows/facet_columns
-for requested facets. Nonempty data require exact coverage of observed levels.</p></dd>
+for requested facets. Nonempty data require exact coverage of observed levels,
+except numeric tiles: levels$fill may contain unused palette categories.</p></dd>
 
 
 <dt id="arg-facets">facets<a class="anchor" aria-label="anchor" href="#arg-facets"></a></dt>
@@ -144,8 +147,9 @@ axes are required. Coordinates outside the declared limits are refused.</p></dd>
 
 
 <dt id="arg-colour-values">colour_values<a class="anchor" aria-label="anchor" href="#arg-colour-values"></a></dt>
-<dd><p>Numeric points only: complete named colour vector whose
-unique names exactly match <code>levels$colour</code>. Colour order follows those levels.</p></dd>
+<dd><p>Numeric points or tiles: complete named colour vector whose
+unique names exactly match <code>levels$colour</code> (points) or <code>levels$fill</code> (tiles).
+Colour order follows those levels.</p></dd>
 
 
 <dt id="arg-annotation">annotation<a class="anchor" aria-label="anchor" href="#arg-annotation"></a></dt>
@@ -168,6 +172,22 @@ Both numeric_axes limits remain strict finite input envelopes. Paired NULL
 breaks/labels request automatic ticks in this mode only. The x viewing range
 uses its limits; y trains per panel with ordinary expansion, not a common y
 viewing limit. No values or statistics are changed.</p></dd>
+
+<dt id="arg-tile">tile<a class="anchor" aria-label="anchor" href="#arg-tile"></a></dt>
+<dd><p>Numeric tiles only: a list with finite positive width and height,
+and legend equal to "observed" or "declared". Optional legend_text_size_pt is
+NULL or a positive finite scalar overriding only legend text. Omitted or NULL
+values preserve the default tile recipe. Optional axis_text_x_inherit_blank
+is NULL or a plain logical scalar. TRUE preserves blank-element inheritance
+for numeric x-axis text; omitted, NULL or FALSE retain the previous plotting
+default. Omitted and NULL values preserve recipe bytes. Other types are unaffected. Requires mapping x/y/fill,
+levels$fill and a complete named colour_values palette. Coordinates stay numeric,
+borders are absent and aspect ratio is one. Axes train on tile extents with
+ordinary expansion. Observed legends include present categories in declared
+order; declared legends include unused levels without adding tiles. Singleton
+input is supported, empty input refused. Facets, numeric_axes, annotation,
+scatter, reference, midpoint and display_labels are unsupported. Status is
+available. Labels accept title/subtitle/x/y/fill/caption. No categories are inferred.</p></dd>
 
 </dl></div>
     <div class="section level2">

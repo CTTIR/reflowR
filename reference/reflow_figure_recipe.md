@@ -13,7 +13,8 @@ reflow_figure_recipe(
   facets = list(), labels = list(), midpoint = NULL, reference = NULL,
   style = list(), status = "available", provenance = character(),
   display_labels = list(), numeric_axes = NULL, colour_values = NULL,
-  annotation = NULL, scatter = NULL
+  annotation = NULL, scatter = NULL,
+  tile = NULL
 )
 ```
 
@@ -21,12 +22,13 @@ reflow_figure_recipe(
 
 - type:
 
-  `tile_heatmap`, `effect_points` or `numeric_points`.
+  `tile_heatmap`, `effect_points`, `numeric_points` or `numeric_tiles`.
 
 - mapping:
 
   Named character vector of data column names. Heatmaps require `x`,
   `y`, `value`; effects and numeric points require `x`, `y`, `colour`.
+  Numeric tiles require `x`, `y`, `fill`.
 
 - row_key:
 
@@ -37,7 +39,8 @@ reflow_figure_recipe(
   Named list of explicit unique character levels: x/y for heatmaps,
   y/colour for effects, colour for numeric points, plus
   facet_rows/facet_columns for requested facets. Nonempty data require
-  exact coverage of observed levels.
+  exact coverage of observed levels, except numeric tiles: levels\$fill
+  may contain unused palette categories.
 
 - facets:
 
@@ -98,8 +101,9 @@ reflow_figure_recipe(
 
 - colour_values:
 
-  Numeric points only: complete named colour vector whose unique names
-  exactly match `levels$colour`. Colour order follows those levels.
+  Numeric points or tiles: complete named colour vector whose unique
+  names exactly match `levels$colour` (points) or `levels$fill` (tiles).
+  Colour order follows those levels.
 
 - annotation:
 
@@ -126,6 +130,26 @@ reflow_figure_recipe(
   The x viewing range uses its limits; y trains per panel with ordinary
   expansion, not a common y viewing limit. No values or statistics are
   changed.
+
+- tile:
+
+  Numeric tiles only: a list with finite positive width and height, and
+  legend equal to "observed" or "declared". Optional legend_text_size_pt
+  is NULL or a positive finite scalar overriding only legend text.
+  Omitted or NULL values preserve the default tile recipe. Optional
+  axis_text_x_inherit_blank is NULL or a plain logical scalar. TRUE
+  preserves blank-element inheritance for numeric x-axis text; omitted,
+  NULL or FALSE retain the previous plotting default. Omitted and NULL
+  values preserve recipe bytes. Other types are unaffected. Requires
+  mapping x/y/fill, levels\$fill and a complete named colour_values
+  palette. Coordinates stay numeric, borders are absent and aspect ratio
+  is one. Axes train on tile extents with ordinary expansion. Observed
+  legends include present categories in declared order; declared legends
+  include unused levels without adding tiles. Singleton input is
+  supported, empty input refused. Facets, numeric_axes, annotation,
+  scatter, reference, midpoint and display_labels are unsupported.
+  Status is available. Labels accept title/subtitle/x/y/fill/caption. No
+  categories are inferred.
 
 ## Value
 
