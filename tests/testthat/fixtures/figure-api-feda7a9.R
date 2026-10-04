@@ -11,18 +11,16 @@
 
 #' Declare a Finalized-Value Figure Recipe
 #'
-#' Supports tile heatmaps, effect points, numeric points and numeric tiles. Values,
+#' Supports tile heatmaps, effect points and supplied numeric points. Values,
 #' categorical orders and scales are supplied by the caller. No observations are
 #' filtered, aggregated, fitted, jittered or interpreted as independent units.
-#' @param type `tile_heatmap`, `effect_points`, `numeric_points` or `numeric_tiles`.
+#' @param type `tile_heatmap`, `effect_points` or `numeric_points`.
 #' @param mapping Named character vector of data column names. Heatmaps require
 #'   `x`, `y`, `value`; effects and numeric points require `x`, `y`, `colour`.
-#'   Numeric tiles require `x`, `y`, `fill`.
 #' @param row_key Nonempty character vector of complete unique-key columns.
 #' @param levels Named list of explicit unique character levels: x/y for heatmaps,
 #'   y/colour for effects, colour for numeric points, plus facet_rows/facet_columns
-#'   for requested facets. Nonempty data require exact coverage of observed levels,
-#'   except numeric tiles: levels$fill may include unused palette categories.
+#'   for requested facets. Nonempty data require exact coverage of observed levels.
 #' @param facets Named list with optional rows/columns column names. Heatmap and
 #'   effect facets use free y scales and space. Numeric-point facets use fixed
 #'   scales and space in both directions. Facets do not aggregate values.
@@ -52,9 +50,8 @@
 #'   values within limits), and an equally long character labels vector. Both
 #'   axes are required. Coordinates outside the declared limits are refused.
 #'   See scatter for its explicitly selected automatic-break mode.
-#' @param colour_values Numeric points or tiles: complete named colour vector whose
-#'   unique names exactly match levels$colour (points) or levels$fill (tiles).
-#'   Colour order follows those levels.
+#' @param colour_values Numeric points only: complete named colour vector whose
+#'   unique names exactly match levels$colour. Colour order follows those levels.
 #' @param annotation Numeric points only: NULL or a named list with column,
 #'   nudge_x, nudge_y, size_pt, check_overlap and show_legend. Nudges must be finite;
 #'   size_pt must be finite and at least 7; both policies must be logical scalars.
@@ -74,23 +71,6 @@
 #'   mode permits paired NULL breaks/labels for automatic ticks. The x limits
 #'   also set the visible coordinate range; y trains separately per panel with
 #'   ordinary scale expansion and no common y viewing limit. No values change.
-#' @param tile Numeric tiles only: list with positive finite width and height,
-#'   and legend equal to "observed" or "declared". Optional legend_text_size_pt
-#'   is NULL or a positive finite scalar overriding only legend text. Omitted or
-#'   NULL values preserve the default tile recipe.
-#'   Optional axis_text_x_inherit_blank is NULL or a plain logical scalar.
-#'   TRUE preserves blank-element inheritance for the numeric x-axis text;
-#'   omitted, NULL or FALSE retain the previous plotting default. NULL and
-#'   omitted values preserve recipe bytes. No other figure type is affected.
-#'   This type requires mapping
-#'   x/y/fill, levels$fill and the complete named colour_values palette. Coordinates
-#'   remain numeric, tiles have no borders and aspect ratio is one. Axes train
-#'   automatically on tile extents with ordinary expansion. Observed legends
-#'   include only categories present, in declared level order; declared legends
-#'   include unused levels without adding tiles. Singleton input is supported;
-#'   empty input is refused. Facets, numeric_axes, annotation, scatter, reference,
-#'   midpoint and display_labels are unsupported. Status must be available.
-#'   Labels accept title/subtitle/x/y/fill/caption. No categories are inferred.
 #' @details Numeric-only options must remain NULL for existing types.
 #'   Their default omission preserves existing recipe structure and behavior.
 #'   Numeric coordinates are supplied directly: no aggregation, filtering, jitter,
@@ -102,13 +82,7 @@ reflow_figure_recipe <- function(type, mapping, row_key, levels,
     facets = list(), labels = list(), midpoint = NULL, reference = NULL,
     style = list(), status = "available", provenance = character(),
     display_labels = list(), numeric_axes = NULL, colour_values = NULL,
-    annotation = NULL, scatter = NULL, tile = NULL) {
-  if (identical(type, "numeric_tiles")) {
-    return(.rf_tiles_recipe(mapping, row_key, levels, facets, labels, midpoint,
-      reference, style, status, provenance, display_labels, numeric_axes,
-      colour_values, annotation, scatter, tile))
-  }
-  .rf_figure_assert(is.null(tile), "Tile options require numeric_tiles")
+    annotation = NULL, scatter = NULL) {
   if (identical(type, "numeric_points") && !is.null(scatter)) {
     return(.rf_wrap_recipe(mapping, row_key, levels, facets, labels, midpoint,
       reference, style, status, provenance, display_labels, numeric_axes,
@@ -243,9 +217,6 @@ reflow_figure_plot <- function(data, recipe, annotation_data = NULL) {
   }
   .rf_figure_assert(is.null(annotation_data),
     "Separate annotation data require wrapped numeric points")
-  if (is.list(recipe) && identical(recipe$type, "numeric_tiles")) {
-    return(.rf_tiles_plot(data, recipe))
-  }
   if (is.list(recipe) && identical(recipe$type, "numeric_points")) {
     return(.rf_numeric_plot(data, recipe))
   }
@@ -351,4 +322,336 @@ reflow_figure_plot <- function(data, recipe, annotation_data = NULL) {
     plot <- plot + ggplot2::theme(text = ggplot2::element_text(size = recipe$style$text_size))
   }
   c(list(plot = plot), audit)
+}
+
+.rf_numeric_names <- function(x, required, optional = character()) {
+  is.list(x) && !is.object(x) && !is.null(names(x)) && !anyNA(names(x)) &&
+    !anyDuplicated(names(x)) && all(required %in% names(x)) &&
+    all(names(x) %in% c(required, optional))
+}
+.rf_numeric_vector <- function(x) {
+  is.numeric(x) && is.null(attributes(x)) && length(x) > 0L && all(is.finite(x))
+}
+.rf_numeric_recipe <- function(mapping, row_key, levels, facets, labels, midpoint,
+    reference, style, status, provenance, display_labels, numeric_axes,
+    colour_values, annotation) {
+  a <- .rf_figure_assert
+  a(is.null(midpoint) && identical(status, "available"),
+    "Numeric points require available status and no midpoint")
+  need <- c("x", "y", "colour")
+  a(.rf_figure_text(mapping) && !is.null(names(mapping)) &&
+    !anyDuplicated(names(mapping)) && setequal(names(mapping), need) &&
+    !anyDuplicated(unname(mapping)), "Invalid numeric mapping")
+  mapping <- mapping[need]
+  a(.rf_figure_text(row_key) && length(row_key) > 0L && !anyDuplicated(row_key),
+    "Invalid row key")
+  a(is.list(facets) && !is.object(facets) && (length(facets) == 0L ||
+    .rf_numeric_names(facets, character(), c("rows", "columns"))), "Invalid facets")
+  a(all(vapply(facets, function(x) .rf_figure_text(x) && length(x) == 1L,
+    logical(1))) && !anyDuplicated(unlist(facets)), "Invalid facet columns")
+  roles <- c("colour", if ("rows" %in% names(facets)) "facet_rows",
+    if ("columns" %in% names(facets)) "facet_columns")
+  a(.rf_numeric_names(levels, roles) && all(vapply(levels, function(x) {
+    .rf_figure_text(x) && length(x) > 0L && !anyDuplicated(x)
+  }, logical(1))), "Invalid numeric categorical levels")
+  levels <- levels[roles]
+  a(.rf_figure_text(colour_values) && !is.null(names(colour_values)) &&
+    !anyDuplicated(names(colour_values)) &&
+    setequal(names(colour_values), levels$colour), "Invalid named colour values")
+  tryCatch(grDevices::col2rgb(colour_values), error = function(e) stop("Invalid colour"))
+  colour_values <- colour_values[levels$colour]
+  a(.rf_numeric_names(numeric_axes, c("x", "y")), "Both numeric axes are required")
+  for (axis in c("x", "y")) {
+    z <- numeric_axes[[axis]]
+    a(.rf_numeric_names(z, c("limits", "breaks", "labels")), "Invalid numeric axis")
+    a(.rf_numeric_vector(z$limits) && length(z$limits) == 2L &&
+      z$limits[[1]] < z$limits[[2]], "Invalid numeric limits")
+    a(.rf_numeric_vector(z$breaks) && !anyDuplicated(z$breaks) &&
+      all(diff(z$breaks) > 0) && all(z$breaks >= z$limits[[1]]) &&
+      all(z$breaks <= z$limits[[2]]), "Invalid numeric breaks")
+    a(.rf_figure_text(z$labels, TRUE) && length(z$labels) == length(z$breaks),
+      "Invalid numeric break labels")
+    numeric_axes[[axis]] <- z[c("limits", "breaks", "labels")]
+  }
+  numeric_axes <- numeric_axes[c("x", "y")]
+  a(is.null(reference) || (.rf_figure_scalar(reference) &&
+    reference >= numeric_axes$y$limits[[1]] && reference <= numeric_axes$y$limits[[2]]),
+    "Invalid horizontal reference")
+  if (!is.null(annotation)) {
+    keys <- c("column", "nudge_x", "nudge_y", "size_pt", "check_overlap", "show_legend")
+    a(.rf_numeric_names(annotation, keys), "Invalid annotation fields")
+    a(.rf_figure_text(annotation$column) && length(annotation$column) == 1L,
+      "Invalid annotation column")
+    a(.rf_figure_scalar(annotation$nudge_x) && .rf_figure_scalar(annotation$nudge_y) &&
+      .rf_figure_scalar(annotation$size_pt) && annotation$size_pt >= 7,
+      "Invalid annotation geometry or size")
+    for (k in c("check_overlap", "show_legend")) {
+      a(is.logical(annotation[[k]]) && length(annotation[[k]]) == 1L &&
+        is.null(attributes(annotation[[k]])) && !is.na(annotation[[k]]),
+        "Invalid annotation policy")
+    }
+    annotation <- annotation[keys]
+  }
+  a(is.list(labels) && !is.object(labels) && (length(labels) == 0L ||
+    .rf_numeric_names(labels, character(),
+      c("title", "subtitle", "x", "y", "fill", "colour", "caption"))), "Invalid labels")
+  a(all(vapply(labels, function(x) {
+    is.null(x) || (.rf_figure_text(x, TRUE) && length(x) == 1L)
+  }, logical(1))), "Labels must be plain text scalars or NULL")
+  # Reuse existing plain style/provenance validation without changing its defaults.
+  proxy_levels <- c(list(y = "numeric"), levels)
+  proxy <- reflow_figure_recipe("effect_points", mapping, row_key, proxy_levels,
+    facets, labels[setdiff(names(labels), "subtitle")], reference = 0,
+    style = style, provenance = provenance,
+    display_labels = display_labels)
+  a(all(names(display_labels) %in% c("facet_rows", "facet_columns")),
+    "Numeric axes use explicit break labels")
+  structure(list(schema = "reflow_numeric_points_1", type = "numeric_points",
+    mapping = mapping, row_key = row_key, levels = levels, facets = facets,
+    labels = labels, midpoint = NULL, reference = reference, style = proxy$style,
+    status = status, provenance = provenance, display_labels = display_labels,
+    numeric_axes = numeric_axes, colour_values = colour_values, annotation = annotation),
+    class = "reflow_figure_recipe")
+}
+.rf_numeric_plot <- function(data, recipe) {
+  a <- .rf_figure_assert
+  expected <- c("schema", "type", "mapping", "row_key", "levels", "facets", "labels",
+    "midpoint", "reference", "style", "status", "provenance", "display_labels",
+    "numeric_axes", "colour_values", "annotation")
+  a(identical(class(recipe), "reflow_figure_recipe") &&
+    identical(recipe$schema, "reflow_numeric_points_1") &&
+    identical(names(recipe), expected), "Invalid numeric recipe schema")
+  rebuilt <- do.call(reflow_figure_recipe, unclass(recipe)[setdiff(expected, "schema")])
+  a(identical(recipe, rebuilt), "Numeric recipe failed revalidation")
+  a(is.data.frame(data) && !anyDuplicated(names(data)) && nrow(data) > 0L,
+    "Numeric points require a nonempty data frame")
+  selected <- unique(c(recipe$row_key, unname(recipe$mapping), unlist(recipe$facets),
+    recipe$annotation$column))
+  a(all(selected %in% names(data)), "Missing selected column")
+  d <- as.data.frame(data)[selected]
+  numeric_columns <- unname(recipe$mapping[c("x", "y")])
+  a(!any(numeric_columns %in% c(recipe$row_key, unlist(recipe$facets),
+    recipe$annotation$column)), "Numeric columns cannot be keys, facets or annotations")
+  for (k in numeric_columns) {
+    a(.rf_numeric_vector(d[[k]]), "Numeric coordinates must be plain finite vectors")
+  }
+  for (k in setdiff(selected, numeric_columns)) {
+    a(.rf_figure_text(d[[k]]) && length(d[[k]]) == nrow(d), "Invalid text column")
+  }
+  a(!anyDuplicated(d[recipe$row_key]), "Duplicate complete row key")
+  role_columns <- list(colour = recipe$mapping[["colour"]])
+  if (length(recipe$facets)) {
+    role_columns <- c(role_columns,
+      stats::setNames(recipe$facets, paste0("facet_", names(recipe$facets))))
+  }
+  for (role in names(role_columns)) {
+    a(setequal(d[[role_columns[[role]]]], recipe$levels[[role]]),
+      "Declared levels do not exactly cover observed categories")
+  }
+  for (axis in c("x", "y")) {
+    v <- d[[recipe$mapping[[axis]]]]
+    limits <- recipe$numeric_axes[[axis]]$limits
+    a(all(v >= limits[[1]] & v <= limits[[2]]), "Coordinates outside supplied limits")
+  }
+  canonical <- d[do.call(order, c(unname(d[recipe$row_key]), list(method = "radix"))),
+    , drop = FALSE]
+  rownames(canonical) <- NULL
+  hash <- function(x) {
+    digest::digest(serialize(x, NULL, version = 2), algo = "sha256", serialize = FALSE)
+  }
+  a(requireNamespace("ggplot2", quietly = TRUE), "ggplot2 is required")
+  .data <- rlang::.data
+  draw <- data.frame(x = d[[recipe$mapping[["x"]]]], y = d[[recipe$mapping[["y"]]]],
+    colour = factor(d[[recipe$mapping[["colour"]]]], levels = recipe$levels$colour))
+  if (!is.null(recipe$annotation)) draw$label <- d[[recipe$annotation$column]]
+  for (role in names(recipe$facets)) {
+    key <- paste0("facet_", role)
+    draw[[key]] <- factor(d[[recipe$facets[[role]]]], levels = recipe$levels[[key]])
+  }
+  plot <- ggplot2::ggplot(draw, ggplot2::aes(x = .data$x, y = .data$y,
+    colour = .data$colour))
+  if (!is.null(recipe$reference)) {
+    plot <- plot + ggplot2::geom_hline(yintercept = recipe$reference,
+      colour = "grey55", linewidth = 0.4)
+  }
+  plot <- plot + ggplot2::geom_point(size = recipe$style$point_size)
+  if (!is.null(recipe$annotation)) {
+    z <- recipe$annotation
+    plot <- plot + ggplot2::geom_text(ggplot2::aes(label = .data$label),
+      nudge_x = z$nudge_x, nudge_y = z$nudge_y, size = z$size_pt * 25.4 / 72.27,
+      check_overlap = z$check_overlap, show.legend = z$show_legend,
+      family = recipe$style$family)
+  }
+  plot <- plot + ggplot2::scale_colour_manual(values = recipe$colour_values,
+    limits = recipe$levels$colour, drop = FALSE)
+  for (axis in c("x", "y")) {
+    z <- recipe$numeric_axes[[axis]]
+    scale <- if (axis == "x") ggplot2::scale_x_continuous else ggplot2::scale_y_continuous
+    plot <- plot + scale(breaks = z$breaks, labels = z$labels, expand = c(0, 0))
+  }
+  # Coordinate limits retain annotation records beyond the visible panel for explicit auditing.
+  plot <- plot + ggplot2::coord_cartesian(xlim = recipe$numeric_axes$x$limits,
+    ylim = recipe$numeric_axes$y$limits, expand = FALSE, clip = "on")
+  if (length(recipe$facets)) {
+    rows <- if ("rows" %in% names(recipe$facets)) ggplot2::vars(.data$facet_rows) else NULL
+    cols <- if ("columns" %in% names(recipe$facets)) ggplot2::vars(.data$facet_columns) else NULL
+    args <- list(rows = rows, cols = cols, scales = "fixed", space = "fixed", drop = FALSE)
+    if (length(recipe$display_labels)) {
+      args$labeller <- do.call(ggplot2::labeller, recipe$display_labels)
+    }
+    plot <- plot + do.call(ggplot2::facet_grid, args)
+  }
+  plot <- plot + do.call(ggplot2::labs, recipe$labels) +
+    ggplot2::theme_bw(base_size = recipe$style$base_size, base_family = recipe$style$family) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = recipe$style$x_angle),
+      strip.text.y.right = ggplot2::element_text(angle = recipe$style$strip_y_angle))
+  if ("text_size" %in% names(recipe$style)) {
+    plot <- plot + ggplot2::theme(text = ggplot2::element_text(size = recipe$style$text_size))
+  }
+  list(plot = plot, schema = "reflow_numeric_plot_1", status = "available", rows = nrow(d),
+    selected_columns = selected, payload_sha256 = hash(list(data = canonical,
+      mapping = recipe$mapping, row_key = recipe$row_key, reference = recipe$reference)),
+    recipe_sha256 = hash(unclass(recipe)), annotation_records =
+      if (is.null(recipe$annotation)) 0L else nrow(d), visible_annotations = NA_integer_)
+}
+
+# Optional numeric layout version; omitted options retain the original recipe.
+.rf_wrap_axes <- function(axes) {
+  a <- .rf_figure_assert
+  a(.rf_numeric_names(axes, c("x", "y")), "Both numeric axes are required")
+  result <- axes[c("x", "y")]
+  for (axis in names(result)) {
+    z <- result[[axis]]
+    a(.rf_numeric_names(z, c("limits", "breaks", "labels")), "Invalid numeric axis")
+    a(.rf_numeric_vector(z$limits) && length(z$limits) == 2L &&
+      z$limits[[1]] < z$limits[[2]], "Invalid numeric limits")
+    if (is.null(z$breaks) || is.null(z$labels)) {
+      a(is.null(z$breaks) && is.null(z$labels), "Automatic breaks need NULL labels")
+      result[[axis]] <- list(limits = z$limits, breaks = z$limits,
+        labels = as.character(z$limits))
+    }
+  }
+  result
+}
+
+.rf_wrap_recipe <- function(mapping, row_key, levels, facets, labels, midpoint,
+    reference, style, status, provenance, display_labels, numeric_axes,
+    colour_values, annotation, scatter) {
+  a <- .rf_figure_assert
+  a(.rf_numeric_names(scatter, c("ncol", "point_alpha", "corner")),
+    "Invalid scatter fields")
+  a(.rf_figure_scalar(scatter$ncol) && scatter$ncol >= 1 &&
+    scatter$ncol <= 100 && scatter$ncol == floor(scatter$ncol),
+    "Invalid wrap column count")
+  a(.rf_figure_scalar(scatter$point_alpha) && scatter$point_alpha >= 0 &&
+    scatter$point_alpha <= 1, "Invalid point alpha")
+  a(identical(names(facets), "rows") &&
+    .rf_figure_text(facets$rows) && length(facets$rows) == 1L,
+    "Wrapped points require one row facet")
+  a(is.null(reference) && is.null(annotation),
+    "Wrapped points require separate corner annotations and no reference")
+  z <- scatter$corner
+  a(.rf_numeric_names(z, c("row_key", "column", "hjust", "vjust", "size_pt",
+    "lineheight")), "Invalid corner fields")
+  a(.rf_figure_text(z$row_key) && length(z$row_key) > 0L &&
+    !anyDuplicated(z$row_key) && .rf_figure_text(z$column) &&
+    length(z$column) == 1L && !z$column %in% c(z$row_key, unlist(facets)),
+    "Invalid corner columns")
+  a(.rf_figure_scalar(z$hjust) && .rf_figure_scalar(z$vjust) &&
+    .rf_figure_scalar(z$size_pt) && z$size_pt >= 7 &&
+    .rf_figure_scalar(z$lineheight) && z$lineheight > 0,
+    "Invalid corner geometry or size")
+  base <- .rf_numeric_recipe(mapping, row_key, levels, facets, labels, midpoint,
+    reference, style, status, provenance, display_labels,
+    .rf_wrap_axes(numeric_axes), colour_values, annotation)
+  base$schema <- "reflow_numeric_points_wrap_1"
+  base$numeric_axes <- lapply(numeric_axes[c("x", "y")], function(x) {
+    x[c("limits", "breaks", "labels")]
+  })
+  base$scatter <- list(ncol = scatter$ncol, point_alpha = scatter$point_alpha,
+    corner = z[c("row_key", "column", "hjust", "vjust", "size_pt", "lineheight")])
+  base
+}
+
+.rf_wrap_plot <- function(data, recipe, annotation_data) {
+  a <- .rf_figure_assert
+  expected <- c("schema", "type", "mapping", "row_key", "levels", "facets",
+    "labels", "midpoint", "reference", "style", "status", "provenance",
+    "display_labels", "numeric_axes", "colour_values", "annotation", "scatter")
+  a(identical(class(recipe), "reflow_figure_recipe") &&
+    identical(recipe$schema, "reflow_numeric_points_wrap_1") &&
+    identical(names(recipe), expected), "Invalid wrapped recipe schema")
+  rebuilt <- do.call(reflow_figure_recipe, unclass(recipe)[setdiff(expected, "schema")])
+  a(identical(recipe, rebuilt), "Wrapped recipe failed revalidation")
+  proxy <- recipe
+  proxy$scatter <- NULL
+  proxy$schema <- "reflow_numeric_points_1"
+  proxy$numeric_axes <- .rf_wrap_axes(recipe$numeric_axes)
+  validated <- .rf_numeric_plot(data, proxy)
+  z <- recipe$scatter$corner
+  facet <- recipe$facets$rows
+  selected <- unique(c(z$row_key, facet, z$column))
+  a(is.data.frame(annotation_data) && !anyDuplicated(names(annotation_data)) &&
+    all(selected %in% names(annotation_data)), "Invalid corner data")
+  d <- as.data.frame(annotation_data)[selected]
+  a(nrow(d) == length(recipe$levels$facet_rows), "Exactly one corner per facet required")
+  for (key in selected) {
+    a(.rf_figure_text(d[[key]]) && is.null(attributes(d[[key]])),
+      "Corner columns must be plain nonmissing text")
+  }
+  a(!anyDuplicated(d[z$row_key]) && !anyDuplicated(d[[facet]]) &&
+    setequal(d[[facet]], recipe$levels$facet_rows), "Corner key or facet coverage differs")
+  draw <- data.frame(x = data[[recipe$mapping[["x"]]]],
+    y = data[[recipe$mapping[["y"]]]],
+    colour = factor(data[[recipe$mapping[["colour"]]]], levels = recipe$levels$colour),
+    facet_rows = factor(data[[facet]], levels = recipe$levels$facet_rows))
+  corners <- data.frame(label = d[[z$column]],
+    facet_rows = factor(d[[facet]], levels = recipe$levels$facet_rows))
+  .data <- rlang::.data
+  plot <- ggplot2::ggplot(draw, ggplot2::aes(x = .data$x, y = .data$y,
+    colour = .data$colour)) +
+    ggplot2::geom_point(size = recipe$style$point_size,
+      alpha = recipe$scatter$point_alpha) +
+    ggplot2::geom_text(data = corners,
+      ggplot2::aes(x = -Inf, y = Inf, label = .data$label),
+      inherit.aes = FALSE, hjust = z$hjust, vjust = z$vjust,
+      size = z$size_pt * 25.4 / 72.27, lineheight = z$lineheight,
+      family = recipe$style$family, show.legend = FALSE) +
+    ggplot2::scale_colour_manual(values = recipe$colour_values,
+      limits = recipe$levels$colour, drop = FALSE)
+  for (axis in c("x", "y")) {
+    spec <- recipe$numeric_axes[[axis]]
+    if (!is.null(spec$breaks)) {
+      scale <- if (axis == "x") ggplot2::scale_x_continuous else ggplot2::scale_y_continuous
+      plot <- plot + scale(breaks = spec$breaks, labels = spec$labels)
+    }
+  }
+  args <- list(facets = ggplot2::vars(.data$facet_rows),
+    ncol = recipe$scatter$ncol, scales = "free_y", drop = FALSE)
+  if (length(recipe$display_labels)) {
+    args$labeller <- do.call(ggplot2::labeller, recipe$display_labels)
+  }
+  plot <- plot + do.call(ggplot2::facet_wrap, args) +
+    ggplot2::coord_cartesian(xlim = recipe$numeric_axes$x$limits) +
+    do.call(ggplot2::labs, recipe$labels) +
+    ggplot2::theme_bw(base_size = recipe$style$base_size,
+      base_family = recipe$style$family) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = recipe$style$x_angle),
+      strip.text = ggplot2::element_text(face = "bold"),
+      panel.grid.minor = ggplot2::element_blank(), legend.position = "bottom")
+  if ("text_size" %in% names(recipe$style)) {
+    plot <- plot + ggplot2::theme(text = ggplot2::element_text(size = recipe$style$text_size))
+  }
+  canonical <- d[do.call(order, c(unname(d[z$row_key]), list(method = "radix"))),
+    , drop = FALSE]
+  rownames(canonical) <- NULL
+  hash <- function(x) {
+    digest::digest(serialize(x, NULL, version = 2), algo = "sha256", serialize = FALSE)
+  }
+  list(plot = plot, schema = "reflow_numeric_wrap_plot_1", status = "available",
+    rows = validated$rows, selected_columns = validated$selected_columns,
+    payload_sha256 = validated$payload_sha256,
+    annotation_payload_sha256 = hash(list(data = canonical, row_key = z$row_key,
+      facet = facet, column = z$column)), recipe_sha256 = hash(unclass(recipe)),
+    annotation_records = nrow(d), visible_annotations = NA_integer_)
 }

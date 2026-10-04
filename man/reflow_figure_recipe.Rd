@@ -8,20 +8,23 @@ reflow_figure_recipe(
   facets = list(), labels = list(), midpoint = NULL, reference = NULL,
   style = list(), status = "available", provenance = character(),
   display_labels = list(), numeric_axes = NULL, colour_values = NULL,
-  annotation = NULL, scatter = NULL
+  annotation = NULL, scatter = NULL,
+  tile = NULL
 )
 }
 \arguments{
-\item{type}{\code{tile_heatmap}, \code{effect_points} or \code{numeric_points}.}
+\item{type}{\code{tile_heatmap}, \code{effect_points}, \code{numeric_points} or \code{numeric_tiles}.}
 
 \item{mapping}{Named character vector of data column names. Heatmaps require
-\code{x}, \code{y}, \code{value}; effects and numeric points require \code{x}, \code{y}, \code{colour}.}
+\code{x}, \code{y}, \code{value}; effects and numeric points require \code{x}, \code{y}, \code{colour}.
+Numeric tiles require \code{x}, \code{y}, \code{fill}.}
 
 \item{row_key}{Nonempty character vector of complete unique-key columns.}
 
 \item{levels}{Named list of explicit unique character levels: x/y for heatmaps,
 y/colour for effects, colour for numeric points, plus facet_rows/facet_columns
-for requested facets. Nonempty data require exact coverage of observed levels.}
+for requested facets. Nonempty data require exact coverage of observed levels,
+except numeric tiles: levels$fill may contain unused palette categories.}
 
 \item{facets}{Named list with optional rows/columns column names. Heatmap and
 effect facets use free y scales and space. Numeric-point facets use fixed
@@ -60,8 +63,9 @@ Omitted roles use identity labels; colour labels are not mapped here.}
 values within limits), and an equally long character labels vector. Both
 axes are required. Coordinates outside the declared limits are refused.}
 
-\item{colour_values}{Numeric points only: complete named colour vector whose
-unique names exactly match \code{levels$colour}. Colour order follows those levels.}
+\item{colour_values}{Numeric points or tiles: complete named colour vector whose
+unique names exactly match \code{levels$colour} (points) or \code{levels$fill} (tiles).
+Colour order follows those levels.}
 
 \item{annotation}{Numeric points only: NULL or a named list with column,
 nudge_x, nudge_y, size_pt, check_overlap and show_legend. Nudges must be finite;
@@ -80,6 +84,20 @@ Both numeric_axes limits remain strict finite input envelopes. Paired NULL
 breaks/labels request automatic ticks in this mode only. The x viewing range
 uses its limits; y trains per panel with ordinary expansion, not a common y
 viewing limit. No values or statistics are changed.}
+\item{tile}{Numeric tiles only: a list with finite positive width and height,
+and legend equal to "observed" or "declared". Optional legend_text_size_pt is
+NULL or a positive finite scalar overriding only legend text. Omitted or NULL
+values preserve the default tile recipe. Optional axis_text_x_inherit_blank
+is NULL or a plain logical scalar. TRUE preserves blank-element inheritance
+for numeric x-axis text; omitted, NULL or FALSE retain the previous plotting
+default. Omitted and NULL values preserve recipe bytes. Other types are unaffected. Requires mapping x/y/fill,
+levels$fill and a complete named colour_values palette. Coordinates stay numeric,
+borders are absent and aspect ratio is one. Axes train on tile extents with
+ordinary expansion. Observed legends include present categories in declared
+order; declared legends include unused levels without adding tiles. Singleton
+input is supported, empty input refused. Facets, numeric_axes, annotation,
+scatter, reference, midpoint and display_labels are unsupported. Status is
+available. Labels accept title/subtitle/x/y/fill/caption. No categories are inferred.}
 }
 \value{
 A versioned recipe; no data are processed or files written.

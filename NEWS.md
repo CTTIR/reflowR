@@ -1,5 +1,12 @@
 # Development
 
+* Add explicit categorical numeric tiles with fixed dimensions, equal aspect
+  and an optional legend text size independent of the base theme.
+
+* Numeric tiles can explicitly preserve x-axis blank-element inheritance with
+  `tile$axis_text_x_inherit_blank`; omitted and NULL values retain existing
+  recipe bytes and plotting defaults. Other figure types are unchanged.
+
 - Add opt-in numeric point layouts with wrapped free-y panels, explicit point opacity, and a separate keyed corner annotation table. Existing recipes and strict finite input validation remain unchanged.
 
 * Allow explicitly declared finite bounded-stage deadlines from 1 through 86400 seconds. Guardian liveness, transport and cleanup intervals remain unchanged; this ceiling is not a long-duration reliability guarantee.
