@@ -5,7 +5,7 @@ Build a Plot from a Finalized-Value Figure Recipe
 ## Usage
 
 ``` r
-reflow_figure_plot(data, recipe)
+reflow_figure_plot(data, recipe, annotation_data = NULL)
 ```
 
 ## Arguments
@@ -24,6 +24,15 @@ reflow_figure_plot(data, recipe)
   A recipe from
   [`reflow_figure_recipe()`](https://cttir.github.io/reflowR/reference/reflow_figure_recipe.md).
 
+- annotation_data:
+
+  NULL for existing recipes. Wrapped numeric points require a separate
+  frame with exactly one uniquely keyed row per declared facet. Selected
+  key, facet and label columns must be plain nonmissing character
+  vectors without attributes. Keys and facet values must each be unique;
+  extra columns are ignored. Row order, literal newlines and supplied
+  status/NA text are preserved; no statistics are computed.
+
 ## Value
 
 Versioned list with plot (ggplot, or NULL for explicitly empty legacy
@@ -35,8 +44,12 @@ check_overlap can suppress visibility. The payload hash binds key-sorted
 selected values and mapping, row keys, and supplied midpoint/reference
 as applicable. Styling, level orders, numeric axis declarations, colour
 maps and unverified provenance bind the recipe hash. Extra unselected
-status columns are not authenticated by these hashes. Hashes use R
-version-2 serialization, not a cross-language protocol.
+status columns are not authenticated by these hashes. Wrapped numeric
+points additionally return annotation_payload_sha256 for key-sorted
+selected annotation values and declared key/facet/label columns.
+Canonical payload hashes do not record input row order; drawing
+preserves it and order equality requires separate diagnostics. Hashes
+use R version-2 serialization, not a cross-language protocol.
 
 ## Details
 

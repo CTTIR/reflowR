@@ -13,7 +13,7 @@ reflow_figure_recipe(
   facets = list(), labels = list(), midpoint = NULL, reference = NULL,
   style = list(), status = "available", provenance = character(),
   display_labels = list(), numeric_axes = NULL, colour_values = NULL,
-  annotation = NULL
+  annotation = NULL, scatter = NULL
 )
 ```
 
@@ -111,15 +111,31 @@ reflow_figure_recipe(
   suppression can hide text. Actual visible label coverage and exported
   glyph sizes require device and visual checks.
 
+- scatter:
+
+  Numeric points only: NULL preserves the existing fixed-scale recipe. A
+  plain list of ncol (integer-valued 1..100), point_alpha (0..1), and
+  corner selects free-y facet_wrap with one facets\$rows column and
+  declared facet order. Corner contains row_key, column, finite
+  hjust/vjust, size_pt at least7, and positive lineheight. Separate
+  annotation_data supplies exactly one uniquely keyed plaintext row per
+  facet. Display anchors are negative/positive infinity; point
+  coordinates remain finite. Reference and row-linked annotation must be
+  NULL. Both numeric_axes limits remain strict finite input envelopes.
+  Paired NULL breaks/labels request automatic ticks in this mode only.
+  The x viewing range uses its limits; y trains per panel with ordinary
+  expansion, not a common y viewing limit. No values or statistics are
+  changed.
+
 ## Value
 
 A versioned recipe; no data are processed or files written.
 
 ## Details
 
-The three numeric-only arguments must remain NULL for existing types.
-Their default omission preserves existing recipe structure and behavior.
-Numeric coordinates are supplied directly: no aggregation, filtering,
-jitter, automatic offsets or implicit reordering is performed. Plotted
-rows retain input order; categorical display order follows the declared
+Numeric-only options must remain NULL for existing types. Their default
+omission preserves existing recipe structure and behavior. Numeric
+coordinates are supplied directly: no aggregation, filtering, jitter,
+automatic offsets or implicit reordering is performed. Plotted rows
+retain input order; categorical display order follows the declared
 levels.
