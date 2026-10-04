@@ -49,6 +49,7 @@
 #'   (two strictly increasing finite values), breaks (unique increasing finite
 #'   values within limits), and an equally long character labels vector. Both
 #'   axes are required. Coordinates outside the declared limits are refused.
+#'   See scatter for its explicitly selected automatic-break mode.
 #' @param colour_values Numeric points only: complete named colour vector whose
 #'   unique names exactly match levels$colour. Colour order follows those levels.
 #' @param annotation Numeric points only: NULL or a named list with column,
@@ -57,7 +58,20 @@
 #'   Text size uses ggplot2's 72.27 points per inch conversion. Annotation records
 #'   are retained; clipping and overlap suppression can hide text. Actual visible
 #'   label coverage and exported glyph sizes require device and visual checks.
-#' @details The three numeric-only arguments must remain NULL for existing types.
+#' @param scatter Numeric points only: NULL keeps the existing fixed-scale recipe.
+#'   An optional plain list with ncol (integer-valued 1..100), point_alpha (0..1)
+#'   and corner selects wrapped free-y panels. Exactly one facets$rows column is
+#'   required; facet order is declared by levels$facet_rows. Corner is a plain
+#'   list with row_key, column, finite hjust/vjust, size_pt (at least 7), and
+#'   positive lineheight. Independent annotation_data must contain exactly one
+#'   uniquely keyed, nonmissing plaintext row per facet. Corners use fixed
+#'   negative/positive infinite display anchors, without admitting infinite
+#'   point coordinates. Reference and row-linked annotation must both be NULL.
+#'   Both numeric_axes limits remain strict finite input envelopes. Only this
+#'   mode permits paired NULL breaks/labels for automatic ticks. The x limits
+#'   also set the visible coordinate range; y trains separately per panel with
+#'   ordinary scale expansion and no common y viewing limit. No values change.
+#' @details Numeric-only options must remain NULL for existing types.
 #'   Their default omission preserves existing recipe structure and behavior.
 #'   Numeric coordinates are supplied directly: no aggregation, filtering, jitter,
 #'   automatic offsets or implicit reordering is performed. Plotted rows retain
@@ -68,7 +82,13 @@ reflow_figure_recipe <- function(type, mapping, row_key, levels,
     facets = list(), labels = list(), midpoint = NULL, reference = NULL,
     style = list(), status = "available", provenance = character(),
     display_labels = list(), numeric_axes = NULL, colour_values = NULL,
-    annotation = NULL) {
+    annotation = NULL, scatter = NULL) {
+  if (identical(type, "numeric_points") && !is.null(scatter)) {
+    return(.rf_wrap_recipe(mapping, row_key, levels, facets, labels, midpoint,
+      reference, style, status, provenance, display_labels, numeric_axes,
+      colour_values, annotation, scatter))
+  }
+  .rf_figure_assert(is.null(scatter), "Scatter options require numeric_points")
   if (identical(type, "numeric_points")) {
     return(.rf_numeric_recipe(mapping, row_key, levels, facets, labels, midpoint,
       reference, style, status, provenance, display_labels, numeric_axes,
@@ -166,6 +186,12 @@ reflow_figure_recipe <- function(type, mapping, row_key, levels,
 #'   distinct keyed rows. Numeric points require nonempty data and preserve input
 #'   row order, with complete colour/facet levels and fixed numeric scales.
 #' @param recipe A recipe from [reflow_figure_recipe()].
+#' @param annotation_data NULL for existing recipes. Wrapped numeric points
+#'   require a separate data frame with exactly one corner annotation per
+#'   declared facet. Selected keys, facet and label columns must be plain,
+#'   nonmissing character vectors without attributes; extra columns are ignored.
+#'   Complete keys and facet values must each be unique. Input row order, literal
+#'   newlines and supplied status/NA text are preserved; no statistics are computed.
 #' @return Versioned list with plot (ggplot, or NULL for explicitly empty legacy
 #'   input), status, rows, selected_columns, payload_sha256 and recipe_sha256.
 #'   Numeric points additionally return annotation_records (zero when absent)
@@ -175,13 +201,22 @@ reflow_figure_recipe <- function(type, mapping, row_key, levels,
 #'   and supplied midpoint/reference as applicable. Styling, level orders, numeric
 #'   axis declarations, colour maps and unverified provenance bind the recipe hash.
 #'   Extra unselected status columns are not authenticated by these hashes.
+#'   Wrapped numeric points additionally return annotation_payload_sha256 for
+#'   key-sorted selected annotation values and declared key/facet/label columns.
+#'   Neither canonical payload hash records input row order; drawing preserves
+#'   that order and order equivalence requires a separate diagnostic assertion.
 #'   Hashes use R version-2 serialization, not a cross-language protocol.
 #' @details Numeric points draw the supplied coordinates without aggregation,
 #'   filtering, fitting, jitter or automatic offsets. Text nudges affect annotations
 #'   only. Device-specific visible-label coverage, clipping and minimum exported
 #'   font sizes require separate render and visual qualification. No files are written.
 #' @export
-reflow_figure_plot <- function(data, recipe) {
+reflow_figure_plot <- function(data, recipe, annotation_data = NULL) {
+  if (is.list(recipe) && identical(recipe$schema, "reflow_numeric_points_wrap_1")) {
+    return(.rf_wrap_plot(data, recipe, annotation_data))
+  }
+  .rf_figure_assert(is.null(annotation_data),
+    "Separate annotation data require wrapped numeric points")
   if (is.list(recipe) && identical(recipe$type, "numeric_points")) {
     return(.rf_numeric_plot(data, recipe))
   }

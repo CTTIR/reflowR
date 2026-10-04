@@ -1,5 +1,7 @@
 # Development
 
+- Add opt-in numeric point layouts with wrapped free-y panels, explicit point opacity, and a separate keyed corner annotation table. Existing recipes and strict finite input validation remain unchanged.
+
 * Allow explicitly declared finite bounded-stage deadlines from 1 through 86400 seconds. Guardian liveness, transport and cleanup intervals remain unchanged; this ceiling is not a long-duration reliability guarantee.
 
 - Preserve the authenticated legacy figure fixture bytes across Git checkout line-ending settings.
