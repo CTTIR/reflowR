@@ -83,25 +83,25 @@
     
 <!-- badges: start -->
 <p><a href="https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://cttir.github.io/reflowR/"><img src="https://github.com/CTTIR/reflowR/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a> <a href="https://CRAN.R-project.org/package=reflowR" class="external-link"><img src="https://www.r-pkg.org/badges/version/reflowR" alt="CRAN status"></a> <a href="https://app.codecov.io/gh/CTTIR/reflowR?branch=main" class="external-link"><img src="https://codecov.io/gh/CTTIR/reflowR/branch/main/graph/badge.svg" alt="Codecov test coverage"></a> <a href="https://cran.r-project.org/package=reflowR" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/reflowR" alt="CRAN downloads"></a> <a href="https://cran.r-project.org/package=reflowR" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/reflowR" alt="CRAN downloads total"></a> <a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <!-- badges: end --></p>
-<div class="section level3">
-<h3 id="what-is-reflowr">What is reflowR?<a class="anchor" aria-label="anchor" href="#what-is-reflowr"></a>
-</h3>
+<div class="section level2">
+<h2 id="what-is-reflowr">What is reflowR?<a class="anchor" aria-label="anchor" href="#what-is-reflowr"></a>
+</h2>
 <p><strong>reflowR</strong> extends the <a href="https://workflowr.github.io/workflowr/" class="external-link">workflowr</a> package with
 themed color schemes, structured analysis pipeline templates, and
 utility scripts for reproducible research. It wraps
 <code><a href="https://workflowr.github.io/workflowr/reference/wflow_start.html" class="external-link">workflowr::wflow_start()</a></code> and layers on additional structure
 and theming.</p>
 </div>
-<div class="section level3">
-<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h3>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install from GitHub (workflowr is installed automatically)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"cttir/reflowR"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
-</h3>
+<div class="section level2">
+<h2 id="quick-start">Quick Start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cttir/reflowR" class="external-link">reflowR</a></span><span class="op">)</span></span>
 <span></span>
@@ -114,9 +114,9 @@ and theming.</p>
 <span>  depth     <span class="op">=</span> <span class="st">"standard"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="choosing-a-scheme">Choosing a Scheme<a class="anchor" aria-label="anchor" href="#choosing-a-scheme"></a>
-</h3>
+<div class="section level2">
+<h2 id="choosing-a-scheme">Choosing a Scheme<a class="anchor" aria-label="anchor" href="#choosing-a-scheme"></a>
+</h2>
 <p>reflowR provides five color schemes:</p>
 <table class="table">
 <colgroup>
@@ -168,9 +168,9 @@ and theming.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/reflow_preview.html">reflow_preview</a></span><span class="op">(</span><span class="st">"clinical"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="choosing-a-depth">Choosing a Depth<a class="anchor" aria-label="anchor" href="#choosing-a-depth"></a>
-</h3>
+<div class="section level2">
+<h2 id="choosing-a-depth">Choosing a Depth<a class="anchor" aria-label="anchor" href="#choosing-a-depth"></a>
+</h2>
 <table class="table">
 <thead><tr class="header">
 <th>Preset</th>
@@ -196,9 +196,9 @@ and theming.</p>
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="project-structure">Project Structure<a class="anchor" aria-label="anchor" href="#project-structure"></a>
-</h3>
+<div class="section level2">
+<h2 id="project-structure">Project Structure<a class="anchor" aria-label="anchor" href="#project-structure"></a>
+</h2>
 <p>After <code><a href="../reference/reflow_init.html">reflow_init()</a></code>, your project contains:</p>
 <pre><code>my_project/
 +-- analysis/        # Rmd pipeline files (rendered to docs/)
@@ -221,9 +221,9 @@ and theming.</p>
 +-- output/          # Figures, tables, models
 +-- report/          # Quarto report template</code></pre>
 </div>
-<div class="section level3">
-<h3 id="working-with-your-project">Working with Your Project<a class="anchor" aria-label="anchor" href="#working-with-your-project"></a>
-</h3>
+<div class="section level2">
+<h2 id="working-with-your-project">Working with Your Project<a class="anchor" aria-label="anchor" href="#working-with-your-project"></a>
+</h2>
 <p>After creation, use standard workflowr commands:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Render all Rmd files</span></span>
@@ -241,9 +241,9 @@ and theming.</p>
 <span><span class="co"># Set up GitHub Pages</span></span>
 <span><span class="fu">workflowr</span><span class="fu">::</span><span class="fu"><a href="https://workflowr.github.io/workflowr/reference/wflow_use_github.html" class="external-link">wflow_use_github</a></span><span class="op">(</span><span class="st">"username"</span>, <span class="st">"repo"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="customization">Customization<a class="anchor" aria-label="anchor" href="#customization"></a>
-</h3>
+<div class="section level2">
+<h2 id="customization">Customization<a class="anchor" aria-label="anchor" href="#customization"></a>
+</h2>
 <ul>
 <li>
 <strong>CSS</strong>: Edit <code>assets/theme.css</code> to
@@ -259,23 +259,6 @@ update <code>_site.yml</code> navbar</li>
 <code>code/00_setup.R</code>
 </li>
 </ul>
-</div>
-<div class="section level2">
-<h2 id="use-of-llm-tools">Use of LLM tools<a class="anchor" aria-label="anchor" href="#use-of-llm-tools"></a>
-</h2>
-<p>Portions of this package were prepared with assistance from large
-language model tooling for narrowly defined, non-authorial tasks:
-copyediting, prose smoothing, Markdown/LaTeX formatting, scaffolding of
-boilerplate files (CI configs, build scripts), code refactoring. The
-tools used were <a href="https://kisski.gwdg.de/leistungen/2-02-llm-service/" class="external-link">Chat AI</a>,
-the LLM service of KISSKI (GWDG), and a self-hosted <strong>Mistral
-Small (24B, Apache-2.0)</strong> run locally via <a href="https://ollama.com/" class="external-link">Ollama</a> and the <code>ollamar</code> R
-package — local inference only, with no data sent to third parties for
-the self-hosted model.</p>
-<p>All scientific claims, methodological choices, analyses,
-interpretations, and conclusions are the author’s own. No LLM-generated
-text was incorporated without review and revision, and every reference
-was verified against its DOI, arXiv ID, or ISBN.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
