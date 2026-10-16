@@ -1,5 +1,5 @@
 cttir_profile_fixture <- function() {
-  package <- tempfile("cttir-runtime-")
+  package <- tempfile("cttir-runtime-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
   dir.create(package)
   dir.create(file.path(package, "R"))
   writeLines(c("Package: cttiR", "Version: 0.1.0"), file.path(package, "DESCRIPTION"))
@@ -25,7 +25,7 @@ cttir_profile_project <- function(fixture, one_stage = FALSE) {
     list(applicable = identical(id, "descriptive"), reason = if (id == "descriptive") "" else "Isolated structural provenance fixture")), .strict_stage_ids) else NULL
   profile <- reflow_profile("clinical", "secondary", "observational", profile_version = "strict-cttir-v1",
     data_access = "synthetic", jurisdiction = "Germany", legal_basis = "Generated test observations", stages = overrides)
-  directory <- tempfile("cttir-project-")
+  directory <- tempfile("cttir-project-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
   withr::defer({
     Sys.chmod(file.path(directory, "data/raw"), "0755")
     unlink(directory, recursive = TRUE)

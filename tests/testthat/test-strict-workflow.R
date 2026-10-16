@@ -5,13 +5,28 @@ strict_test_lock <- function() {
 }
 
 strict_test_project <- function(profile = reflow_profile("clinical", "secondary", "observational")) {
-  root <- tempfile("strict-project-")
+  root <- tempfile("strict-project-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
   withr::defer({
     Sys.chmod(file.path(root, "data/raw"), "0755")
     unlink(root, recursive = TRUE)
   }, envir = parent.frame())
   reflow_init_strict(root, profile, "Study example", "Research group", strict_test_lock())
 }
+
+test_that("initialization rejects a linked ancestor before creating project files", {
+  skip_on_os("windows")
+  parent <- tempfile("strict-parent-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+  dir.create(parent)
+  withr::defer(unlink(parent, recursive = TRUE))
+  real <- file.path(parent, "physical")
+  link <- file.path(parent, "linked")
+  dir.create(real)
+  expect_true(file.symlink(real, link))
+  profile <- reflow_profile("clinical", "secondary", "observational")
+  expect_error(reflow_init_strict(file.path(link, "project"), profile,
+    "Study example", "Research group", strict_test_lock()), "Symbolic links")
+  expect_false(dir.exists(file.path(real, "project")))
+})
 
 test_that("domain, data origin and research design retain explicit palette semantics", {
   p <- reflow_profile("clinical", "secondary", "observational")
