@@ -1,20 +1,5 @@
 # Getting Started with reflowR
 
-[![R-CMD-check](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml)
-[![pkgdown](https://github.com/CTTIR/reflowR/actions/workflows/pkgdown.yaml/badge.svg)](https://cttir.github.io/reflowR/)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/reflowR)](https://CRAN.R-project.org/package=reflowR)
-[![Codecov test
-coverage](https://codecov.io/gh/CTTIR/reflowR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CTTIR/reflowR?branch=main)
-[![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/reflowR)](https://cran.r-project.org/package=reflowR)
-[![CRAN downloads
-total](https://cranlogs.r-pkg.org/badges/grand-total/reflowR)](https://cran.r-project.org/package=reflowR)
-[![License:
-MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-
 ## What is reflowR?
 
 **reflowR** extends the
@@ -29,7 +14,7 @@ and layers on additional structure and theming.
 ``` r
 
 # Install from GitHub (workflowr is installed automatically)
-remotes::install_github("cttir/reflowR")
+remotes::install_github("r-heller/reflowR")
 ```
 
 ## Quick Start
@@ -78,7 +63,7 @@ reflow_preview("clinical")
 ## Project Structure
 
 After
-[`reflow_init()`](https://cttir.github.io/reflowR/reference/reflow_init.md),
+[`reflow_init()`](https://r-heller.github.io/reflowR/reference/reflow_init.md),
 your project contains:
 
     my_project/

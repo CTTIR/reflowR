@@ -1,0 +1,170 @@
+# Consistent research workflows
+
+The strict profile fixes the project structure in deterministic
+templates. The research declaration chooses domain, data origin and
+study design independently. The same eleven stages remain visible in
+every project: protocol, import, validation, cleaning, descriptive
+analysis, primary analysis, diagnostics, sensitivity analysis,
+exploration, report and reproducibility. An inapplicable stage requires
+a reason. A stage name does not prescribe a statistical method.
+
+``` r
+
+library(reflowR)
+```
+
+    ## reflowR v0.1.0.9000 — Themed Workflowr Extensions
+    ## Use reflow_init() to get started.
+    ## See reflow_schemes() and reflow_presets() for options.
+
+``` r
+
+profile <- reflow_profile("clinical", "secondary", "observational", seed = 104L)
+profile[c("domain", "data_origin", "design", "scheme", "primary_color", "badge")]
+```
+
+    ## $domain
+    ## [1] "clinical"
+    ## 
+    ## $data_origin
+    ## [1] "secondary"
+    ## 
+    ## $design
+    ## [1] "observational"
+    ## 
+    ## $scheme
+    ## [1] "clinical"
+    ## 
+    ## $primary_color
+    ## [1] "#C8102E"
+    ## 
+    ## $badge
+    ## [1] "SECONDARY DATA"
+
+Clinical projects use the clinical red and basic research uses steel
+blue. Methods, simulation and software use green; evidence synthesis
+uses purple. Primary or secondary data are shown as a separate text
+badge, so colour is not the sole indicator of the project category.
+Other domains use the neutral theme.
+
+Declare access, jurisdiction and the intended legal basis explicitly.
+These are recorded statements, not a determination that a project is
+authorized. Unknown values prevent execution readiness.
+
+``` r
+
+profile <- reflow_profile("basic", "primary", "simulation", seed = 104L,
+  data_access = "synthetic", jurisdiction = "Germany",
+  legal_basis = "Generated teaching data without personal records")
+lock <- jsonlite::read_json("reviewed-environment/renv.lock")
+scaffold <- reflow_scaffold(profile, "Example study", "Research group", lock)
+project <- reflow_init_strict("example-study", profile, "Example study",
+  "Research group", lock, git = TRUE)
+```
+
+Initialization writes a new directory and, when requested, initializes
+an empty Git repository. It does not install dependencies, commit,
+render or publish. Provision the exact locked R and package versions in
+a reviewed external R library before execution. This profile does not
+generate a project-local renv activation script or library. The root
+lock declares the required environment; stage execution checks installed
+versions and GitHub revision pins.
+
+Preserve `scaffold$declaration` outside the project. The project cannot
+approve its own profile, palette, control files or changed code. Pass
+externally reviewed SHA-256 hashes for the declared stage files to
+validation:
+
+``` r
+
+reflow_validate_strict("example-study", scaffold$declaration)
+reviewed <- c(
+  "analysis/05_descriptive.Rmd" = "<reviewed SHA-256>",
+  "code/stages/05_descriptive.R" = "<reviewed SHA-256>"
+)
+reflow_validate_strict("example-study", scaffold$declaration, reviewed)
+```
+
+`valid` means the structure and supplied hashes agree. `execution_ready`
+also requires declarations and reviewed implementations for every
+applicable stage. `completed` additionally requires externally retained
+receipt hashes and matching current code, input and output hashes.
+Rendering an empty scaffold does not complete an analysis. Receipts
+record the seed, session and stage outputs; unchanged unrelated
+artifacts do not count as this stage’s outputs.
+
+Render reviewed pages explicitly with
+[`workflowr::wflow_build()`](https://workflowr.github.io/workflowr/reference/wflow_build.html).
+Each build uses workflowr’s fresh R session. Display computed objects
+explicitly in an Rmd chunk, for example with `knitr::kable(summary)`,
+after sourcing the calculation helper. Keep raw inputs read-only. Child
+publications share the root Git repository, dependency lock and site;
+nested execution roots and unknown code entrypoints fail validation.
+
+Static validation is not a security sandbox, a scientific review or
+legal approval. Execute reviewed code only within the group’s separately
+controlled runtime. The existing
+[`reflow_init()`](https://cttir.github.io/reflowR/dev/reference/reflow_init.md)
+and preset interfaces remain available for existing projects; adopting
+the strict profile is an explicit new-project path.
+
+## A fixed cttiR composition
+
+`strict-cttir-v1` is a separate, opt-in profile. The default `strict-v1`
+declaration and scaffold stay unchanged. The composed profile adds
+exactly `cttir-study.json`, `cttir-recipe.json` and
+`cttir-runtime.json`. Each applicable stage calls the fixed installed
+export
+`cttiR::study_stage(stage = "<declared stage>", directory = ".")`. The
+study writer verifies the bound analysis receipt and presents its
+recorded results. Rendering is not an instruction to recompute the
+scientific analysis.
+
+``` r
+
+profile <- reflow_profile("clinical", "secondary", "observational",
+  profile_version = "strict-cttir-v1", data_access = "synthetic",
+  jurisdiction = "Germany", legal_basis = "Generated test observations")
+composition <- list(
+  schema_version = 1L,
+  study = reviewed_study,
+  recipe = reviewed_recipe,
+  runtime = list(package = "cttiR", version = lock$Packages$cttiR$Version,
+    writer = "study_stage", files = installed_cttir_file_hashes)
+)
+scaffold <- reflow_scaffold(profile, "Clinical example", "Research group",
+  lock, composition = composition)
+project <- reflow_init_strict("clinical-example", profile, "Clinical example",
+  "Research group", lock, composition = composition)
+reflow_validate_strict(project$directory, scaffold$declaration,
+  execution_receipts = external_stage_receipt_hashes)
+```
+
+`installed_cttir_file_hashes` is a named list of lowercase SHA-256
+strings covering every regular file in the reviewed installed cttiR
+package, including `DESCRIPTION`, `NAMESPACE`, lazy-load databases and
+package resources. File names are relative to that package directory.
+Empty or partial inventories, symlinks, unlisted files, changed bytes, a
+different package version or a missing explicit `study_stage` export
+block execution readiness. A clean external R library and session remain
+required. No package code is loaded by static inventory checking.
+
+The composition itself must be retained in the trusted external
+declaration. Both scientific objects contain bounded plain JSON values;
+cttiR, rather than reflowR’s structural validator, validates their study
+and recipe semantics. All composed stage and control files are
+immutable: `reviewed_files` overrides are refused. Changing a study
+requires a new reviewed declaration and compilation, not a hash waiver
+for an edited control. No arbitrary extra file list is accepted. The
+compiled runtime helper also embeds the expected study, recipe, runtime,
+profile and lock hashes. These identities are checked before writer
+preflight and again after rendering; replacing a runtime digest map
+cannot approve changed installed code.
+
+Canonical stage files can be structurally execution-ready when the
+installed runtime matches and access declarations are complete. They are
+not completed until current externally pinned execution receipts bind
+their control, raw input and output hashes. Scientific acceptance, the
+upstream analysis receipt and its derived-data lineage remain cttiR’s
+responsibility. These checks do not create an OS sandbox or replace
+methodological review.

@@ -1,7 +1,5 @@
 # reflowR
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889956.svg)](https://doi.org/10.5281/zenodo.21889956)
-
 > Themed extensions for workflowr research workflows
 
 ## Overview
@@ -39,7 +37,7 @@ commands (`wflow_build()`, `wflow_publish()`, etc.).
 ``` r
 
 # install.packages("pak")
-pak::pak("cttir/reflowR")
+pak::pak("r-heller/reflowR")
 # workflowr is installed automatically as a dependency
 ```
 
@@ -47,7 +45,7 @@ Or using remotes:
 
 ``` r
 
-remotes::install_github("cttir/reflowR")
+remotes::install_github("r-heller/reflowR")
 ```
 
 ## Quick Start
@@ -112,11 +110,11 @@ commands work as expected.
 ## Getting Help
 
 - Browse the [function
-  reference](https://cttir.github.io/reflowR/reference/index.html)
+  reference](https://r-heller.github.io/reflowR/reference/index.html)
 - Read the [Getting Started
-  vignette](https://cttir.github.io/reflowR/articles/getting-started.html)
+  vignette](https://r-heller.github.io/reflowR/articles/getting-started.html)
 - File issues at [GitHub
-  Issues](https://github.com/cttir/reflowR/issues)
+  Issues](https://github.com/r-heller/reflowR/issues)
 
 ## Citation
 
@@ -133,65 +131,3 @@ you would like to change, then submit a pull request.
 ## License
 
 MIT
-
-## Recorded imaging workflows
-
-The imaging API runs a sequential graph of exported package functions,
-with explicit references to upstream R objects. It is independent of
-workflowr scaffolding and does not create Git repositories or publish
-anything.
-
-``` r
-
-plan <- reflow_imaging_plan(
-  reflow_imaging_stage("summary", "base", "summary", list(object = 1:4)),
-  reflow_imaging_stage("mean", "base", "mean",
-                      list(x = reflow_imaging_ref("summary")))
-)
-run_dir <- tempfile("imaging-run-")
-results <- reflow_imaging_run(plan, run_dir)
-verified <- reflow_imaging_resume(plan, run_dir)
-```
-
-Use `reflow_imaging_input(path)` for tracked files or directories, or
-set `read = TRUE` to pass an RDS input as an object. Use the reference’s
-`select` argument to extract named nested components. Declare optional
-package backends with the plan’s `packages` argument and stochastic
-calls with a stage `seed`.
-
-Receipts record configuration, input, installed code, runtime and output
-hashes. Resume verifies completed results; changed inputs or corrupt
-results require a new run directory. Common numerical thread environment
-settings are recorded and changes invalidate resume; this does not
-measure effective backend thread counts or capture in-process thread
-setters. Failed or interrupted calls retry in new attempt directories. A
-lock prevents concurrent execution; stale locks require manual
-inspection. Inputs must remain immutable during execution. Calls must be
-trusted, return plain serializable R objects, and avoid external side
-effects: this is not a sandbox. Resource scheduling, file-producing
-stages, external engine provenance, review dashboards and report recipes
-are not yet implemented by this API.
-
-## Use of LLM tools
-
-Where applicable, LLM tools were used for narrowly defined,
-non-authorial tasks: copyediting, prose refinement, Markdown/LaTeX
-formatting, boilerplate scaffolding (such as CI configurations and build
-scripts), and code refactoring. Tools included [Chat
-AI](https://kisski.gwdg.de/leistungen/2-02-llm-service/), the KISSKI
-(GWDG) service, and self-hosted **Mistral Small (24B, Apache-2.0)**
-served through a local **vLLM architecture** on an Ubuntu Linux
-workstation with Intel processors and NVIDIA GPUs. The self-hosted model
-ran locally, with no data sent to third parties.
-
-All scientific claims, methodological choices, analyses, interpretations
-and conclusions remain the authors’ own. Where applicable, LLM-generated
-material must be reviewed and revised before inclusion, and references
-must be verified against their DOI, arXiv ID or ISBN.
-
-Workstation software snapshot (14 October 2026): local,
-OpenAI-compatible vLLM serving with **vLLM
-0.28.1rc1.dev534+g613ab20f7**, **Python 3.12.13** and **PyTorch
-2.13.0**; **R 4.6.1** and **RStudio 2026.06.0+242**. These are
-workstation versions, not per-project dependency or validation
-requirements.
