@@ -1,0 +1,9 @@
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+/data/raw/**
+/renv/library/
+/renv/staging/
+/renv/cache/
+*.log

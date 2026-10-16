@@ -1,0 +1,2 @@
+# Environment restoration is an explicit maintenance operation.
+# Project startup and rendering never install or update dependencies.

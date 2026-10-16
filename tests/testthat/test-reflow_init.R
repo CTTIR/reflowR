@@ -108,11 +108,13 @@ test_that("reflow_init passes github_url and website into the navbar", {
 
 test_that("reflow_init with git = TRUE creates a repository and initial commit", {
   skip_if_not_installed("git2r")
+  configured <- git2r::config(global = TRUE)
+  skip_if(is.null(configured$user.name) || is.null(configured$user.email),
+          "A configured user identity is required for the temporary commit test")
   tmp <- withr::local_tempdir()
   proj <- file.path(tmp, "git_proj")
   reflow_init(directory = proj, author = "A", scheme = "basic", depth = "minimal",
-              git = TRUE, change_wd = FALSE, open = FALSE,
-              user.name = "Test User", user.email = "test@example.org")
+              git = TRUE, change_wd = FALSE, open = FALSE)
   expect_true(dir.exists(file.path(proj, ".git")))
   repo <- git2r::repository(proj)
   commits <- git2r::commits(repo)

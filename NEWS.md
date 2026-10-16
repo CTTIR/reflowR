@@ -1,5 +1,9 @@
 # Development
 
+* Add an opt-in `strict-cttir-v1` composition with three fixed data controls,
+  immutable stage entrypoints, complete installed cttiR file pins and current
+  execution receipts. The original `strict-v1` defaults remain unchanged.
+
 * Add explicit categorical numeric tiles with fixed dimensions, equal aspect
   and an optional legend text size independent of the base theme.
 
@@ -73,3 +77,10 @@ Initial release.
 * `reflow_schemes()` and `reflow_presets()` convenience functions.
 * Full compatibility with workflowr commands (wflow_build, wflow_publish, etc.).
 * Two vignettes: Getting Started and Color Schemes Reference.
+# reflowR 0.1.0.9000
+
+* Added a versioned strict research workflow with separate domain, data-origin
+  and design declarations, canonical stage ordering and established colours.
+* Added inert scaffold creation, external hash review, explicit execution
+  readiness and stage provenance validation. These checks do not establish
+  scientific or legal approval.

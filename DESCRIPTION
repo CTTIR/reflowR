@@ -1,6 +1,6 @@
 Package: reflowR
 Title: Themed Extensions for Workflowr Research Workflows
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R:
     person("R.", "Heller", email = "raban.heller@uni-ulm.de",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8006-9742"))
@@ -25,7 +25,8 @@ Imports:
     rlang,
     ggplot2 (>= 3.4.0),
     base64enc,
-    git2r
+    git2r,
+    jsonlite
 Suggests:
     codetools,
     processx (>= 3.9.0),
