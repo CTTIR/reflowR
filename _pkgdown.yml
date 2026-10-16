@@ -25,6 +25,7 @@ articles:
     contents:
       - getting-started
       - color-schemes
+      - strict-workflows
 
 reference:
   - title: "Finalized-value figures"
@@ -57,6 +58,14 @@ reference:
     desc: "Create and initialize themed workflowr projects."
     contents:
       - reflow_init
+
+  - title: "Strict research workflows"
+    desc: "Create and validate projects with fixed stages and externally reviewed declarations."
+    contents:
+      - reflow_profile
+      - reflow_scaffold
+      - reflow_init_strict
+      - reflow_validate_strict
 
   - title: "Schemes and presets"
     desc: "Explore available color schemes and pipeline depth presets."
