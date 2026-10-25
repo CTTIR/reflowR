@@ -27,6 +27,16 @@ verified before reuse. Random stages require an explicit stage seed; the
 caller's random state is restored after each call.
 }
 \details{
+While a stage function is being called, an external calling handler can use
+\code{invokeRestart("reflow_abort_stage", condition)} to reject a condition. The
+restart raises a \code{simpleError} with that condition's message and call inside
+the executor's failure handlers, so the stage and run record \code{FAILED} before
+the error reaches the caller. No downstream stage runs. This also supports
+warnings delivered directly with \code{\link[base:signalCondition]{base::signalCondition()}}. The restart is
+available only during the stage call, not argument resolution or result
+persistence. Warning classification and muffling remain the caller's policy;
+warning behaviour is unchanged when the restart is not invoked.
+
 The executor never initializes Git, publishes, installs packages or downloads
 data. Called functions are trusted and can have side effects; this API does
 not sandbox them. File-producing, distributed and resource-scheduled stages

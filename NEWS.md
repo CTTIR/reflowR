@@ -1,5 +1,9 @@
 # Development
 
+* Add a stage-call restart for external condition handlers to reject a condition
+  through the imaging executor's existing durable failure receipts. Default
+  warning handling and the run/resume interfaces remain unchanged.
+
 * Add an opt-in `strict-cttir-v1` composition with three fixed data controls,
   immutable stage entrypoints, complete installed cttiR file pins and current
   execution receipts. The original `strict-v1` defaults remain unchanged.

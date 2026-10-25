@@ -8,6 +8,16 @@
 #' verified before reuse. Random stages require an explicit stage seed; the
 #' caller's random state is restored after each call.
 #'
+#' While a stage function is being called, an external calling handler can use
+#' `invokeRestart("reflow_abort_stage", condition)` to reject a condition. The
+#' restart raises a `simpleError` with that condition's message and call inside
+#' the executor's failure handlers, so the stage and run record `FAILED` before
+#' the error reaches the caller. No downstream stage runs. This also supports
+#' warnings delivered directly with [base::signalCondition()]. The restart is
+#' available only during the stage call, not argument resolution or result
+#' persistence. Warning classification and muffling remain the caller's policy;
+#' warning behaviour is unchanged when the restart is not invoked.
+#'
 #' The executor never initializes Git, publishes, installs packages or downloads
 #' data. Called functions are trusted and can have side effects; this API does
 #' not sandbox them. File-producing, distributed and resource-scheduled stages
@@ -143,7 +153,15 @@ rf_execute <- function(plan, directory, signature) {
         }
         value <- tryCatch(
           {
-            value <- rf_call(s, args)
+            value <- withRestarts(
+              rf_call(s, args),
+              reflow_abort_stage = function(condition) {
+                if (!inherits(condition, "condition")) {
+                  stop("reflow_abort_stage requires a condition.")
+                }
+                stop(simpleError(conditionMessage(condition), conditionCall(condition)))
+              }
+            )
             rf_walk(value, identity)
             output <- file.path(attempt, "result.rds")
             saveRDS(value, output, version = 2)
