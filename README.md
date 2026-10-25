@@ -1,4 +1,4 @@
-# reflowR <img src="man/figures/logo.png" align="right" height="139" alt="reflowR logo" />
+# reflowR <img src="man/figures/logo.png" align="right" width="120" height="139" alt="reflowR hex logo" />
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889956.svg)](https://doi.org/10.5281/zenodo.21889956)
 
@@ -170,3 +170,7 @@ must be reviewed and revised before inclusion, and references must be verified
 against their DOI, arXiv ID or ISBN.
 
 Local software setup: vLLM with Python/PyTorch, plus R and RStudio.
+
+## Branding
+
+Editable R artwork and regeneration instructions are in [tools/branding](https://github.com/CTTIR/reflowR/blob/main/tools/branding/README.md).
