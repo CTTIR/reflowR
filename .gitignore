@@ -8,6 +8,17 @@
 inst/doc
 _build.R
 docs/
+# Retain only the branding assets used by tracked static documentation.
+!/docs/
+/docs/*
+!/docs/logo.svg
+!/docs/favicon.svg
+!/docs/favicon.ico
+!/docs/favicon-96x96.png
+!/docs/apple-touch-icon.png
+!/docs/web-app-manifest-192x192.png
+!/docs/web-app-manifest-512x512.png
+!/docs/site.webmanifest
 /doc/
 /Meta/
 *.tmp
