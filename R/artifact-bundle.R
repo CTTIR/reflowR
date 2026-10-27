@@ -13,7 +13,9 @@
 #' With `options(reflowR.package_hash_cache = TRUE)` the hashes of installed
 #' package files are reused within one R process while a file keeps its
 #' device, inode, size, modification and change times; use it only with a
-#' library that nothing modifies during the run. Inputs are always re-read.
+#' library that nothing modifies during the run.
+#' `options(reflowR.input_hash_cache = TRUE)` does the same for tracked input
+#' files; otherwise inputs are re-read for every fingerprint.
 #' @param package,fun Installed package and exported writer function.
 #' @param args Uniquely named ordinary arguments, excluding output arguments.
 #' @param outputs Named list keyed by output argument, each an exact list with
@@ -241,7 +243,12 @@ rfa_tree <- function(path) {
     pending <- pending[-1L]
     children <- list.files(directory, all.files = TRUE,
                            full.names = TRUE, no.. = TRUE)
-    for (entry in children) rfa_no_links(entry)
+    # The directory and its ancestors are already checked; only the entries
+    # themselves can still be links.
+    links <- Sys.readlink(children)
+    if (any(!is.na(links) & nzchar(links))) {
+      stop("Symbolic links are not allowed: ", children[!is.na(links) & nzchar(links)][1L])
+    }
     # No entry is a link (checked above), so stat-based dir.exists() equals
     # rfa_directory() here.
     nested <- dir.exists(children)

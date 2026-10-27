@@ -145,9 +145,16 @@ rf_package_cache <- new.env(parent = emptyenv())
 # options(reflowR.package_hash_cache = TRUE) a hash is reused within the R
 # process while the file keeps its device, inode, size, modification and
 # change times; otherwise every call reads every file.
-rf_package_hashes <- function(paths) {
+rf_package_hashes <- function(paths) rf_stamped_hashes(paths, "reflowR.package_hash_cache")
+
+# Hashes of tracked input files, reused in the same way with
+# options(reflowR.input_hash_cache = TRUE). Large raw inputs referenced by
+# many stages are then read once per process.
+rf_input_hashes <- function(paths) rf_stamped_hashes(paths, "reflowR.input_hash_cache")
+
+rf_stamped_hashes <- function(paths, option) {
   paths <- as.character(paths)
-  if (!length(paths) || !isTRUE(getOption("reflowR.package_hash_cache", FALSE))) {
+  if (!length(paths) || !isTRUE(getOption(option, FALSE))) {
     return(rf_file_hashes(paths))
   }
   info <- fs::file_info(paths, follow = FALSE, fail = FALSE)
@@ -181,7 +188,7 @@ rf_tree <- function(path) {
   }
   files <- files[!dir.exists(files)]
   stats::setNames(
-    rf_file_hashes(files),
+    rf_input_hashes(files),
     if (dir.exists(path)) substring(files, nchar(path) + 2L) else basename(path)
   )
 }

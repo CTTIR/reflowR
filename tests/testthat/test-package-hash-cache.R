@@ -33,3 +33,27 @@ test_that("the package hash cache is opt-in and follows file changes", {
   expect_identical(rf_package_hashes(files), rf_file_hashes(files))
   expect_error(rf_package_hashes(file.path(dir, "missing")), "Cannot read")
 })
+
+test_that("the input hash cache is opt-in, separate and follows file changes", {
+  dir <- withr::local_tempdir()
+  file <- file.path(dir, "input.txt")
+  writeLines("one", file)
+  first <- rf_file_hashes(file)
+  withr::local_options(reflowR.input_hash_cache = FALSE, reflowR.package_hash_cache = FALSE)
+  expect_identical(rf_input_hashes(file), first)
+  withr::local_options(reflowR.input_hash_cache = TRUE)
+  expect_identical(unname(rf_tree(file)), first)
+  writeLines("two", file)
+  expect_identical(unname(rf_tree(file)), rf_file_hashes(file))
+  expect_false(identical(rf_input_hashes(file), first))
+})
+
+test_that("tree walks refuse links below the root", {
+  skip_on_os("windows")
+  dir <- withr::local_tempdir()
+  dir.create(file.path(dir, "sub"))
+  writeLines("x", file.path(dir, "sub", "a.txt"))
+  expect_identical(rfa_tree(dir)$files, "sub/a.txt")
+  file.symlink(file.path(dir, "sub", "a.txt"), file.path(dir, "sub", "link.txt"))
+  expect_error(rfa_tree(dir), "Symbolic links")
+})
