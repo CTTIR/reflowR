@@ -1,5 +1,10 @@
 # Development
 
+* Add `reflow_call_writer()`, a generic artifact writer that calls one exported
+  function of an installed package and saves its value as RDS with an optional
+  tab-separated copy, and `reflow_call_stage()`, which declares such a stage and
+  fingerprints the called package. Existing artifact APIs are unchanged.
+
 * Add a stage-call restart for external condition handlers to reject a condition
   through the imaging executor's existing durable failure receipts. Default
   warning handling and the run/resume interfaces remain unchanged.
