@@ -242,15 +242,17 @@ rfa_tree <- function(path) {
     children <- list.files(directory, all.files = TRUE,
                            full.names = TRUE, no.. = TRUE)
     for (entry in children) rfa_no_links(entry)
-    # One type query per listing; same tests as rfa_directory()/rfa_regular().
-    types <- as.character(fs::file_info(children, follow = FALSE, fail = FALSE)$type)
-    nested <- !is.na(types) & types == "directory"
-    if (any(is.na(types[!nested]) | types[!nested] != "file")) {
-      stop("Only regular files are supported.")
-    }
+    # No entry is a link (checked above), so stat-based dir.exists() equals
+    # rfa_directory() here.
+    nested <- dir.exists(children)
     files <- c(files, children[!nested])
     directories <- c(directories, children[nested])
     pending <- c(pending, children[nested])
+  }
+  # One type query for all files; identical to rfa_regular() per file.
+  types <- as.character(fs::file_info(files, follow = FALSE, fail = FALSE)$type)
+  if (length(files) && any(is.na(types) | types != "file")) {
+    stop("Only regular files are supported.")
   }
   list(
     files = sort(substring(files, nchar(path) + 2L)),
