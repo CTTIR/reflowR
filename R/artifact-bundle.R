@@ -241,12 +241,9 @@ rfa_tree <- function(path) {
     pending <- c(pending, children[rfa_directory(children)])
   }
   files <- entries[!rfa_directory(entries)]
-  if (any(
-    !vapply(
-      files, function(file) rfa_regular(file),
-      logical(1)
-    )
-  )) {
+  # One type query for all files; identical to rfa_regular() per file.
+  types <- as.character(fs::file_info(files, follow = FALSE, fail = FALSE)$type)
+  if (length(files) && any(is.na(types) | types != "file")) {
     stop("Only regular files are supported.")
   }
   list(
