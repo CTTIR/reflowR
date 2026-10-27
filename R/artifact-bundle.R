@@ -10,6 +10,10 @@
 #' Installed package resources (including templates), tracked inputs and
 #'   declared
 #' external runtime files are fingerprinted. Undeclared ambient state is not.
+#' With `options(reflowR.package_hash_cache = TRUE)` the hashes of installed
+#' package files are reused within one R process while a file keeps its
+#' device, inode, size, modification and change times; use it only with a
+#' library that nothing modifies during the run. Inputs are always re-read.
 #' @param package,fun Installed package and exported writer function.
 #' @param args Uniquely named ordinary arguments, excluding output arguments.
 #' @param outputs Named list keyed by output argument, each an exact list with
@@ -291,7 +295,7 @@ rfa_signature <- function(spec) {
     path <- rfa_canonical(find.package(package))
     tree <- rfa_tree(path)
     list(path = path, directories = tree$directories,
-         files = stats::setNames(rf_file_hashes(file.path(path, tree$files)),
+         files = stats::setNames(rf_package_hashes(file.path(path, tree$files)),
                                  tree$files))
   })
   names(resources) <- packages

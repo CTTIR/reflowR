@@ -139,6 +139,36 @@ rf_file_hashes <- function(paths) {
   hashes
 }
 
+rf_package_cache <- new.env(parent = emptyenv())
+
+# Hashes of installed package files. With
+# options(reflowR.package_hash_cache = TRUE) a hash is reused within the R
+# process while the file keeps its device, inode, size, modification and
+# change times; otherwise every call reads every file.
+rf_package_hashes <- function(paths) {
+  paths <- as.character(paths)
+  if (!length(paths) || !isTRUE(getOption("reflowR.package_hash_cache", FALSE))) {
+    return(rf_file_hashes(paths))
+  }
+  info <- fs::file_info(paths, follow = FALSE, fail = FALSE)
+  stamp <- function(x) sprintf("%.9f", as.numeric(x))
+  keys <- paste(paths, info$device_id, info$inode, info$size,
+    stamp(info$modification_time), stamp(info$change_time),
+    sep = "\r"
+  )
+  known <- vapply(keys, exists, logical(1),
+    envir = rf_package_cache, inherits = FALSE, USE.NAMES = FALSE
+  )
+  if (any(!known) || anyNA(info$inode)) {
+    todo <- !known | is.na(info$inode)
+    fresh <- rf_file_hashes(paths[todo])
+    for (i in seq_along(fresh)) assign(keys[todo][i], fresh[i], envir = rf_package_cache)
+  }
+  vapply(keys, get, character(1),
+    envir = rf_package_cache, inherits = FALSE, USE.NAMES = FALSE
+  )
+}
+
 rf_tree <- function(path) {
   if (!file.exists(path)) stop("Missing tracked input: ", path)
   files <- if (dir.exists(path)) {
@@ -180,7 +210,7 @@ rf_packages <- function(stages, extra = character()) {
     list(
       version = as.character(utils::packageVersion(p)),
       files = stats::setNames(
-        rf_file_hashes(files),
+        rf_package_hashes(files),
         substring(files, nchar(root) + 2L)
       )
     )

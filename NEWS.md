@@ -1,5 +1,12 @@
 # Development
 
+* Artifact fingerprints hash files in one call (`tools::sha256sum()` on R >= 4.5.0,
+  same values) and walk package trees with one type query per folder.
+  `options(reflowR.package_hash_cache = TRUE)` reuses installed-package file
+  hashes within one R process while device, inode, size, modification and
+  change times are unchanged; it is off by default and inputs are always
+  re-read.
+
 * Add `reflow_call_writer()`, a generic artifact writer that calls one exported
   function of an installed package and saves its value as RDS with an optional
   tab-separated copy, and `reflow_call_stage()`, which declares such a stage and
