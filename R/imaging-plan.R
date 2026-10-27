@@ -120,7 +120,24 @@ rf_hash <- function(x) {
     algo = "sha256", serialize = FALSE
   )
 }
-rf_file_hash <- function(path) digest::digest(file = path, algo = "sha256")
+rf_file_hash <- function(path) rf_file_hashes(path)
+
+# SHA-256 of file contents, one call for many files. tools::sha256sum()
+# (R >= 4.5.0) gives the same values as digest and is faster.
+rf_file_hashes <- function(paths) {
+  paths <- as.character(paths)
+  if (!length(paths)) return(character())
+  hashes <- if (getRversion() >= "4.5.0") {
+    unname(getExportedValue("tools", "sha256sum")(paths))
+  } else {
+    vapply(paths, function(p) digest::digest(file = p, algo = "sha256"),
+      character(1), USE.NAMES = FALSE)
+  }
+  if (anyNA(hashes)) {
+    stop("Cannot read file for hashing: ", paths[is.na(hashes)][1L])
+  }
+  hashes
+}
 
 rf_tree <- function(path) {
   if (!file.exists(path)) stop("Missing tracked input: ", path)
@@ -134,7 +151,7 @@ rf_tree <- function(path) {
   }
   files <- files[!dir.exists(files)]
   stats::setNames(
-    vapply(files, rf_file_hash, character(1)),
+    rf_file_hashes(files),
     if (dir.exists(path)) substring(files, nchar(path) + 2L) else basename(path)
   )
 }
@@ -163,7 +180,7 @@ rf_packages <- function(stages, extra = character()) {
     list(
       version = as.character(utils::packageVersion(p)),
       files = stats::setNames(
-        vapply(files, rf_file_hash, character(1)),
+        rf_file_hashes(files),
         substring(files, nchar(root) + 2L)
       )
     )

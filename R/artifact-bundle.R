@@ -229,7 +229,8 @@ rfa_tree <- function(path) {
   rfa_no_links(path)
   if (!rfa_directory(path))
     stop("Missing directory: ", path)
-  entries <- character()
+  files <- character()
+  directories <- character()
   pending <- path
   while (length(pending)) {
     directory <- pending[[1L]]
@@ -237,29 +238,19 @@ rfa_tree <- function(path) {
     children <- list.files(directory, all.files = TRUE,
                            full.names = TRUE, no.. = TRUE)
     for (entry in children) rfa_no_links(entry)
-    entries <- c(entries, children)
-    pending <- c(pending, children[rfa_directory(children)])
-  }
-  files <- entries[!rfa_directory(entries)]
-  # One type query for all files; identical to rfa_regular() per file.
-  types <- as.character(fs::file_info(files, follow = FALSE, fail = FALSE)$type)
-  if (length(files) && any(is.na(types) | types != "file")) {
-    stop("Only regular files are supported.")
+    # One type query per listing; same tests as rfa_directory()/rfa_regular().
+    types <- as.character(fs::file_info(children, follow = FALSE, fail = FALSE)$type)
+    nested <- !is.na(types) & types == "directory"
+    if (any(is.na(types[!nested]) | types[!nested] != "file")) {
+      stop("Only regular files are supported.")
+    }
+    files <- c(files, children[!nested])
+    directories <- c(directories, children[nested])
+    pending <- c(pending, children[nested])
   }
   list(
-    files = sort(
-      substring(
-        files, nchar(path) +
-          2L
-      )
-    ),
-    directories = sort(
-      substring(
-        entries[rfa_directory(entries)],
-        nchar(path) +
-          2L
-      )
-    )
+    files = sort(substring(files, nchar(path) + 2L)),
+    directories = sort(substring(directories, nchar(path) + 2L))
   )
 }
 
@@ -300,8 +291,7 @@ rfa_signature <- function(spec) {
     path <- rfa_canonical(find.package(package))
     tree <- rfa_tree(path)
     list(path = path, directories = tree$directories,
-         files = stats::setNames(vapply(file.path(path, tree$files),
-                                        rf_file_hash, character(1)),
+         files = stats::setNames(rf_file_hashes(file.path(path, tree$files)),
                                  tree$files))
   })
   names(resources) <- packages
@@ -345,7 +335,7 @@ rfa_inventory <- function(spec, bundle) {
   data.frame(
     name = names(spec$inventory),
     path = unname(spec$inventory),
-    bytes = bytes, sha256 = unname(vapply(paths, rf_file_hash, character(1))),
+    bytes = bytes, sha256 = rf_file_hashes(paths),
     stringsAsFactors = FALSE
   )
 }
