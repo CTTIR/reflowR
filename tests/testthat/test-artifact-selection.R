@@ -1,3 +1,7 @@
+# These graphs fingerprint the installed package closure many times. Nothing
+# here modifies installed packages, so reuse their file hashes in this process.
+withr::local_options(reflowR.package_hash_cache = TRUE)
+
 test_that("installed writers consume data and unchanged selections do not copy", {
   f <- selector_fixture()
   expect_error(reflow_artifact_select(f$make(), f$registry), "initialization")
@@ -24,6 +28,7 @@ test_that("installed writers consume data and unchanged selections do not copy",
 })
 
 test_that("absent graph after PENDING cannot be automatically dispatched", {
+  skip_on_cran()
   f <- selector_fixture()
   fault <- "PENDING"
   local_mocked_bindings(rfs_checkpoint = function(point) {
@@ -45,6 +50,7 @@ test_that("absent graph after PENDING cannot be automatically dispatched", {
 })
 
 test_that("complete publications recover each valid boundary without another writer", {
+  skip_on_cran()
   for (boundary in c("GRAPH_COMPLETE", "COMPLETED", "INTENT",
                      "POINTER_STAGED", "POINTER_RENAMED")) {
     f <- selector_fixture()
@@ -89,6 +95,7 @@ test_that("event staging residue requires external inspection, never guessed rec
 })
 
 test_that("current journal and payload corruption refuse with exact preservation", {
+  skip_on_cran()
   for (kind in c("current", "event", "header", "payload", "journal", "foreign", "orphan")) {
     f <- selector_fixture()
     p <- reflow_artifact_select(f$make(), f$registry, TRUE)
@@ -109,6 +116,7 @@ test_that("current journal and payload corruption refuse with exact preservation
 })
 
 test_that("input drift before publication preserves pending generation and old pointer", {
+  skip_on_cran()
   f <- selector_fixture()
   fault <- TRUE
   local_mocked_bindings(rfs_checkpoint = function(point) {
@@ -161,6 +169,7 @@ test_that("same registry real contenders cannot both dispatch", {
 })
 
 test_that("a completed successor and stale prior pointer require publication recovery", {
+  skip_on_cran()
   f <- selector_fixture()
   first <- reflow_artifact_select(f$make(), f$registry, TRUE)
   prior <- selector_snapshot(first$generation)
@@ -183,6 +192,7 @@ test_that("a completed successor and stale prior pointer require publication rec
 })
 
 test_that("missing initialization and special metadata never dispatch a writer", {
+  skip_on_cran()
   f <- selector_fixture()
   dir.create(f$registry)
   before <- selector_snapshot(f$registry)
@@ -204,6 +214,7 @@ test_that("missing initialization and special metadata never dispatch a writer",
 })
 
 test_that("completed then failed siblings retain immutable integrity obligations", {
+  skip_on_cran()
   for (damage in c("payload", "READY")) {
     f <- selector_fixture()
     original_plan <- f$make()
@@ -264,6 +275,7 @@ test_that("selector entry refusals preserve existing data and never initialize",
 })
 
 test_that("journal semantic corruption refuses without changing any surviving bytes", {
+  skip_on_cran()
   f <- selector_fixture()
   p <- reflow_artifact_select(f$make(), f$registry, TRUE)
   payload_before <- selector_snapshot(p$generation)
@@ -387,6 +399,7 @@ test_that("reconciliation action guards cannot dispatch or replace a pointer", {
 })
 
 test_that("real event and pointer destination races preserve forensic residue", {
+  skip_on_cran()
   actual_call <- rf_call
   real_writer <- reflow_artifact_run
   for (kind in c("event-rename", "pointer-rename", "staging-tamper", "pointer-drift",
@@ -482,6 +495,7 @@ test_that("platform and optional capability refusals cannot reach a writer", {
 })
 
 test_that("historical definition mismatches release locks and retain graph data", {
+  skip_on_cran()
   f <- selector_fixture()
   p <- reflow_artifact_select(f$make(), f$registry, TRUE)
   before <- selector_snapshot(f$registry)
@@ -511,6 +525,7 @@ test_that("an occupied event staging destination cannot overwrite foreign eviden
 })
 
 test_that("an interrupted dispatch resumes only after explicit graph reconciliation", {
+  skip_on_cran()
   f <- selector_fixture()
   original <- reflow_artifact_run
   interrupted <- TRUE
@@ -575,6 +590,7 @@ test_that("an interrupted dispatch resumes only after explicit graph reconciliat
 })
 
 test_that("completion boundary races preserve their exact injected evidence", {
+  skip_on_cran()
   for (kind in c("request", "definition", "ready", "current")) local({
     mode <- kind
     f <- selector_fixture()
@@ -641,6 +657,7 @@ test_that("completion boundary races preserve their exact injected evidence", {
 })
 
 test_that("actual pointer rename failure retains stage and completed payloads", {
+  skip_on_cran()
   f <- selector_fixture()
   complete <- rfs_complete
   expect_identical(body(complete), body(rfs_complete))
@@ -678,6 +695,7 @@ test_that("actual pointer rename failure retains stage and completed payloads", 
 })
 
 test_that("equal staging residue after pointer rename still forbids publication", {
+  skip_on_cran()
   f <- selector_fixture()
   interrupt <- TRUE
   writer_calls <- 0L

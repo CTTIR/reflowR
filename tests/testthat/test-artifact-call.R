@@ -1,3 +1,7 @@
+# These graphs fingerprint the installed package closure many times. Nothing
+# here modifies installed packages, so reuse their file hashes in this process.
+withr::local_options(reflowR.package_hash_cache = TRUE)
+
 test_that("the call writer saves the exact value and a readable table", {
   dir <- withr::local_tempdir()
   value <- data.frame(
@@ -82,6 +86,7 @@ test_that("call stages are canonical artifact declarations", {
 })
 
 test_that("call stages run, resume and fingerprint as an artifact graph", {
+  skip_on_cran()
   skip_if_not(
     "reflowR" %in% rownames(utils::installed.packages()),
     "needs an installed reflowR"
