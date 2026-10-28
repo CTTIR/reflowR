@@ -21,9 +21,9 @@
 
 ### Theming
 
-- **5 color schemes** -- clinical (red), basic research (steelblue), code/statistics (forest green), special (purple), other (grey) -- each with a custom SVG icon, 8-color palette, and full CSS/SCSS theme
-- **ggplot2 theme + table styling** that automatically matches the selected scheme
-- **Themed navbar** with gradient, icon, and pipeline dropdown menu
+- **9 CTTIR v5 families** -- spectral, spatial, omics, clinical, methods, simulation, evidence, platform and brand -- built from the same design tokens as hexmakR and themakR, each with a family hex icon, Okabe-Ito palette, and CSS/SCSS theme with light and dark modes
+- **ggplot2 theme + table styling** that automatically matches the selected family
+- **Flat navbar** on the page background with the family icon, an accent rule, and the pipeline dropdown menu
 
 ### Scaffolding
 
@@ -68,13 +68,21 @@ workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
 
 ## Color Schemes
 
-| Scheme | Label | Primary | Use Case |
-|--------|-------|---------|----------|
-| `clinical` | Clinical Research | `#C8102E` | Clinical trials, patient data |
-| `basic` | Basic Research | `#4682B4` | Lab research, general science |
-| `code` | Code & Statistics | `#228B22` | Software dev, statistical methods |
-| `special` | Special | `#6A0DAD` | Special projects, reviews |
-| `other` | Other | `#2C2C2C` | Neutral, multipurpose |
+| Scheme | Label | Accent | Use Case |
+|--------|-------|--------|----------|
+| `spectral` | Spectral imaging | `#0072B2` | Imaging, spectroscopy |
+| `spatial` | Spatial biology | `#009E73` | Tissue and spatial assays |
+| `omics` | Molecular data | `#CC79A7` | Sequencing, molecular profiles |
+| `clinical` | Clinical science | `#D55E00` | Clinical trials, patient data |
+| `methods` | Learning & inference | `#56B4E9` | Statistical and ML methods |
+| `simulation` | Systems & simulation | `#E69F00` | Simulation studies, models |
+| `evidence` | Evidence & discovery | `#F0E442` | Reviews, meta-analyses |
+| `platform` | Research infrastructure | `#000000` | Software, data, infrastructure |
+| `brand` | Science, connected | `#0072B2` | General purpose (default) |
+
+The earlier names `basic`, `code`, `special` and `other` remain accepted as
+aliases of `brand`, `methods`, `evidence` and `platform`. Links and text use
+neutral tokens in light and dark mode; the accent marks identity only.
 
 Preview any scheme interactively:
 

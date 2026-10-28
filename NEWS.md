@@ -1,5 +1,25 @@
 # Development
 
+* Site schemes are now the nine CTTIR v5 topic families (spectral, spatial,
+  omics, clinical, methods, simulation, evidence, platform and brand), built
+  from `inst/cttir/design_tokens.csv`, the token table shared with hexmakR and
+  themakR. `reflow_init()` defaults to `brand`. The earlier names remain
+  accepted with a one-time message: `basic` is `brand`, `code` is `methods`,
+  `special` is `evidence` and `other` is `platform`; `clinical` keeps its name
+  with the v5 vermillion. Existing scheme fields remain and gain explicit
+  light/dark surface, tint, code token and font fields.
+* Generated CSS and SCSS follow the themakR surface: flat navbar on the page
+  background, light and dark modes, Inter and JetBrains Mono font stacks
+  without downloads, links in the link token and the family accent only for
+  identity rules. The gradient navbar and emoji titles are gone; each family
+  has an R-drawn hex icon (`tools/branding/family-icons.R`).
+* Generated setup, utility and plot scripts, the preview, the startup message
+  and new strict profiles take colours and fonts from the v5 scheme. Strict
+  declarations recorded with the earlier palette keep their colour and
+  stylesheet and still validate.
+* The generated `_site.yml` is valid YAML again and renders the site into
+  `docs/`, as workflowr expects.
+
 * Standardize the named v5 package logo across README, documentation pages
   and available application headers, with matching light and dark artwork.
 
