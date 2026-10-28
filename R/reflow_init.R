@@ -26,8 +26,17 @@
 #'   Defaults to \code{as.integer(format(Sys.Date(), "\%Y\%m\%d"))}.
 #' @param github_url Character. GitHub repository URL (optional).
 #'   Adds a GitHub link to the navbar.
-#' @param existing Logical. Is the \code{directory} an existing project?
-#'   Passed to \code{workflowr::wflow_start(existing = ...)}. Default \code{FALSE}.
+#' @param existing Logical. Is the \code{directory} an existing project or
+#'   folder? Passed to \code{workflowr::wflow_start(existing = ...)}, which adds
+#'   the missing workflowr files and leaves present ones alone. Default
+#'   \code{FALSE}. Files that reflowR writes are replaced only with
+#'   \code{overwrite = TRUE}.
+#' @param overwrite Logical. Replace files that reflowR writes if they already
+#'   exist in \code{directory}: \code{README.md}, \code{_workflowr.yml},
+#'   \code{analysis/_site.yml}, \code{analysis/index.Rmd},
+#'   \code{analysis/about.Rmd} and the theme, icon, script, pipeline and report
+#'   files. Default \code{FALSE}: the function then stops before writing
+#'   anything and lists the files. Other workflowr files are never replaced.
 #' @param git Logical. Initialize git repository and make first commit?
 #'   Default \code{TRUE}.
 #' @param change_wd Logical. Change working directory to the new project?
@@ -49,14 +58,18 @@
 #' committing yet.
 #'
 #' \strong{Phase 2 -- reflowR theming:} Replaces \code{_site.yml},
-#' \code{index.Rmd}, and \code{about.Rmd} with themed versions; adds the
+#' \code{index.Rmd}, \code{about.Rmd}, \code{_workflowr.yml} and
+#' \code{README.md} with themed versions; adds the
 #' analysis pipeline Rmd files, CSS/SCSS, icon, setup script, utility script,
 #' Quarto report template, and additional subdirectories. If \code{git = TRUE},
 #' initializes git and commits all files.
 #'
-#' If any of the files that Phase 2 adds already exists in \code{directory},
-#' for example after an earlier call, the function stops before writing
-#' anything, so a project is never left partly updated.
+#' If any of the files that Phase 2 writes already exists in \code{directory}
+#' before the call, for example the README or \code{_site.yml} of an existing
+#' workflowr project or the files of an earlier call, the function stops before
+#' writing anything and lists them, so a project is never changed silently or
+#' left partly updated. Set \code{overwrite = TRUE} to replace them with the
+#' reflowR versions.
 #'
 #' @examples
 #' # A clinical project with the three-step pipeline, in a temporary folder
@@ -99,6 +112,7 @@ reflow_init <- function(
   seed        = as.integer(format(Sys.Date(), "%Y%m%d")),
   github_url  = NULL,
   existing    = FALSE,
+  overwrite   = FALSE,
   git         = TRUE,
   change_wd   = rlang::is_interactive(),
   user.name   = NULL,
@@ -109,20 +123,26 @@ reflow_init <- function(
   scheme <- match.arg(scheme)
   depth  <- match.arg(depth)
   if (is.null(name)) name <- basename(directory)
+  if (!is.logical(overwrite) || length(overwrite) != 1L || is.na(overwrite)) {
+    cli::cli_abort("{.arg overwrite} must be {.code TRUE} or {.code FALSE}.")
+  }
   p <- reflow_preset(depth)
 
-  # Check every file that Phase 2 adds before anything is written.
-  added <- reflow_init_added(p)
-  present <- added[file.exists(file.path(directory, added))]
-  if (length(present)) {
+  # Check every file that Phase 2 writes before anything is written. Files
+  # that exist already belong to the user (an existing project or an earlier
+  # call) and are replaced only on request.
+  written <- c(reflow_init_replaced, reflow_init_added(p))
+  present <- written[file.exists(file.path(directory, written))]
+  if (length(present) && !overwrite) {
     cli::cli_abort(c(
-      "reflowR files already exist in {.path {directory}}; nothing was changed.",
-      "i" = "Move or remove {.file {present}} first."
+      "Files that reflowR writes already exist in {.path {directory}}; nothing was changed.",
+      "i" = "Move or remove {.file {present}}, or set {.code overwrite = TRUE} to replace them."
     ))
   }
 
   cli::cli_h1("Creating reflowR project: {.val {name}}")
   cli::cli_alert_info("Scheme: {.val {scheme}} | Depth: {.val {depth}}")
+  if (length(present)) cli::cli_alert_warning("Replacing {.file {present}}.")
 
   # Call workflowr -- git=FALSE so we commit after adding our files
   cli::cli_h2("Phase 1: workflowr scaffold")
@@ -169,8 +189,10 @@ reflow_init <- function(
   # 2d. Copy the family icon (aliases resolve to their v5 family)
   cli::cli_alert("Adding scheme icon...")
   icon_src <- system.file("icons", s$navbar_icon, package = "reflowR")
-  fs::file_copy(icon_src, fs::path(project_dir, "assets", "icon.svg"))
-  fs::file_copy(icon_src, fs::path(project_dir, "docs", "assets", "icon.svg"))
+  fs::file_copy(icon_src, fs::path(project_dir, "assets", "icon.svg"),
+                overwrite = overwrite)
+  fs::file_copy(icon_src, fs::path(project_dir, "docs", "assets", "icon.svg"),
+                overwrite = overwrite)
 
   # 2e. Update _workflowr.yml with user seed
   cli::cli_alert("Configuring workflowr seed...")
@@ -256,6 +278,13 @@ reflow_init <- function(
 
   invisible(project_dir)
 }
+
+# workflowr files that Phase 2 of reflow_init() replaces with themed versions,
+# relative to the project directory.
+reflow_init_replaced <- c(
+  "README.md", "_workflowr.yml",
+  file.path("analysis", c("_site.yml", "index.Rmd", "about.Rmd"))
+)
 
 # Files that Phase 2 of reflow_init() adds on top of the workflowr scaffold,
 # relative to the project directory.

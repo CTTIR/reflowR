@@ -220,6 +220,71 @@ test_that("a repeated call on an existing project changes nothing", {
                    before)
 })
 
+test_that("existing = TRUE leaves the files of a workflowr project unchanged", {
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "wflow_proj")
+  workflowr::wflow_start(proj, git = FALSE, change_wd = FALSE)
+  own <- file.path(proj, reflow_init_replaced)
+  for (f in own) cat("Written by the user\n", file = f, append = TRUE)
+  listing <- function() {
+    tools::md5sum(list.files(proj, recursive = TRUE, all.files = TRUE,
+                             full.names = TRUE))
+  }
+  before <- listing()
+  err <- expect_error(
+    reflow_init(directory = proj, author = "A", depth = "minimal",
+                existing = TRUE, git = FALSE, change_wd = FALSE, open = FALSE),
+    "nothing was changed"
+  )
+  for (f in reflow_init_replaced) expect_match(conditionMessage(err), f, fixed = TRUE)
+  expect_identical(listing(), before)
+
+  # Replacing them is an explicit choice.
+  suppressMessages(reflow_init(directory = proj, author = "A", depth = "minimal",
+                               existing = TRUE, overwrite = TRUE, git = FALSE,
+                               change_wd = FALSE, open = FALSE))
+  expect_false(any(tools::md5sum(own) == before[own]))
+  expect_true(any(grepl("theme.css", readLines(file.path(proj, "analysis", "_site.yml")),
+                        fixed = TRUE)))
+})
+
+test_that("overwrite = TRUE re-themes a project made by an earlier call", {
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "retheme_proj")
+  suppressMessages(reflow_init(directory = proj, author = "A", scheme = "brand",
+                               depth = "minimal", git = FALSE,
+                               change_wd = FALSE, open = FALSE))
+  suppressMessages(reflow_init(directory = proj, author = "A", scheme = "clinical",
+                               depth = "minimal", existing = TRUE, overwrite = TRUE,
+                               git = FALSE, change_wd = FALSE, open = FALSE))
+  css <- readLines(file.path(proj, "analysis", "theme.css"))
+  expect_true(any(grepl(paste0("--cttir-topic: ", reflow_scheme("clinical")$accent, ";"),
+                        css, fixed = TRUE)))
+  icon <- system.file("icons", "icon_clinical.svg", package = "reflowR")
+  expect_identical(unname(tools::md5sum(file.path(proj, "assets", "icon.svg"))),
+                   unname(tools::md5sum(icon)))
+  expect_error(
+    reflow_init(directory = proj, author = "A", existing = TRUE, overwrite = NA,
+                git = FALSE, change_wd = FALSE, open = FALSE),
+    "overwrite"
+  )
+})
+
+test_that("the replaced file list matches what reflow_init changes in a workflowr project", {
+  tmp <- withr::local_tempdir()
+  base <- file.path(tmp, "base")
+  themed <- file.path(tmp, "themed")
+  workflowr::wflow_start(base, name = "x", git = FALSE, change_wd = FALSE)
+  suppressMessages(reflow_init(directory = themed, name = "x", author = "A",
+                               depth = "minimal", git = FALSE,
+                               change_wd = FALSE, open = FALSE))
+  common <- intersect(list.files(base, recursive = TRUE, all.files = TRUE),
+                      list.files(themed, recursive = TRUE, all.files = TRUE))
+  changed <- common[unname(tools::md5sum(file.path(base, common))) !=
+                      unname(tools::md5sum(file.path(themed, common)))]
+  expect_setequal(changed, reflow_init_replaced)
+})
+
 test_that("the checked file list matches what reflow_init adds", {
   tmp <- withr::local_tempdir()
   proj <- file.path(tmp, "listed_proj")

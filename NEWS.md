@@ -17,10 +17,13 @@
 * `_workflowr.yml` records the installed workflowr version instead of a fixed
   1.7.2.
 
-* `reflow_init()` checks all files it adds before writing anything and stops
-  with a clear message if one already exists. A repeated call with
-  `existing = TRUE` used to overwrite `_site.yml` and the theme and then fail
-  on the icon, leaving the project partly updated.
+* `reflow_init()` checks all files it writes before writing anything and stops
+  with a message listing those that already exist. With `existing = TRUE` it
+  used to replace the `README.md`, `_workflowr.yml`, `_site.yml`, `index.Rmd`
+  and `about.Rmd` of an existing workflowr project without asking, and a
+  repeated call overwrote `_site.yml` and the theme and then failed on the
+  icon, leaving the project partly updated. The new argument
+  `overwrite = TRUE` replaces these files on request.
 
 * `reflow_init()` escapes the project name and author in the YAML headers of the
   generated pages and report, so quotes, colons or backslashes in them no
