@@ -1,7 +1,7 @@
 # Generate the 00_setup.R Script
 
-Creates the project setup script with package loading, paths, color
-definitions, ggplot2 theme, and table styling helpers.
+Creates the project setup script with package loading, paths, the CTTIR
+v5 scheme colours and fonts, ggplot2 theme, and table styling helpers.
 
 ## Usage
 

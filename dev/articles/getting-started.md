@@ -52,15 +52,22 @@ reflow_init(
 
 ## Choosing a Scheme
 
-reflowR provides five color schemes:
+reflowR schemes are the nine CTTIR v5 topic families:
 
-| Scheme | Label | Primary Color | Best For |
+| Scheme | Label | Accent | Best For |
 |----|----|----|----|
-| `clinical` | Clinical Research | Red (#C8102E) | Clinical trials, patient data |
-| `basic` | Basic Research | Steelblue (#4682B4) | Lab research, general science |
-| `code` | Code & Statistics | Forest Green (#228B22) | Software dev, statistical methods |
-| `special` | Special | Purple (#6A0DAD) | Special projects, reviews |
-| `other` | Other | Grey (#2C2C2C) | Neutral, multipurpose |
+| `spectral` | Spectral imaging | Blue (#0072B2) | Imaging, spectroscopy |
+| `spatial` | Spatial biology | Bluish green (#009E73) | Tissue and spatial assays |
+| `omics` | Molecular data | Reddish purple (#CC79A7) | Sequencing, molecular profiles |
+| `clinical` | Clinical science | Vermillion (#D55E00) | Clinical trials, patient data |
+| `methods` | Learning & inference | Sky blue (#56B4E9) | Statistical and ML methods |
+| `simulation` | Systems & simulation | Orange (#E69F00) | Simulation studies, models |
+| `evidence` | Evidence & discovery | Yellow (#F0E442) | Reviews, meta-analyses |
+| `platform` | Research infrastructure | Black (#000000) | Software, data, infrastructure |
+| `brand` | Science, connected | Blue (#0072B2) | General purpose (default) |
+
+The earlier names `basic`, `code`, `special` and `other` remain accepted
+as aliases of `brand`, `methods`, `evidence` and `platform`.
 
 Preview any scheme:
 
@@ -90,7 +97,7 @@ your project contains:
     |   +-- about.Rmd    # Author card + pipeline docs
     |   +-- 01_read_data.Rmd  # ... pipeline steps
     |   +-- ...
-    +-- assets/          # Theme CSS, SCSS, and SVG icon
+    +-- assets/          # Theme CSS, SCSS, and family icon
     +-- code/            # R scripts
     |   +-- 00_setup.R   # Packages, paths, colors, ggplot theme
     |   +-- utils.R      # Helper functions
@@ -128,7 +135,7 @@ workflowr::wflow_use_github("username", "repo")
 
 ## Customization
 
-- **CSS**: Edit `assets/theme.css` to customize styling
+- **CSS**: Edit `analysis/theme.css` to customize styling
 - **New Rmd files**: Add to `analysis/` and update `_site.yml` navbar
 - **Navbar**: Edit `analysis/_site.yml`
 - **ggplot theme**: Modify `theme_wf()` in `code/00_setup.R`

@@ -18,8 +18,8 @@
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Themed Extensions for Workflowr Research Workflows">
-<meta name="description" content="Extends the workflowr package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. Wraps workflowr::wflow_start() and adds five color schemes (clinical, basic research, code/statistics, special, and neutral), three depth presets for the Rmd pipeline (minimal, standard, extended), custom CSS/SCSS theming, SVG icons, ggplot2 theme functions, and a Quarto report template. All generated projects remain fully compatible with standard workflowr commands.">
-<meta property="og:description" content="Extends the workflowr package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. Wraps workflowr::wflow_start() and adds five color schemes (clinical, basic research, code/statistics, special, and neutral), three depth presets for the Rmd pipeline (minimal, standard, extended), custom CSS/SCSS theming, SVG icons, ggplot2 theme functions, and a Quarto report template. All generated projects remain fully compatible with standard workflowr commands.">
+<meta name="description" content="Extends the workflowr package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. Wraps workflowr::wflow_start() and adds the nine CTTIR v5 topic families as site schemes (Okabe-Ito accents, light and dark surfaces, Inter and JetBrains Mono typography from shared design tokens), three depth presets for the Rmd pipeline (minimal, standard, extended), CSS/SCSS theming, SVG family icons, ggplot2 theme functions, and a Quarto report template. All generated projects remain fully compatible with standard workflowr commands.">
+<meta property="og:description" content="Extends the workflowr package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. Wraps workflowr::wflow_start() and adds the nine CTTIR v5 topic families as site schemes (Okabe-Ito accents, light and dark surfaces, Inter and JetBrains Mono typography from shared design tokens), three depth presets for the Rmd pipeline (minimal, standard, extended), CSS/SCSS theming, SVG family icons, ggplot2 theme functions, and a Quarto report template. All generated projects remain fully compatible with standard workflowr commands.">
 <meta property="og:image" content="https://cttir.github.io/reflowR/logo.svg">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#1565c0">
@@ -98,11 +98,11 @@
 </h3>
 <ul>
 <li>
-<strong>5 color schemes</strong> – clinical (red), basic research (steelblue), code/statistics (forest green), special (purple), other (grey) – each with a custom SVG icon, 8-color palette, and full CSS/SCSS theme</li>
+<strong>9 CTTIR v5 families</strong> – spectral, spatial, omics, clinical, methods, simulation, evidence, platform and brand – built from the same design tokens as hexmakR and themakR, each with a family hex icon, Okabe-Ito palette, and CSS/SCSS theme with light and dark modes</li>
 <li>
-<strong>ggplot2 theme + table styling</strong> that automatically matches the selected scheme</li>
+<strong>ggplot2 theme + table styling</strong> that automatically matches the selected family</li>
 <li>
-<strong>Themed navbar</strong> with gradient, icon, and pipeline dropdown menu</li>
+<strong>Flat navbar</strong> on the page background with the family icon, an accent rule, and the pipeline dropdown menu</li>
 </ul>
 </div>
 <div class="section level3">
@@ -154,50 +154,75 @@
 </h2>
 <table class="table">
 <colgroup>
-<col width="23%">
-<col width="20%">
-<col width="26%">
-<col width="29%">
+<col width="24%">
+<col width="21%">
+<col width="24%">
+<col width="30%">
 </colgroup>
 <thead><tr>
 <th>Scheme</th>
 <th>Label</th>
-<th>Primary</th>
+<th>Accent</th>
 <th>Use Case</th>
 </tr></thead>
 <tbody>
 <tr>
+<td><code>spectral</code></td>
+<td>Spectral imaging</td>
+<td><code>#0072B2</code></td>
+<td>Imaging, spectroscopy</td>
+</tr>
+<tr>
+<td><code>spatial</code></td>
+<td>Spatial biology</td>
+<td><code>#009E73</code></td>
+<td>Tissue and spatial assays</td>
+</tr>
+<tr>
+<td><code>omics</code></td>
+<td>Molecular data</td>
+<td><code>#CC79A7</code></td>
+<td>Sequencing, molecular profiles</td>
+</tr>
+<tr>
 <td><code>clinical</code></td>
-<td>Clinical Research</td>
-<td><code>#C8102E</code></td>
+<td>Clinical science</td>
+<td><code>#D55E00</code></td>
 <td>Clinical trials, patient data</td>
 </tr>
 <tr>
-<td><code>basic</code></td>
-<td>Basic Research</td>
-<td><code>#4682B4</code></td>
-<td>Lab research, general science</td>
+<td><code>methods</code></td>
+<td>Learning &amp; inference</td>
+<td><code>#56B4E9</code></td>
+<td>Statistical and ML methods</td>
 </tr>
 <tr>
-<td><code>code</code></td>
-<td>Code &amp; Statistics</td>
-<td><code>#228B22</code></td>
-<td>Software dev, statistical methods</td>
+<td><code>simulation</code></td>
+<td>Systems &amp; simulation</td>
+<td><code>#E69F00</code></td>
+<td>Simulation studies, models</td>
 </tr>
 <tr>
-<td><code>special</code></td>
-<td>Special</td>
-<td><code>#6A0DAD</code></td>
-<td>Special projects, reviews</td>
+<td><code>evidence</code></td>
+<td>Evidence &amp; discovery</td>
+<td><code>#F0E442</code></td>
+<td>Reviews, meta-analyses</td>
 </tr>
 <tr>
-<td><code>other</code></td>
-<td>Other</td>
-<td><code>#2C2C2C</code></td>
-<td>Neutral, multipurpose</td>
+<td><code>platform</code></td>
+<td>Research infrastructure</td>
+<td><code>#000000</code></td>
+<td>Software, data, infrastructure</td>
+</tr>
+<tr>
+<td><code>brand</code></td>
+<td>Science, connected</td>
+<td><code>#0072B2</code></td>
+<td>General purpose (default)</td>
 </tr>
 </tbody>
 </table>
+<p>The earlier names <code>basic</code>, <code>code</code>, <code>special</code> and <code>other</code> remain accepted as aliases of <code>brand</code>, <code>methods</code>, <code>evidence</code> and <code>platform</code>. Links and text use neutral tokens in light and dark mode; the accent marks identity only.</p>
 <p>Preview any scheme interactively:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/reflow_preview.html">reflow_preview</a></span><span class="op">(</span><span class="st">"clinical"</span><span class="op">)</span></span>

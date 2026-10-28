@@ -15,7 +15,7 @@ a reason. A stage name does not prescribe a statistical method.
 library(reflowR)
 ```
 
-    ## reflowR v0.1.0.9000 — Themed Workflowr Extensions
+    ## reflowR v0.1.0.9000 — Themed Workflowr Extensions (CTTIR v5)
     ## Use reflow_init() to get started.
     ## See reflow_schemes() and reflow_presets() for options.
 
@@ -38,16 +38,18 @@ profile[c("domain", "data_origin", "design", "scheme", "primary_color", "badge")
     ## [1] "clinical"
     ## 
     ## $primary_color
-    ## [1] "#C8102E"
+    ## [1] "#D55E00"
     ## 
     ## $badge
     ## [1] "SECONDARY DATA"
 
-Clinical projects use the clinical red and basic research uses steel
-blue. Methods, simulation and software use green; evidence synthesis
-uses purple. Primary or secondary data are shown as a separate text
-badge, so colour is not the sole indicator of the project category.
-Other domains use the neutral theme.
+The palette follows the CTTIR v5 families: clinical projects use
+`clinical` (vermillion) and basic research uses `brand` (blue). Methods,
+simulation and software use `methods`; evidence synthesis uses
+`evidence`. Other domains use `platform`. Primary or secondary data are
+shown as a separate text badge, so colour is not the sole indicator of
+the project category. Declarations recorded with the earlier palette
+keep their scheme, colour and stylesheet and still validate.
 
 Declare access, jurisdiction and the intended legal basis explicitly.
 These are recorded statements, not a determination that a project is

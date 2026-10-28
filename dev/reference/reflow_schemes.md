@@ -1,7 +1,8 @@
 # List Available Color Schemes
 
-Prints a formatted table of all available reflowR color schemes and
-returns their names invisibly.
+Prints the CTTIR v5 topic families with their labels and accents,
+followed by the earlier scheme names that remain accepted as aliases,
+and returns the family keys invisibly.
 
 ## Usage
 
@@ -11,18 +12,24 @@ reflow_schemes()
 
 ## Value
 
-Invisibly returns a character vector of scheme names.
+Invisibly returns a character vector of the nine v5 family keys.
 
 ## Examples
 
 ``` r
 reflow_schemes()
 #> 
-#> ── Available reflowR Schemes ──
+#> ── Available reflowR Schemes (CTTIR v5 families) ──
 #> 
-#> "clinical" -- 🏥 Clinical Research (#C8102E)
-#> "basic" -- 🔬 Basic Research (#4682B4)
-#> "code" -- 💻 Code & Statistics (#228B22)
-#> "special" -- 📜 Special (#6A0DAD)
-#> "other" -- 📁 Other (#2C2C2C)
+#> "spectral" -- Spectral imaging (#0072B2)
+#> "spatial" -- Spatial biology (#009E73)
+#> "omics" -- Molecular data (#CC79A7)
+#> "clinical" -- Clinical science (#D55E00)
+#> "methods" -- Learning & inference (#56B4E9)
+#> "simulation" -- Systems & simulation (#E69F00)
+#> "evidence" -- Evidence & discovery (#F0E442)
+#> "platform" -- Research infrastructure (#000000)
+#> "brand" -- Science, connected (#0072B2)
+#> Earlier names remain aliases: "basic -> brand", "code -> methods", "special ->
+#> evidence", and "other -> platform".
 ```

@@ -37,6 +37,10 @@ Declare package calls and execute or resume verified object workflows.
   : Declare a deferred artifact writer
 - [`reflow_artifact_plan()`](https://cttir.github.io/reflowR/dev/reference/reflow_artifact_plan.md)
   : Declare a serial artifact dependency plan
+- [`reflow_call_writer()`](https://cttir.github.io/reflowR/dev/reference/reflow_call_writer.md)
+  : Call one installed export and save its value
+- [`reflow_call_stage()`](https://cttir.github.io/reflowR/dev/reference/reflow_call_stage.md)
+  : Declare a stage that calls one installed export
 - [`reflow_artifact_plan_run()`](https://cttir.github.io/reflowR/dev/reference/reflow_artifact_plan_run.md)
   [`reflow_artifact_plan_resume()`](https://cttir.github.io/reflowR/dev/reference/reflow_artifact_plan_run.md)
   : Execute or verify an immutable artifact graph generation

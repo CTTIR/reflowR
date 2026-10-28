@@ -1,19 +1,22 @@
 # Preview a Color Scheme
 
-Opens an HTML preview in the RStudio viewer (or browser) showing color
-swatches, the scheme icon, and the navbar gradient.
+Opens an HTML preview in the RStudio viewer (or browser) showing the
+family icon on a flat navbar with its accent rule, the light and dark
+surfaces, the identity colours and the Okabe-Ito palette.
 
 ## Usage
 
 ``` r
-reflow_preview(scheme = "basic")
+reflow_preview(scheme = "brand")
 ```
 
 ## Arguments
 
 - scheme:
 
-  Character. Scheme name (e.g., `"clinical"`).
+  Character. A v5 family key (e.g., `"clinical"`) or an earlier scheme
+  name, see
+  [`reflow_scheme()`](https://cttir.github.io/reflowR/dev/reference/reflow_scheme.md).
 
 ## Value
 
@@ -24,6 +27,6 @@ Invisibly returns the scheme list.
 ``` r
 if (FALSE) { # \dontrun{
 reflow_preview("clinical")
-reflow_preview("basic")
+reflow_preview("brand")
 } # }
 ```

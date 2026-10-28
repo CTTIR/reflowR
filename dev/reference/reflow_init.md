@@ -17,7 +17,8 @@ reflow_init(
   affiliation = NULL,
   orcid = NULL,
   website = NULL,
-  scheme = c("basic", "clinical", "code", "special", "other"),
+  scheme = c("brand", "spectral", "spatial", "omics", "clinical", "methods",
+    "simulation", "evidence", "platform", "basic", "code", "special", "other"),
   depth = c("standard", "minimal", "extended"),
   seed = as.integer(format(Sys.Date(), "%Y%m%d")),
   github_url = NULL,
@@ -65,8 +66,13 @@ reflow_init(
 
 - scheme:
 
-  Character. Color scheme to apply. One of `"clinical"`, `"basic"`,
-  `"code"`, `"special"`, `"other"`. Defaults to `"basic"`.
+  Character. CTTIR v5 family whose colours, icon and fonts style the
+  site: one of `"brand"` (default), `"spectral"`, `"spatial"`,
+  `"omics"`, `"clinical"`, `"methods"`, `"simulation"`, `"evidence"` or
+  `"platform"`. The earlier names `"basic"`, `"code"`, `"special"` and
+  `"other"` remain accepted as aliases of brand, methods, evidence and
+  platform. See
+  [`reflow_schemes`](https://cttir.github.io/reflowR/dev/reference/reflow_schemes.md).
 
 - depth:
 
@@ -164,7 +170,7 @@ reflow_init(
 reflow_init(
   directory = "~/projects/simulation_study",
   author    = "Raban Heller",
-  scheme    = "code",
+  scheme    = "simulation",
   depth     = "minimal"
 )
 

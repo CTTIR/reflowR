@@ -2,12 +2,13 @@
 
 Extends the workflowr package with themed color schemes, structured
 analysis pipeline templates, and utility scripts for reproducible
-research. Wraps workflowr::wflow_start() and adds five color schemes
-(clinical, basic research, code/statistics, special, and neutral), three
-depth presets for the Rmd pipeline (minimal, standard, extended), custom
-CSS/SCSS theming, SVG icons, ggplot2 theme functions, and a Quarto
-report template. All generated projects remain fully compatible with
-standard workflowr commands.
+research. Wraps workflowr::wflow_start() and adds the nine CTTIR v5
+topic families as site schemes (Okabe-Ito accents, light and dark
+surfaces, Inter and JetBrains Mono typography from shared design
+tokens), three depth presets for the Rmd pipeline (minimal, standard,
+extended), CSS/SCSS theming, SVG family icons, ggplot2 theme functions,
+and a Quarto report template. All generated projects remain fully
+compatible with standard workflowr commands.
 
 ## See also
 

@@ -144,53 +144,81 @@ and theming.</p>
 <div class="section level2">
 <h2 id="choosing-a-scheme">Choosing a Scheme<a class="anchor" aria-label="anchor" href="#choosing-a-scheme"></a>
 </h2>
-<p>reflowR provides five color schemes:</p>
+<p>reflowR schemes are the nine CTTIR v5 topic families:</p>
 <table class="table">
 <colgroup>
-<col width="20%">
-<col width="17%">
-<col width="37%">
-<col width="25%">
+<col width="24%">
+<col width="21%">
+<col width="24%">
+<col width="30%">
 </colgroup>
 <thead><tr class="header">
 <th>Scheme</th>
 <th>Label</th>
-<th>Primary Color</th>
+<th>Accent</th>
 <th>Best For</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td><code>spectral</code></td>
+<td>Spectral imaging</td>
+<td>Blue (#0072B2)</td>
+<td>Imaging, spectroscopy</td>
+</tr>
+<tr class="even">
+<td><code>spatial</code></td>
+<td>Spatial biology</td>
+<td>Bluish green (#009E73)</td>
+<td>Tissue and spatial assays</td>
+</tr>
+<tr class="odd">
+<td><code>omics</code></td>
+<td>Molecular data</td>
+<td>Reddish purple (#CC79A7)</td>
+<td>Sequencing, molecular profiles</td>
+</tr>
+<tr class="even">
 <td><code>clinical</code></td>
-<td>Clinical Research</td>
-<td>Red (#C8102E)</td>
+<td>Clinical science</td>
+<td>Vermillion (#D55E00)</td>
 <td>Clinical trials, patient data</td>
 </tr>
-<tr class="even">
-<td><code>basic</code></td>
-<td>Basic Research</td>
-<td>Steelblue (#4682B4)</td>
-<td>Lab research, general science</td>
-</tr>
 <tr class="odd">
-<td><code>code</code></td>
-<td>Code &amp; Statistics</td>
-<td>Forest Green (#228B22)</td>
-<td>Software dev, statistical methods</td>
+<td><code>methods</code></td>
+<td>Learning &amp; inference</td>
+<td>Sky blue (#56B4E9)</td>
+<td>Statistical and ML methods</td>
 </tr>
 <tr class="even">
-<td><code>special</code></td>
-<td>Special</td>
-<td>Purple (#6A0DAD)</td>
-<td>Special projects, reviews</td>
+<td><code>simulation</code></td>
+<td>Systems &amp; simulation</td>
+<td>Orange (#E69F00)</td>
+<td>Simulation studies, models</td>
 </tr>
 <tr class="odd">
-<td><code>other</code></td>
-<td>Other</td>
-<td>Grey (#2C2C2C)</td>
-<td>Neutral, multipurpose</td>
+<td><code>evidence</code></td>
+<td>Evidence &amp; discovery</td>
+<td>Yellow (#F0E442)</td>
+<td>Reviews, meta-analyses</td>
+</tr>
+<tr class="even">
+<td><code>platform</code></td>
+<td>Research infrastructure</td>
+<td>Black (#000000)</td>
+<td>Software, data, infrastructure</td>
+</tr>
+<tr class="odd">
+<td><code>brand</code></td>
+<td>Science, connected</td>
+<td>Blue (#0072B2)</td>
+<td>General purpose (default)</td>
 </tr>
 </tbody>
 </table>
+<p>The earlier names <code>basic</code>, <code>code</code>,
+<code>special</code> and <code>other</code> remain accepted as aliases
+of <code>brand</code>, <code>methods</code>, <code>evidence</code> and
+<code>platform</code>.</p>
 <p>Preview any scheme:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/reflow_preview.html">reflow_preview</a></span><span class="op">(</span><span class="st">"clinical"</span><span class="op">)</span></span></code></pre></div>
@@ -234,7 +262,7 @@ and theming.</p>
 |   +-- about.Rmd    # Author card + pipeline docs
 |   +-- 01_read_data.Rmd  # ... pipeline steps
 |   +-- ...
-+-- assets/          # Theme CSS, SCSS, and SVG icon
++-- assets/          # Theme CSS, SCSS, and family icon
 +-- code/            # R scripts
 |   +-- 00_setup.R   # Packages, paths, colors, ggplot theme
 |   +-- utils.R      # Helper functions
@@ -273,7 +301,7 @@ and theming.</p>
 </h2>
 <ul>
 <li>
-<strong>CSS</strong>: Edit <code>assets/theme.css</code> to
+<strong>CSS</strong>: Edit <code>analysis/theme.css</code> to
 customize styling</li>
 <li>
 <strong>New Rmd files</strong>: Add to <code>analysis/</code> and

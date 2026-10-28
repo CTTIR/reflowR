@@ -72,7 +72,8 @@ pipeline, utility scripts, and a Quarto report template.</p>
 <span>  affiliation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  orcid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  website <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  scheme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"basic"</span>, <span class="st">"clinical"</span>, <span class="st">"code"</span>, <span class="st">"special"</span>, <span class="st">"other"</span><span class="op">)</span>,</span>
+<span>  scheme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"brand"</span>, <span class="st">"spectral"</span>, <span class="st">"spatial"</span>, <span class="st">"omics"</span>, <span class="st">"clinical"</span>, <span class="st">"methods"</span>,</span>
+<span>    <span class="st">"simulation"</span>, <span class="st">"evidence"</span>, <span class="st">"platform"</span>, <span class="st">"basic"</span>, <span class="st">"code"</span>, <span class="st">"special"</span>, <span class="st">"other"</span><span class="op">)</span>,</span>
 <span>  depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"standard"</span>, <span class="st">"minimal"</span>, <span class="st">"extended"</span><span class="op">)</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%Y%m%d"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  github_url <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -120,9 +121,13 @@ If <code>NULL</code>, derived from the directory basename.</p></dd>
 
 
 <dt id="arg-scheme">scheme<a class="anchor" aria-label="anchor" href="#arg-scheme"></a></dt>
-<dd><p>Character. Color scheme to apply. One of <code>"clinical"</code>,
-<code>"basic"</code>, <code>"code"</code>, <code>"special"</code>, <code>"other"</code>.
-Defaults to <code>"basic"</code>.</p></dd>
+<dd><p>Character. CTTIR v5 family whose colours, icon and fonts
+style the site: one of <code>"brand"</code> (default), <code>"spectral"</code>,
+<code>"spatial"</code>, <code>"omics"</code>, <code>"clinical"</code>, <code>"methods"</code>,
+<code>"simulation"</code>, <code>"evidence"</code> or <code>"platform"</code>. The earlier
+names <code>"basic"</code>, <code>"code"</code>, <code>"special"</code> and <code>"other"</code>
+remain accepted as aliases of brand, methods, evidence and platform.
+See <code><a href="reflow_schemes.html">reflow_schemes</a></code>.</p></dd>
 
 
 <dt id="arg-depth">depth<a class="anchor" aria-label="anchor" href="#arg-depth"></a></dt>
@@ -212,7 +217,7 @@ initializes git and commits all files.</p>
 <span class="r-in"><span><span class="fu">reflow_init</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  directory <span class="op">=</span> <span class="st">"~/projects/simulation_study"</span>,</span></span>
 <span class="r-in"><span>  author    <span class="op">=</span> <span class="st">"Raban Heller"</span>,</span></span>
-<span class="r-in"><span>  scheme    <span class="op">=</span> <span class="st">"code"</span>,</span></span>
+<span class="r-in"><span>  scheme    <span class="op">=</span> <span class="st">"simulation"</span>,</span></span>
 <span class="r-in"><span>  depth     <span class="op">=</span> <span class="st">"minimal"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

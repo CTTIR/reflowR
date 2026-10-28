@@ -1,6 +1,9 @@
 # Generate Theme SCSS from a Color Scheme
 
-Creates a Quarto-compatible SCSS file with custom properties.
+Creates a Quarto-compatible SCSS file on the CTTIR v5 surface. Bootstrap
+defaults take the light tokens (links use the link token, as in
+themakR); the rules section adds the same `--cttir-*` custom properties
+as the site CSS, a dark mode and the accent identity rules.
 
 ## Usage
 

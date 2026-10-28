@@ -117,9 +117,9 @@ exploration, report and reproducibility. An inapplicable stage requires
 a reason. A stage name does not prescribe a statistical method.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cttir/reflowR" class="external-link">reflowR</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">reflowR</span> v0.1.0.9000 — Themed Workflowr Extensions</span></span>
-<span><span class="co">## Use <span style="color: #00BB00;">reflow_init()</span> to get started.</span></span>
-<span><span class="co">## See <span style="color: #0000BB;">reflow_schemes()</span> and <span style="color: #0000BB;">reflow_presets()</span> for options.</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #0087D7; font-weight: bold;">reflowR</span> v0.1.0.9000 — Themed Workflowr Extensions (CTTIR v5)</span></span>
+<span><span class="co">## Use <span style="font-weight: bold;">reflow_init()</span> to get started.</span></span>
+<span><span class="co">## See <span style="font-weight: bold;">reflow_schemes()</span> and <span style="font-weight: bold;">reflow_presets()</span> for options.</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">profile</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reflow_profile.html">reflow_profile</a></span><span class="op">(</span><span class="st">"clinical"</span>, <span class="st">"secondary"</span>, <span class="st">"observational"</span>, seed <span class="op">=</span> <span class="fl">104L</span><span class="op">)</span></span>
 <span><span class="va">profile</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"domain"</span>, <span class="st">"data_origin"</span>, <span class="st">"design"</span>, <span class="st">"scheme"</span>, <span class="st">"primary_color"</span>, <span class="st">"badge"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
@@ -136,15 +136,18 @@ a reason. A stage name does not prescribe a statistical method.</p>
 <span><span class="co">## [1] "clinical"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $primary_color</span></span>
-<span><span class="co">## [1] "#C8102E"</span></span>
+<span><span class="co">## [1] "#D55E00"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $badge</span></span>
 <span><span class="co">## [1] "SECONDARY DATA"</span></span></code></pre>
-<p>Clinical projects use the clinical red and basic research uses steel
-blue. Methods, simulation and software use green; evidence synthesis
-uses purple. Primary or secondary data are shown as a separate text
-badge, so colour is not the sole indicator of the project category.
-Other domains use the neutral theme.</p>
+<p>The palette follows the CTTIR v5 families: clinical projects use
+<code>clinical</code> (vermillion) and basic research uses
+<code>brand</code> (blue). Methods, simulation and software use
+<code>methods</code>; evidence synthesis uses <code>evidence</code>.
+Other domains use <code>platform</code>. Primary or secondary data are
+shown as a separate text badge, so colour is not the sole indicator of
+the project category. Declarations recorded with the earlier palette
+keep their scheme, colour and stylesheet and still validate.</p>
 <p>Declare access, jurisdiction and the intended legal basis explicitly.
 These are recorded statements, not a determination that a project is
 authorized. Unknown values prevent execution readiness.</p>

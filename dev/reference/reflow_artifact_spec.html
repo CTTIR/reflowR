@@ -8,7 +8,13 @@ trailing dots/spaces. Unicode spelling is preserved, not normalized. Parents
 of output paths are created; declared output directories are writer-created.
 Installed package resources (including templates), tracked inputs and
 declared
-external runtime files are fingerprinted. Undeclared ambient state is not."><meta property="og:description" content="Calls one trusted installed export, substituting only declared top-level
+external runtime files are fingerprinted. Undeclared ambient state is not.
+With options(reflowR.package_hash_cache = TRUE) the hashes of installed
+package files are reused within one R process while a file keeps its
+device, inode, size, modification and change times; use it only with a
+library that nothing modifies during the run.
+options(reflowR.input_hash_cache = TRUE) does the same for tracked input
+files; otherwise inputs are re-read for every fingerprint."><meta property="og:description" content="Calls one trusted installed export, substituting only declared top-level
 output arguments. The writer's return value is discarded. This is not a
 sandbox, scheduler, native-process supervisor or complete artifact DAG.
 Plain strings are configuration; files must use reflow_imaging_input().
@@ -17,7 +23,13 @@ trailing dots/spaces. Unicode spelling is preserved, not normalized. Parents
 of output paths are created; declared output directories are writer-created.
 Installed package resources (including templates), tracked inputs and
 declared
-external runtime files are fingerprinted. Undeclared ambient state is not."><meta property="og:image" content="https://cttir.github.io/reflowR/logo.svg"><meta name="robots" content="noindex"><meta name="theme-color" content="#1565c0"><!-- Package browser icons -->
+external runtime files are fingerprinted. Undeclared ambient state is not.
+With options(reflowR.package_hash_cache = TRUE) the hashes of installed
+package files are reused within one R process while a file keeps its
+device, inode, size, modification and change times; use it only with a
+library that nothing modifies during the run.
+options(reflowR.input_hash_cache = TRUE) does the same for tracked input
+files; otherwise inputs are re-read for every fingerprint."><meta property="og:image" content="https://cttir.github.io/reflowR/logo.svg"><meta name="robots" content="noindex"><meta name="theme-color" content="#1565c0"><!-- Package browser icons -->
 <link rel="icon" type="image/x-icon" href="../favicon.ico?v=d0aaf44e32c2">
 <link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png?v=d0aaf44e32c2">
 <link rel="icon" type="image/svg+xml" sizes="any" href="../favicon.svg?v=d0aaf44e32c2">
@@ -80,7 +92,13 @@ trailing dots/spaces. Unicode spelling is preserved, not normalized. Parents
 of output paths are created; declared output directories are writer-created.
 Installed package resources (including templates), tracked inputs and
 declared
-external runtime files are fingerprinted. Undeclared ambient state is not.</p>
+external runtime files are fingerprinted. Undeclared ambient state is not.
+With <code>options(reflowR.package_hash_cache = TRUE)</code> the hashes of installed
+package files are reused within one R process while a file keeps its
+device, inode, size, modification and change times; use it only with a
+library that nothing modifies during the run.
+<code>options(reflowR.input_hash_cache = TRUE)</code> does the same for tracked input
+files; otherwise inputs are re-read for every fingerprint.</p>
     </div>
 
     <div class="section level2">
