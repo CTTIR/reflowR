@@ -52,3 +52,15 @@ test_that("quotes in the project name and author keep the report header valid", 
   expect_identical(header$title, 'Trial "B": #1 -- Report')
   expect_identical(header$author, 'Ann "AJ" Lee')
 })
+
+test_that("the README links to the repository named in DESCRIPTION", {
+  urls <- strsplit(utils::packageDescription("reflowR")$URL, "[,[:space:]]+")[[1]]
+  repo <- grep("^https://github[.]com/", urls, value = TRUE)
+  expect_length(repo, 1L)
+  root <- withr::local_tempdir()
+  path <- generate_project_readme(root, name = "P", author = "A",
+                                  scheme = reflow_scheme("brand"),
+                                  preset = reflow_preset("minimal"))
+  md <- paste(readLines(path, warn = FALSE), collapse = "\n")
+  expect_match(md, paste0("[reflowR](", repo, ")"), fixed = TRUE)
+})

@@ -165,3 +165,17 @@ test_that("quotes and colons in titles and authors keep the front matter valid",
                      scheme = reflow_scheme("brand"), preset = reflow_preset("minimal"))
   expect_identical(front(file.path(root, "analysis", "index.Rmd"))$title, name)
 })
+
+test_that("the about page links to the repository named in DESCRIPTION", {
+  urls <- strsplit(utils::packageDescription("reflowR")$URL, "[,[:space:]]+")[[1]]
+  repo <- grep("^https://github[.]com/", urls, value = TRUE)
+  expect_length(repo, 1L)
+  root <- withr::local_tempdir()
+  dir.create(file.path(root, "analysis"))
+  path <- generate_about_rmd(root, name = "P", author = "A", email = NULL,
+                             affiliation = NULL, orcid = NULL, website = NULL,
+                             scheme = reflow_scheme("brand"),
+                             preset = reflow_preset("minimal"))
+  rmd <- paste(readLines(path, warn = FALSE), collapse = "\n")
+  expect_match(rmd, paste0("[reflowR](", repo, ")"), fixed = TRUE)
+})

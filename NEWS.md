@@ -25,6 +25,9 @@
   icon, leaving the project partly updated. The new argument
   `overwrite = TRUE` replaces these files on request.
 
+* The generated README and about page link to the package repository given
+  in DESCRIPTION instead of a former personal repository.
+
 * `reflow_init()` escapes the project name and author in the YAML headers of the
   generated pages and report, so quotes, colons or backslashes in them no
   longer produce invalid front matter.

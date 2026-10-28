@@ -201,7 +201,7 @@ editor_options:
 
 **{name}** is a reproducible research project built with
 [workflowr](https://workflowr.github.io/workflowr/) and themed by
-[reflowR](https://github.com/r-heller/reflowR).
+[reflowR](https://github.com/cttir/reflowR).
 
 ## Author
 
