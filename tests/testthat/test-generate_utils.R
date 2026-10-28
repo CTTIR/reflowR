@@ -27,4 +27,5 @@ test_that("generate_utils_script is scheme-agnostic in body but labels header", 
   # both contain the v5 family labels respectively
   expect_true(any(grepl("Science, connected", c1, fixed = TRUE)))
   expect_true(any(grepl("Learning & inference", c2, fixed = TRUE)))
+  expect_false(any(grepl("\"(white|black)\"", c(c1, c2))))
 })

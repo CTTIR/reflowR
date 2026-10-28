@@ -56,3 +56,9 @@ test_that("generate_code_library returns invisibly", {
   expect_invisible(generate_code_library(root, scheme = reflow_scheme("brand"),
                                          preset = reflow_preset("minimal")))
 })
+
+test_that("plot helpers take every colour from the scheme objects", {
+  txt <- as.character(generate_plot_helpers_content(reflow_scheme("brand")))
+  expect_false(grepl('"(white|black)"', txt))
+  expect_false(grepl("#[0-9A-Fa-f]{6}", txt))
+})

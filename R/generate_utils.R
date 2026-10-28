@@ -28,7 +28,7 @@ save_wf_plot <- function(plot, filename, dir = paths$figures,
   for (fmt in formats) {{
     out <- file.path(dir, paste0(filename, ".", fmt))
     ggplot2::ggsave(out, plot = plot, width = width, height = height,
-                    dpi = dpi, bg = "white")
+                    dpi = dpi, bg = wf_colors$white)
   }}
   cli::cli_alert_success("Plot saved: {{.val {{filename}}}}")
   invisible(file.path(dir, paste0(filename, ".", formats[1])))
@@ -43,10 +43,10 @@ wf_cor_heatmap <- function(df, vars = NULL, method = "pearson", ...) {{
   names(cor_long) <- c("Var1", "Var2", "value")
 
   ggplot2::ggplot(cor_long, ggplot2::aes(Var1, Var2, fill = value)) +
-    ggplot2::geom_tile(color = "white") +
+    ggplot2::geom_tile(color = wf_colors$white) +
     scale_fill_wf_diverging(limits = c(-1, 1), name = method) +
     ggplot2::geom_text(ggplot2::aes(label = sprintf("%.2f", value)),
-                       size = 3, color = "black") +
+                       size = 3, color = wf_colors$dark) +
     ggplot2::labs(x = NULL, y = NULL) +
     theme_wf() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
@@ -68,7 +68,7 @@ wf_histograms <- function(df, vars = NULL, bins = 30, ncol = 3) {{
   plots <- lapply(vars, function(v) {{
     ggplot2::ggplot(df, ggplot2::aes(.data[[v]])) +
       ggplot2::geom_histogram(bins = bins, fill = wf_colors$primary,
-                              color = "white", alpha = 0.8) +
+                              color = wf_colors$white, alpha = 0.8) +
       theme_wf() +
       ggplot2::labs(title = v, x = NULL, y = "Count")
   }})

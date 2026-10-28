@@ -15,7 +15,7 @@ generate_setup_script(project_dir, scheme)
 Invisibly returns the output file path.
 }
 \description{
-Creates the project setup script with package loading, paths, color
-definitions, ggplot2 theme, and table styling helpers.
+Creates the project setup script with package loading, paths, the CTTIR v5
+scheme colours and fonts, ggplot2 theme, and table styling helpers.
 }
 \keyword{internal}

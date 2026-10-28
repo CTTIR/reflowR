@@ -1,7 +1,7 @@
 #' Generate the 00_setup.R Script
 #'
-#' Creates the project setup script with package loading, paths, color
-#' definitions, ggplot2 theme, and table styling helpers.
+#' Creates the project setup script with package loading, paths, the CTTIR v5
+#' scheme colours and fonts, ggplot2 theme, and table styling helpers.
 #'
 #' @param project_dir Character. Path to the project root.
 #' @param scheme A scheme list from [reflow_scheme()].
@@ -62,19 +62,34 @@ paths <- list(
   report    = here::here("report")
 )
 
-# ── Scheme colors ──
+# ── Scheme colors (CTTIR v5 family: {s$family}) ──
+# primary/accent is the family accent; dark, grey, border and white are the
+# light-mode heading, muted text, border and page tokens.
 wf_colors <- list(
   primary       = "{s$primary}",
   primary_light = "{s$primary_light}",
   accent        = "{s$accent}",
   secondary     = "{s$secondary}",
+  face          = "{s$face_light}",
   light_grey    = "{s$light_grey}",
+  border        = "{s$border_light}",
   grey          = "{s$grey}",
   dark          = "{s$dark}",
-  white         = "{s$white}"
+  white         = "{s$white}",
+  link          = "{s$link_light}",
+  blue          = "{s$blue}",
+  red           = "{s$red}"
 )
 
+# Okabe-Ito topic colours, family accent first
 wf_palette <- {pal_str}
+
+# ── Scheme fonts ──
+wf_fonts <- list(
+  body  = "{s$font_body}",
+  code  = "{s$font_code}",
+  brand = "{s$font_brand}"
+)
 
 # ── ggplot2 color scales ──
 scale_color_wf <- function(...) {{
@@ -95,23 +110,26 @@ scale_fill_wf_gradient <- function(...) {{
                                high = wf_colors$secondary, ...)
 }}
 
+# Okabe-Ito blue and vermillion keep both ends distinct for every family.
 scale_color_wf_diverging <- function(...) {{
-  ggplot2::scale_color_gradient2(low = wf_colors$accent,
+  ggplot2::scale_color_gradient2(low = wf_colors$blue,
                                  mid = wf_colors$light_grey,
-                                 high = wf_colors$primary, ...)
+                                 high = wf_colors$red, ...)
 }}
 
 scale_fill_wf_diverging <- function(...) {{
-  ggplot2::scale_fill_gradient2(low = wf_colors$accent,
+  ggplot2::scale_fill_gradient2(low = wf_colors$blue,
                                 mid = wf_colors$light_grey,
-                                high = wf_colors$primary, ...)
+                                high = wf_colors$red, ...)
 }}
 
 # ── ggplot2 theme ──
-theme_wf <- function(base_size = 12) {{
-  ggplot2::theme_minimal(base_size = base_size) +
+# Plots use the device sans font so every graphics device can draw them; pass
+# base_family = wf_fonts$body when Inter is installed for your device.
+theme_wf <- function(base_size = 12, base_family = "sans") {{
+  ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
-      text             = ggplot2::element_text(family = "sans", color = wf_colors$dark),
+      text             = ggplot2::element_text(color = wf_colors$dark),
       plot.title       = ggplot2::element_text(face = "bold", size = base_size * 1.3,
                                                color = wf_colors$dark, margin = ggplot2::margin(b = 10)),
       plot.subtitle    = ggplot2::element_text(size = base_size * 1.05,
@@ -123,13 +141,13 @@ theme_wf <- function(base_size = 12) {{
       legend.position  = "bottom",
       legend.title     = ggplot2::element_text(face = "bold", size = base_size * 0.9),
       legend.text      = ggplot2::element_text(size = base_size * 0.85),
-      panel.grid.major = ggplot2::element_line(color = "#E8E8E8", linewidth = 0.3),
+      panel.grid.major = ggplot2::element_line(color = wf_colors$border, linewidth = 0.3),
       panel.grid.minor = ggplot2::element_blank(),
       strip.text       = ggplot2::element_text(face = "bold", size = base_size * 0.95,
-                                               color = wf_colors$white),
-      strip.background = ggplot2::element_rect(fill = wf_colors$primary, color = NA),
-      plot.background  = ggplot2::element_rect(fill = "white", color = NA),
-      panel.background = ggplot2::element_rect(fill = "white", color = NA)
+                                               color = wf_colors$dark),
+      strip.background = ggplot2::element_rect(fill = wf_colors$face, color = NA),
+      plot.background  = ggplot2::element_rect(fill = wf_colors$white, color = NA),
+      panel.background = ggplot2::element_rect(fill = wf_colors$white, color = NA)
     )
 }}
 
@@ -144,24 +162,28 @@ wf_gtsummary_theme <- list(
 gtsummary::set_gtsummary_theme(wf_gtsummary_theme)
 
 # ── gt styling helper ──
+# Text stays on neutral surfaces (gt picks dark or light text by contrast);
+# the accent marks only the header rule.
 gt_wf_style <- function(gt_tbl) {{
   gt_tbl |>
     gt::tab_options(
-      table.font.names         = "Source Sans Pro, sans-serif",
+      table.font.names         = c(wf_fonts$body, "system-ui", "sans-serif"),
+      table.font.color         = wf_colors$dark,
+      table.font.color.light   = wf_colors$white,
+      table.background.color   = wf_colors$white,
       heading.title.font.size  = gt::px(18),
       heading.title.font.weight = "bold",
       column_labels.font.weight = "bold",
-      column_labels.background.color = wf_colors$primary,
-      column_labels.font.color = wf_colors$white,
-      row_group.background.color     = wf_colors$primary_light,
-      row_group.font.color           = wf_colors$white,
-      table.border.top.color   = wf_colors$primary,
-      table.border.top.width   = gt::px(3),
-      table.border.bottom.color = wf_colors$grey,
+      column_labels.background.color = wf_colors$white,
+      column_labels.border.bottom.color = wf_colors$primary,
+      column_labels.border.bottom.width = gt::px(2),
+      row_group.background.color     = wf_colors$face,
+      table.border.top.color   = wf_colors$border,
+      table.border.bottom.color = wf_colors$border,
       row.striping.background_color = paste0(wf_colors$light_grey, "80")
     ) |>
     gt::opt_row_striping() |>
-    gt::opt_table_outline(color = wf_colors$primary)
+    gt::opt_table_outline(color = wf_colors$border)
 }}
 
 # ── knitr defaults ──

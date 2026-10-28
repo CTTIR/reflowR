@@ -594,7 +594,7 @@ wf_distributions <- function(df, vars = NULL, fill_var = NULL,
   plots <- lapply(vars, function(v) {{
     p <- ggplot2::ggplot(df, ggplot2::aes(.data[[v]]))
     if (type %in% c("histogram", "both")) {{
-      p <- p + ggplot2::geom_histogram(fill = wf_colors$primary, color = "white",
+      p <- p + ggplot2::geom_histogram(fill = wf_colors$primary, color = wf_colors$white,
                                        alpha = 0.7, bins = 30)
     }}
     if (type %in% c("density", "both")) {{

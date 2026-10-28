@@ -217,8 +217,9 @@ This project uses the **{preset$label}** pipeline:
 
 ## Theme
 
-- **Scheme:** {scheme$label}
-- **Primary color:** `{scheme$primary}`
+- **Scheme:** {scheme$label} (CTTIR v5 family `{scheme$family}`)
+- **Accent:** `{scheme$primary}`
+- **Fonts:** {scheme$font_body} and {scheme$font_code}, when installed
 - **Toolkit:** workflowr + reflowR
 
 ## Reproducibility
