@@ -60,7 +60,7 @@ test_that("extended preset creates 12 analysis files", {
   expect_equal(length(rmds), 12)
 })
 
-test_that("all v5 families produce CSS with their accent and family icon", {
+test_that("all v5 families produce the v5 CSS and their family icon", {
   skip_on_cran()
   for (s in c("spectral", "spatial", "omics", "clinical", "methods",
               "simulation", "evidence", "platform", "brand")) {
@@ -69,7 +69,8 @@ test_that("all v5 families produce CSS with their accent and family icon", {
     reflow_init(directory = proj, author = "A", scheme = s,
                 depth = "minimal", git = FALSE, change_wd = FALSE, open = FALSE)
     css <- readLines(file.path(proj, "assets", "theme.css"))
-    expect_true(any(grepl(reflow_scheme(s)$accent, css, fixed = TRUE)))
+    expect_true(any(grepl("--cttir-page", css, fixed = TRUE)))
+    expect_true(any(grepl(paste0("--cttir-topic: ", reflow_scheme(s)$accent, ";"), css, fixed = TRUE)))
     icon <- system.file("icons", paste0("icon_", s, ".svg"), package = "reflowR")
     for (copy in c("assets/icon.svg", "docs/assets/icon.svg")) {
       expect_identical(unname(tools::md5sum(file.path(proj, copy))), unname(tools::md5sum(icon)))
@@ -84,7 +85,7 @@ test_that("reflow_init defaults to the brand family", {
   reflow_init(directory = proj, author = "A", depth = "minimal",
               git = FALSE, change_wd = FALSE, open = FALSE)
   css <- readLines(file.path(proj, "assets", "theme.css"))
-  expect_true(any(grepl("#0072B2", css, fixed = TRUE)))
+  expect_true(any(grepl("--cttir-topic: #0072B2;", css, fixed = TRUE)))
   readme <- readLines(file.path(proj, "README.md"))
   expect_true(any(grepl("Science, connected", readme, fixed = TRUE)))
 })
@@ -96,7 +97,7 @@ test_that("earlier scheme names still create projects in their v5 family", {
                                depth = "minimal", git = FALSE, change_wd = FALSE,
                                open = FALSE))
   css <- readLines(file.path(proj, "assets", "theme.css"))
-  expect_true(any(grepl("#56B4E9", css, fixed = TRUE)))
+  expect_true(any(grepl("--cttir-topic: #56B4E9;", css, fixed = TRUE)))
   icon <- system.file("icons", "icon_methods.svg", package = "reflowR")
   expect_identical(unname(tools::md5sum(file.path(proj, "assets", "icon.svg"))),
                    unname(tools::md5sum(icon)))

@@ -15,7 +15,15 @@ generate_css(scheme, output_path)
 Invisibly returns the output path.
 }
 \description{
-Creates a CSS file with custom properties and styled selectors based on the
-provided color scheme.
+Creates the CTTIR v5 site stylesheet for a workflowr (Bootstrap 3) site:
+the themakR surface with page, text, heading, link, code and border colours
+for light and dark modes, Inter and JetBrains Mono font stacks without font
+downloads, and a flat navbar on the page background. The family accent is
+used only for identity rules such as the navbar rule, the title underline,
+active navigation markers, callout borders and table header rules.
+}
+\details{
+Dark mode follows \code{prefers-color-scheme} and can be forced with
+\code{data-bs-theme="light"}/\code{"dark"} or \code{body.colorscheme-light}/\code{-dark}.
 }
 \keyword{internal}

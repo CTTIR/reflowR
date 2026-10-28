@@ -6,10 +6,14 @@ strict_template <- function(name) {
 
 strict_yaml_scalar <- function(x) as.character(jsonlite::toJSON(x, auto_unbox = TRUE))
 
-# The stylesheet is part of the canonical scaffold; its bytes enter strict-v1
-# file hashes.
+# The stylesheet is part of the canonical scaffold: changing the v5 site CSS
+# changes strict-v1 file hashes. Legacy declarations keep their original bytes.
 strict_css <- function(profile) {
-  paste0(":root { --research-primary: ", profile$primary_color, "; }\n.navbar { border-bottom: 4px solid var(--research-primary); }\nh1, h2, a { color: var(--research-primary); }\n.research-badge { border: 1px solid var(--research-primary); padding: .2em .5em; }\n")
+  if (strict_profile_legacy(profile)) {
+    return(paste0(":root { --research-primary: ", profile$primary_color, "; }\n.navbar { border-bottom: 4px solid var(--research-primary); }\nh1, h2, a { color: var(--research-primary); }\n.research-badge { border: 1px solid var(--research-primary); padding: .2em .5em; }\n"))
+  }
+  paste0(site_css(reflow_scheme(profile$scheme)),
+         "\n.research-badge {\n  border: 1px solid var(--cttir-topic);\n  padding: 0.2em 0.5em;\n}\n")
 }
 
 strict_stage_rmd <- function(stage, profile, author) {

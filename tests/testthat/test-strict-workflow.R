@@ -148,6 +148,18 @@ test_that("completion requires current stage outputs and externally retained rec
   expect_false(reflow_validate_strict(s$directory, s$declaration, reviewed, receipt)$completed)
 })
 
+test_that("strict projects use the v5 site stylesheet of their family", {
+  s <- strict_test_project()
+  css <- s$files[["analysis/strict.css"]]
+  expect_identical(css, paste0(reflowR:::site_css(reflow_scheme("clinical")),
+    "\n.research-badge {\n  border: 1px solid var(--cttir-topic);\n  padding: 0.2em 0.5em;\n}\n"))
+  expect_match(css, "--cttir-topic: #D55E00;", fixed = TRUE)
+  expect_match(css, "a, a:visited {\n  color: var(--cttir-link);", fixed = TRUE)
+  expect_false(grepl("--research-primary", css, fixed = TRUE))
+  expect_identical(readLines(file.path(s$directory, "analysis/strict.css")),
+                   strsplit(css, "\n", fixed = TRUE)[[1]])
+})
+
 test_that("declarations written with the earlier palette still validate unchanged", {
   legacy <- list(
     list(domain = "clinical", design = "observational", scheme = "clinical", colour = "#C8102E"),

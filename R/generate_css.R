@@ -1,7 +1,14 @@
 #' Generate Theme CSS from a Color Scheme
 #'
-#' Creates a CSS file with custom properties and styled selectors based on the
-#' provided color scheme.
+#' Creates the CTTIR v5 site stylesheet for a workflowr (Bootstrap 3) site:
+#' the themakR surface with page, text, heading, link, code and border colours
+#' for light and dark modes, Inter and JetBrains Mono font stacks without font
+#' downloads, and a flat navbar on the page background. The family accent is
+#' used only for identity rules such as the navbar rule, the title underline,
+#' active navigation markers, callout borders and table header rules.
+#'
+#' Dark mode follows `prefers-color-scheme` and can be forced with
+#' `data-bs-theme="light"`/`"dark"` or `body.colorscheme-light`/`-dark`.
 #'
 #' @param scheme A scheme list from [reflow_scheme()].
 #' @param output_path Character. File path for the output CSS file.
@@ -10,331 +17,460 @@
 #'
 #' @keywords internal
 generate_css <- function(scheme, output_path) {
+  writeLines(site_css(scheme), output_path)
+  invisible(output_path)
+}
+
+# Custom properties for one colour mode, named as in themakR's
+# _cttir-tokens.scss and extended by muted text, tile face and code tokens.
+css_mode_properties <- function(s, mode) {
+  field <- function(name) s[[paste0(name, "_", mode)]]
+  syntax <- field("syntax")
+  c(sprintf("  color-scheme: %s;", mode),
+    sprintf("  --cttir-page: %s;", field("page")),
+    sprintf("  --cttir-text: %s;", field("text")),
+    sprintf("  --cttir-heading: %s;", field("heading")),
+    sprintf("  --cttir-link: %s;", field("link")),
+    sprintf("  --cttir-code-surface: %s;", field("code_surface")),
+    sprintf("  --cttir-border: %s;", field("border")),
+    sprintf("  --cttir-muted: %s;", field("muted")),
+    sprintf("  --cttir-face: %s;", field("face")),
+    sprintf("  --cttir-show-light: %s;", if (mode == "light") "block" else "none"),
+    sprintf("  --cttir-show-dark: %s;", if (mode == "dark") "block" else "none"),
+    sprintf("  --cttir-syntax-%s: %s;", names(syntax), syntax))
+}
+
+# Token blocks shared by the CSS and SCSS generators. Explicit attributes and
+# body classes override the system preference, as in themakR; print always
+# uses the light tokens.
+css_token_blocks <- function(s) {
+  light <- css_mode_properties(s, "light")
+  dark <- css_mode_properties(s, "dark")
+  accents <- vapply(.cttir_schemes(), `[[`, character(1), "accent")
+  paste(c(
+    ":root {",
+    sprintf('  --cttir-font-body: "%s", system-ui, sans-serif;', s$font_body),
+    sprintf('  --cttir-font-code: "%s", ui-monospace, monospace;', s$font_code),
+    sprintf('  --cttir-font-brand: "%s", ui-monospace, monospace;', s$font_brand),
+    sprintf("  --cttir-brand-weight: %s;", s$brand_weight),
+    sprintf("  --cttir-topic: %s;", s$accent),
+    "}",
+    ":root {", light, "}",
+    "@media (prefers-color-scheme: dark) {", ":root {", dark, "}", "}",
+    '[data-bs-theme="light"], body.colorscheme-light {', light, "}",
+    '[data-bs-theme="dark"], body.colorscheme-dark {', dark, "}",
+    "@media (prefers-color-scheme: dark) {", "body.colorscheme-auto {", dark, "}", "}",
+    "@media print {",
+    ':root, [data-bs-theme="dark"], body.colorscheme-dark, body.colorscheme-auto {',
+    light, "}", "}",
+    sprintf('[data-cttir-topic="%s"] { --cttir-topic: %s; }', names(accents), accents)
+  ), collapse = "\n")
+}
+
+# Pandoc highlighting classes grouped by token colour. Prefixing body outranks
+# the highlight style embedded by rmarkdown, in both colour modes.
+css_syntax_rules <- function() {
+  groups <- list(keyword = c("kw", "cf", "im", "pp", "ex", "dt"),
+                 string = c("st", "ch", "vs", "ss", "sc"),
+                 number = c("dv", "bn", "fl", "cn"),
+                 "function" = c("fu", "bu", "at"),
+                 comment = c("co", "do", "an", "cv", "in"),
+                 alert = c("al", "er", "wa"),
+                 text = c("va", "ot", "op"))
+  rules <- vapply(names(groups), function(g) {
+    selectors <- paste0("body code span.", groups[[g]], collapse = ", ")
+    colour <- if (g == "text") "var(--cttir-text)" else paste0("var(--cttir-syntax-", g, ")")
+    style <- if (g == "comment") "; font-style: italic" else ""
+    paste0(selectors, " { color: ", colour, style, "; }")
+  }, character(1))
+  paste(rules, collapse = "\n")
+}
+
+site_css <- function(scheme) {
   s <- scheme
-  css <- glue::glue('
-/* ============================================================
-   reflowR Theme: {s$label}
-   Auto-generated -- do not edit manually
-   ============================================================ */
-
-/* --- CSS Custom Properties --- */
-:root {{
-  --primary: {s$primary};
-  --primary-light: {s$primary_light};
-  --accent: {s$accent};
-  --secondary: {s$secondary};
-  --light-grey: {s$light_grey};
-  --grey: {s$grey};
-  --dark: {s$dark};
-  --white: {s$white};
-  --gradient-from: {s$gradient_from};
-  --gradient-to: {s$gradient_to};
-  --font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}}
-
-/* --- Body --- */
-body {{
-  background-color: #FFFFFF !important;
-  font-family: var(--font-family);
-  color: #333333;
-  line-height: 1.7;
-}}
-
-/* --- Navbar --- */
-.navbar {{
-  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to)) !important;
-  border: none !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  min-height: 56px;
-}}
-.navbar-default {{
-  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to)) !important;
-  border: none !important;
-}}
-.navbar-default .navbar-brand,
-.navbar-default .navbar-nav > li > a {{
-  color: var(--white) !important;
-  font-weight: 600;
-  transition: opacity 0.2s ease;
-}}
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus {{
-  color: var(--white) !important;
-  opacity: 0.85;
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}}
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {{
-  color: var(--white) !important;
-  background-color: rgba(255, 255, 255, 0.15) !important;
-}}
-.navbar-brand img {{
-  display: inline-block;
-  margin-right: 8px;
-  vertical-align: middle;
-}}
-
-/* --- Dropdown Menus --- */
-.navbar-default .navbar-nav > .open > a,
-.navbar-default .navbar-nav > .open > a:hover {{
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  color: var(--white) !important;
-}}
-.dropdown-menu {{
-  border: 1px solid var(--light-grey);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-}}
-.dropdown-menu > li > a {{
-  color: var(--dark) !important;
-  padding: 8px 20px;
-  transition: background-color 0.15s ease;
-}}
-.dropdown-menu > li > a:hover {{
-  background-color: var(--primary) !important;
-  color: var(--white) !important;
-}}
-
-/* --- Headings --- */
-h1, h2, h3, h4, h5, h6 {{
-  color: var(--dark);
-  font-weight: 700;
-}}
-h1 {{ border-bottom: 3px solid var(--primary); padding-bottom: 0.4em; }}
-h2 {{ border-bottom: 2px solid var(--primary-light); padding-bottom: 0.3em; }}
-h3 {{ color: var(--accent); }}
-
-/* --- Links --- */
-a {{ color: var(--primary); text-decoration: none; transition: color 0.2s ease; }}
-a:hover {{ color: var(--accent); text-decoration: underline; }}
-
-/* --- TOC Sidebar --- */
-.tocify {{
-  border: 1px solid var(--light-grey);
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-}}
-.tocify .tocify-header {{
-  font-weight: 600;
-}}
-.tocify-item.active {{
-  background-color: var(--primary) !important;
-  color: var(--white) !important;
-  border-radius: 4px;
-}}
-.tocify-item.active a {{
-  color: var(--white) !important;
-}}
-.tocify ul, .tocify li {{
+  rules <- glue::glue('
+/* --- Page --- */
+body {
+  background-color: var(--cttir-page);
+  color: var(--cttir-text);
+  font-family: var(--cttir-font-body);
   line-height: 1.6;
-}}
-
-/* --- Tables --- */
-table {{
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1.5rem;
-}}
-thead th {{
-  background-color: var(--primary) !important;
-  color: var(--white) !important;
-  font-weight: 600;
-  padding: 10px 12px;
-  border-bottom: 2px solid var(--accent);
-}}
-tbody td {{
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--light-grey);
-}}
-tbody tr:hover {{
-  background-color: {s$light_grey} !important;
-}}
-tbody tr:nth-child(even) {{
-  background-color: {s$light_grey}80;
-}}
-
-/* --- gt tables --- */
-.gt_table {{
-  border-top: 3px solid var(--primary) !important;
-}}
-.gt_col_heading {{
-  background-color: var(--primary) !important;
-  color: var(--white) !important;
-  font-weight: 600 !important;
-}}
-.gt_group_heading {{
-  background-color: var(--primary-light) !important;
-  color: var(--white) !important;
-}}
-.gt_row:hover {{
-  background-color: {s$light_grey} !important;
-}}
-.gt_striped {{
-  background-color: {s$light_grey}80 !important;
-}}
-
-/* --- Code Blocks --- */
-pre {{
-  background-color: #F8F9FA;
-  border: 1px solid #E9ECEF;
-  border-left: 4px solid var(--primary);
-  border-radius: 4px;
-  padding: 12px 16px;
-  font-size: 0.9em;
-}}
-code {{
-  color: var(--accent);
-  background-color: #F8F9FA;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 0.9em;
-}}
-pre code {{
-  color: inherit;
-  background-color: transparent;
-  padding: 0;
-}}
-
-/* --- Buttons --- */
-.btn-primary {{
-  background-color: var(--primary) !important;
-  border-color: var(--accent) !important;
-  color: var(--white) !important;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}}
-.btn-primary:hover {{
-  background-color: var(--accent) !important;
-  border-color: var(--secondary) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}}
-
-/* --- Panels --- */
-.panel-primary {{
-  border-color: var(--primary);
-}}
-.panel-primary > .panel-heading {{
-  background-color: var(--primary) !important;
-  border-color: var(--accent) !important;
-  color: var(--white) !important;
-}}
-.panel {{
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}}
-
-/* --- Alerts --- */
-.alert-info {{
-  background-color: {s$light_grey};
-  border-color: var(--primary-light);
-  color: var(--dark);
-  border-left: 4px solid var(--primary);
-}}
-.alert-success {{
-  border-left: 4px solid #28a745;
-}}
-.alert-warning {{
-  border-left: 4px solid #ffc107;
-}}
-.alert-danger {{
-  border-left: 4px solid #dc3545;
-}}
-
-/* --- Badges --- */
-.badge {{
-  background-color: var(--primary) !important;
-  color: var(--white) !important;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 12px;
-}}
-
-/* --- Blockquotes --- */
-blockquote {{
-  border-left: 4px solid var(--primary);
-  padding: 10px 20px;
-  margin: 1em 0;
-  background-color: {s$light_grey};
-  border-radius: 0 4px 4px 0;
-  color: var(--dark);
-}}
-blockquote p:last-child {{
-  margin-bottom: 0;
-}}
-
-/* --- Selection Highlight --- */
-::selection {{
-  background-color: {s$primary_light};
-  color: var(--white);
-}}
-::-moz-selection {{
-  background-color: {s$primary_light};
-  color: var(--white);
-}}
-
-/* --- Scrollbar --- */
-::-webkit-scrollbar {{
-  width: 8px;
-}}
-::-webkit-scrollbar-track {{
-  background: var(--light-grey);
-}}
-::-webkit-scrollbar-thumb {{
-  background: var(--grey);
-  border-radius: 4px;
-}}
-::-webkit-scrollbar-thumb:hover {{
-  background: var(--primary);
-}}
-
-/* --- Code Folding --- */
-.btn-default.btn-xs {{
-  color: var(--primary);
-  border-color: var(--primary-light);
-}}
-.btn-default.btn-xs:hover {{
-  background-color: var(--primary);
-  color: var(--white);
-}}
-
-/* --- workflowr status bar --- */
-.wflow-status {{
-  margin-bottom: 1.5rem;
-  padding: 10px 15px;
-  background-color: {s$light_grey};
-  border-radius: 4px;
-  border-left: 4px solid var(--primary);
-}}
-
-/* --- Figure captions --- */
-.figure .caption, figcaption {{
-  color: var(--grey);
+}
+::selection {
+  background-color: var(--cttir-face);
+  color: var(--cttir-heading);
+}
+hr {
+  border-top-color: var(--cttir-border);
+}
+.text-muted, .help-block, .figure .caption, p.caption, figcaption, caption {
+  color: var(--cttir-muted);
+}
+.figure .caption, p.caption, figcaption {
   font-style: italic;
   margin-top: 0.5em;
   text-align: center;
-}}
+}
 
-/* --- Print Styles --- */
-@media print {{
-  .navbar {{ display: none !important; }}
-  body {{ background-color: #FFFFFF !important; color: #000000 !important; }}
-  a {{ color: #000000 !important; text-decoration: underline; }}
-  pre {{ border: 1px solid #cccccc; page-break-inside: avoid; }}
-  h1, h2, h3 {{ page-break-after: avoid; }}
-  table {{ page-break-inside: avoid; }}
-  thead th {{ background-color: #EEEEEE !important; color: #000000 !important; }}
-}}
-')
-  writeLines(css, output_path)
-  invisible(output_path)
+/* --- Headings --- */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--cttir-heading);
+  font-family: var(--cttir-font-body);
+  font-weight: 600;
+}
+h1, h1.title {
+  border-bottom: 3px solid var(--cttir-topic);
+  padding-bottom: 0.3em;
+}
+h2 {
+  border-bottom: 1px solid var(--cttir-border);
+  padding-bottom: 0.25em;
+}
+h4.author, h4.date {
+  color: var(--cttir-muted);
+  font-weight: 400;
+}
+
+/* --- Links: the link token, never the topic accent --- */
+a, a:visited {
+  color: var(--cttir-link);
+}
+a:hover, a:focus {
+  color: var(--cttir-link);
+  text-decoration: underline;
+}
+
+/* --- Navbar: flat, on the page background, accent rule as identity cue --- */
+.navbar, .navbar-default {
+  background: var(--cttir-page);
+  background-image: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: inset 0 -3px 0 var(--cttir-topic);
+}
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: var(--cttir-heading);
+  font-family: var(--cttir-font-brand);
+  font-weight: var(--cttir-brand-weight);
+  letter-spacing: -0.02em;
+}
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.navbar-brand img {
+  display: inline-block;
+  height: 30px;
+  width: auto;
+}
+.navbar-default .navbar-nav > li > a {
+  color: var(--cttir-heading);
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: var(--cttir-heading);
+  background-color: var(--cttir-code-surface);
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: var(--cttir-heading);
+  background-color: var(--cttir-code-surface);
+  box-shadow: inset 0 -3px 0 var(--cttir-topic);
+}
+.navbar-default .navbar-toggle {
+  border-color: var(--cttir-border);
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: var(--cttir-code-surface);
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: var(--cttir-heading);
+}
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+  border-color: var(--cttir-border);
+}
+
+/* --- Dropdown menus: text stays on neutral surfaces --- */
+.dropdown-menu {
+  background-color: var(--cttir-page);
+  border: 1px solid var(--cttir-border);
+  border-radius: 4px;
+  box-shadow: none;
+}
+.dropdown-menu > li > a,
+.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+  color: var(--cttir-text);
+  padding: 6px 20px;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+  color: var(--cttir-heading);
+  background-color: var(--cttir-code-surface);
+}
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a {
+  color: var(--cttir-heading);
+  background-color: var(--cttir-code-surface);
+  box-shadow: inset 3px 0 0 var(--cttir-topic);
+}
+.dropdown-menu .divider {
+  background-color: var(--cttir-border);
+}
+.dropdown-header {
+  color: var(--cttir-muted);
+}
+
+/* --- Table of contents (tocify) --- */
+#TOC, .tocify {
+  background-color: var(--cttir-page);
+  border: 1px solid var(--cttir-border);
+  border-radius: 4px;
+}
+.tocify .list-group-item, .tocify-item {
+  background-color: transparent;
+  border-color: var(--cttir-border);
+  color: var(--cttir-text);
+}
+.tocify .list-group-item:hover, .tocify-item:hover {
+  background-color: var(--cttir-code-surface);
+  color: var(--cttir-heading);
+}
+.tocify .list-group-item.active,
+.tocify .list-group-item.active:hover,
+.tocify .list-group-item.active:focus,
+.tocify-item.active {
+  background-color: var(--cttir-code-surface);
+  border-color: var(--cttir-border);
+  color: var(--cttir-heading);
+  box-shadow: inset 3px 0 0 var(--cttir-topic);
+}
+.tocify-item.active a {
+  color: var(--cttir-heading);
+}
+
+/* --- Code --- */
+code, kbd, pre, samp {
+  font-family: var(--cttir-font-code);
+}
+body pre, body pre:not([class]), body div.sourceCode, body pre.sourceCode {
+  background-color: var(--cttir-code-surface);
+  border: 1px solid var(--cttir-border);
+  border-radius: 4px;
+  color: var(--cttir-text);
+}
+body pre {
+  padding: 12px 16px;
+  font-size: 0.875em;
+}
+body div.sourceCode pre.sourceCode {
+  border: 0;
+  margin: 0;
+}
+:not(pre) > code {
+  background-color: var(--cttir-code-surface);
+  color: var(--cttir-text);
+  padding: 0.125rem 0.3125rem;
+  border-radius: 3px;
+  font-size: 0.875em;
+}
+pre code, body pre > code.sourceCode {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+<<css_syntax_rules()>>
+
+/* --- Buttons and code folding --- */
+.btn-default, .btn-default.btn-xs, .code-folding-btn {
+  background-color: var(--cttir-page);
+  border-color: var(--cttir-border);
+  color: var(--cttir-text);
+}
+.btn-default:hover, .btn-default:focus, .btn-default:active,
+.btn-default.active, .open > .dropdown-toggle.btn-default {
+  background-color: var(--cttir-code-surface);
+  border-color: var(--cttir-border);
+  color: var(--cttir-heading);
+}
+.btn-primary, .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+  background-color: var(--cttir-heading);
+  border-color: var(--cttir-heading);
+  color: var(--cttir-page);
+}
+
+/* --- Tables --- */
+table, .table {
+  color: var(--cttir-text);
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+thead th, .table > thead > tr > th {
+  background-color: transparent;
+  color: var(--cttir-heading);
+  font-family: var(--cttir-font-code);
+  font-size: 0.875em;
+  font-weight: 600;
+  border-bottom: 2px solid var(--cttir-topic);
+}
+tbody td, .table > tbody > tr > td, .table > tbody > tr > th,
+.table > tfoot > tr > td {
+  border-top: 1px solid var(--cttir-border);
+}
+.table-striped > tbody > tr:nth-of-type(odd),
+.table-hover > tbody > tr:hover {
+  background-color: var(--cttir-code-surface);
+}
+
+/* --- gt tables carry inline colours; restyle them to the page --- */
+.gt_table {
+  background-color: transparent !important;
+  color: var(--cttir-text) !important;
+  border-top: 2px solid var(--cttir-topic) !important;
+}
+.gt_heading, .gt_title, .gt_subtitle, .gt_col_headings, .gt_col_heading,
+.gt_column_spanner_outer, .gt_row, .gt_stub, .gt_sourcenotes, .gt_footnotes {
+  background-color: transparent !important;
+  color: var(--cttir-text) !important;
+  border-color: var(--cttir-border) !important;
+}
+.gt_col_heading {
+  color: var(--cttir-heading) !important;
+  font-weight: 600 !important;
+}
+.gt_col_headings {
+  border-bottom: 2px solid var(--cttir-topic) !important;
+}
+.gt_group_heading, .gt_empty_group_heading, .gt_striped {
+  background-color: var(--cttir-code-surface) !important;
+  color: var(--cttir-heading) !important;
+}
+
+/* --- Panels, wells and tabs, including the workflowr report --- */
+.panel, .well, .tab-content {
+  background-color: var(--cttir-page);
+  border-color: var(--cttir-border);
+  color: var(--cttir-text);
+}
+.panel {
+  border-radius: 4px;
+  box-shadow: none;
+}
+.panel-default > .panel-heading, .panel-primary > .panel-heading {
+  background-color: var(--cttir-code-surface);
+  border-color: var(--cttir-border);
+  color: var(--cttir-heading);
+}
+.panel-primary {
+  border-color: var(--cttir-border);
+  border-left: 3px solid var(--cttir-topic);
+}
+.well {
+  background-color: var(--cttir-code-surface);
+  box-shadow: none;
+}
+.nav-tabs {
+  border-bottom-color: var(--cttir-border);
+}
+.nav-tabs > li > a:hover {
+  background-color: var(--cttir-code-surface);
+  border-color: var(--cttir-border);
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  background-color: var(--cttir-page);
+  border-color: var(--cttir-border) var(--cttir-border) transparent;
+  color: var(--cttir-heading);
+  box-shadow: inset 0 3px 0 var(--cttir-topic);
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: var(--cttir-code-surface);
+  color: var(--cttir-heading);
+  box-shadow: inset 3px 0 0 var(--cttir-topic);
+}
+
+/* --- Callouts: neutral surface, accent or status colour on the left --- */
+blockquote {
+  border-left: 3px solid var(--cttir-topic);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 1em 0;
+  font-size: inherit;
+  color: var(--cttir-text);
+}
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+.alert {
+  background-color: var(--cttir-code-surface);
+  border: 1px solid var(--cttir-border);
+  border-left: 3px solid var(--cttir-topic);
+  color: var(--cttir-text);
+}
+.alert a, .alert .alert-link {
+  color: var(--cttir-link);
+}
+.alert-success { border-left-color: <<s$green>>; }
+.alert-warning { border-left-color: <<s$orange>>; }
+.alert-danger { border-left-color: <<s$red>>; }
+
+/* --- Badges and labels --- */
+.badge, .label {
+  background-color: var(--cttir-code-surface);
+  border: 1px solid var(--cttir-border);
+  color: var(--cttir-heading);
+  font-weight: 600;
+}
+
+/* --- Footer --- */
+footer, .footer, #footer {
+  border-top: 1px solid var(--cttir-border);
+  color: var(--cttir-muted);
+}
+
+/* --- Print: light tokens (set above), no navigation --- */
+@media print {
+  .navbar { display: none !important; }
+  a { text-decoration: underline; }
+  pre { page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+  table { page-break-inside: avoid; }
+}
+', .open = "<<", .close = ">>")
+
+  paste0(
+    "/* ============================================================\n",
+    "   reflowR theme: ", s$label, " (CTTIR v5 family ", s$family, ")\n",
+    "   Generated from the CTTIR v5 design tokens -- do not edit by hand.\n",
+    "   No fonts are downloaded: Inter and JetBrains Mono are used when\n",
+    "   installed, otherwise the system fonts in the stacks below.\n",
+    "   ============================================================ */\n\n",
+    css_token_blocks(s), "\n\n", rules, "\n"
+  )
 }
 
 
 #' Generate Theme SCSS from a Color Scheme
 #'
-#' Creates a Quarto-compatible SCSS file with custom properties.
+#' Creates a Quarto-compatible SCSS file on the CTTIR v5 surface. Bootstrap
+#' defaults take the light tokens (links use the link token, as in themakR);
+#' the rules section adds the same `--cttir-*` custom properties as the site
+#' CSS, a dark mode and the accent identity rules.
 #'
 #' @param scheme A scheme list from [reflow_scheme()].
 #' @param output_path Character. File path for the output SCSS file.
@@ -343,70 +479,112 @@ blockquote p:last-child {{
 #'
 #' @keywords internal
 generate_scss <- function(scheme, output_path) {
+  writeLines(site_scss(scheme), output_path)
+  invisible(output_path)
+}
+
+site_scss <- function(scheme) {
   s <- scheme
-  scss <- glue::glue('
+  defaults <- glue::glue('
 /*-- scss:defaults --*/
 
-$primary: {s$primary};
-$primary-light: {s$primary_light};
-$accent: {s$accent};
-$secondary: {s$secondary};
-$light-grey: {s$light_grey};
-$grey: {s$grey};
-$dark: {s$dark};
+// CTTIR v5 tokens for the <<s$label>> family (<<s$family>>).
+$cttir-topic: <<s$accent>>;
+$cttir-page: <<s$page_light>>;
+$cttir-text: <<s$text_light>>;
+$cttir-heading: <<s$heading_light>>;
+$cttir-link: <<s$link_light>>;
+$cttir-code-surface: <<s$code_surface_light>>;
+$cttir-border: <<s$border_light>>;
+$cttir-muted: <<s$muted_light>>;
 
-$body-bg: #FFFFFF;
-$body-color: #333333;
-$link-color: $primary;
-$font-family-sans-serif: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$primary: $cttir-link;
+$body-bg: $cttir-page;
+$body-color: $cttir-text;
+$headings-color: $cttir-heading;
+$link-color: $cttir-link;
+$border-color: $cttir-border;
+$code-bg: $cttir-code-surface;
+$code-color: $cttir-text;
+$font-family-sans-serif: "<<s$font_body>>", system-ui, sans-serif;
+$font-family-monospace: "<<s$font_code>>", ui-monospace, monospace;
+$headings-font-weight: 600;
 
-$navbar-bg: $primary;
-$navbar-fg: #FFFFFF;
+$navbar-bg: $cttir-page;
+$navbar-fg: $cttir-heading;
+$navbar-hl: $cttir-heading;
 
-$toc-active-border: $primary;
-$toc-inactive-border: $light-grey;
+$toc-active-border: $cttir-topic;
+$toc-inactive-border: $cttir-border;
+', .open = "<<", .close = ">>")
 
+  rules <- glue::glue('
 /*-- scss:rules --*/
 
-body {{
-  background-color: #FFFFFF !important;
-  line-height: 1.7;
-}}
+body {
+  background-color: var(--cttir-page);
+  color: var(--cttir-text);
+  font-family: var(--cttir-font-body);
+}
+h1, h2, h3, h4, h5, h6 {
+  color: var(--cttir-heading);
+}
+h1, h1.title {
+  border-bottom: 3px solid var(--cttir-topic);
+  padding-bottom: 0.3em;
+}
+h2 {
+  border-bottom: 1px solid var(--cttir-border);
+  padding-bottom: 0.25em;
+}
+a, a:visited, a:hover {
+  color: var(--cttir-link);
+}
+.navbar {
+  background-color: var(--cttir-page);
+  box-shadow: inset 0 -3px 0 var(--cttir-topic);
+}
+.navbar-brand, .navbar-title {
+  color: var(--cttir-heading);
+  font-family: var(--cttir-font-brand);
+  font-weight: var(--cttir-brand-weight);
+}
+.navbar .nav-link, .navbar .nav-link:hover {
+  color: var(--cttir-heading);
+}
+#TOC .nav-link.active, nav[role="doc-toc"] a.active {
+  color: var(--cttir-heading);
+  border-left-color: var(--cttir-topic);
+}
+body pre, body div.sourceCode {
+  background-color: var(--cttir-code-surface);
+  border: 1px solid var(--cttir-border);
+  color: var(--cttir-text);
+}
+:not(pre) > code {
+  background-color: var(--cttir-code-surface);
+  color: var(--cttir-text);
+}
+<<css_syntax_rules()>>
+table thead th {
+  color: var(--cttir-heading);
+  font-family: var(--cttir-font-code);
+  font-weight: 600;
+  border-bottom: 2px solid var(--cttir-topic);
+}
+blockquote, .callout {
+  border-left: 3px solid var(--cttir-topic);
+  color: var(--cttir-text);
+}
+.badge {
+  background-color: var(--cttir-code-surface);
+  color: var(--cttir-heading);
+}
+::selection {
+  background-color: var(--cttir-face);
+  color: var(--cttir-heading);
+}
+', .open = "<<", .close = ">>")
 
-h1 {{ border-bottom: 3px solid $primary; padding-bottom: 0.4em; color: $dark; }}
-h2 {{ border-bottom: 2px solid $primary-light; padding-bottom: 0.3em; color: $dark; }}
-h3 {{ color: $accent; }}
-
-pre {{
-  border-left: 4px solid $primary;
-  background-color: #F8F9FA;
-}}
-
-code {{
-  color: $accent;
-}}
-
-blockquote {{
-  border-left: 4px solid $primary;
-  background-color: $light-grey;
-  padding: 10px 20px;
-  border-radius: 0 4px 4px 0;
-}}
-
-table thead th {{
-  background-color: $primary !important;
-  color: #FFFFFF !important;
-}}
-
-.badge {{
-  background-color: $primary;
-}}
-
-::selection {{
-  background-color: $primary-light;
-  color: #FFFFFF;
-}}
-')
-  writeLines(scss, output_path)
-  invisible(output_path)
+  paste0(defaults, "\n\n", rules, "\n\n", css_token_blocks(s), "\n")
 }
