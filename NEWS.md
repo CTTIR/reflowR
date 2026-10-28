@@ -1,5 +1,8 @@
 # Development
 
+* `options(reflowR.input_hash_cache = TRUE)` reuses the hashes of tracked
+  input files within one R process in the same way as the package hash cache;
+  tree walks check links of a folder's entries in one call.
 * Artifact fingerprints hash files in one call (`tools::sha256sum()` on R >= 4.5.0,
   same values) and walk package trees with one type query per folder.
   `options(reflowR.package_hash_cache = TRUE)` reuses installed-package file
