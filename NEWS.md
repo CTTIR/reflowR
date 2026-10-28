@@ -1,5 +1,8 @@
 # reflowR (development version)
 
+* The Zenodo DOI is no longer listed in the README and `CITATION.cff`; the
+  record is not published yet, and the DOI will be added once it is.
+
 * Package closures (artifact definitions, imaging plans and bounded runs)
   follow Depends and Imports only. LinkingTo packages supply headers at build
   time and need not be installed; their effect is in the hashed compiled code.
