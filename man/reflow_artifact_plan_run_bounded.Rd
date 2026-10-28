@@ -23,13 +23,25 @@ reflow_artifact_plan_resume_bounded(plan, directory, supervisor_directory,
 \details{Control policy and attempt journals are separate from graph inventory. Orphan READY adoption requires a matching successful guardian outcome and fresh locked verification. Missing journals, failed guardian outcomes and changed policies fail closed. Ordinary parent unwind releases its graph/control locks; stale locks after process death require external inspection. Guardian death is unqualified and requires external cleanup. Linux only, trusted descendants, per-process address space, requested threads, and explicit finite deadlines of 1--86400 seconds per node; no graph-wide deadline, parallel scheduler, selector or targets integration.}
 \seealso{\code{\link{reflow_artifact_run_bounded}}, \code{\link{reflow_artifact_plan_run}}}
 \examples{
-# Needs Linux with processx, ps, prlimit and nice. A run starts a guardian
-# and a worker process and pins every installed file they load.
+# Needs Linux with processx, ps, prlimit and nice, and a package library
+# without symbolic links (R CMD check --as-cran links its packages). A run
+# starts a guardian and a worker process and pins every installed file they
+# load, which takes a while.
 \donttest{
-if (identical(Sys.info()[["sysname"]], "Linux") &&
-    requireNamespace("processx", quietly = TRUE) &&
-    requireNamespace("ps", quietly = TRUE) && ps::ps_is_supported() &&
-    nzchar(Sys.which("prlimit")) && nzchar(Sys.which("nice"))) {
+roots <- c("reflowR", "processx", "ps", "digest", "base")
+usable <- identical(Sys.info()[["sysname"]], "Linux") &&
+  requireNamespace("processx", quietly = TRUE) &&
+  requireNamespace("ps", quietly = TRUE) && ps::ps_is_supported() &&
+  nzchar(Sys.which("prlimit")) && nzchar(Sys.which("nice"))
+if (usable) {
+  # reflowR, processx, ps, digest, the writer package (base) and their imports
+  packages <- unique(c(roots, unlist(tools::package_dependencies(
+    roots, db = utils::installed.packages(), which = c("Depends", "Imports"),
+    recursive = TRUE
+  ))))
+  usable <- !any(nzchar(Sys.readlink(find.package(packages))))
+}
+if (usable) {
   root <- tempfile("bounded-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
   work <- file.path(root, c("tmp", "cache"))
   for (path in c(root, work)) dir.create(path)
@@ -46,13 +58,8 @@ if (identical(Sys.info()[["sysname"]], "Linux") &&
     prlimit = normalizePath(Sys.which("prlimit")),
     nice_command = normalizePath(Sys.which("nice"))
   )
-  # Pin the backend scripts, the three executables and every installed file
-  # of reflowR, processx, ps, digest, the writer packages and their imports.
-  roots <- c("reflowR", "processx", "ps", "digest", "base")
-  packages <- unique(c(roots, unlist(tools::package_dependencies(
-    roots, db = utils::installed.packages(), which = c("Depends", "Imports"),
-    recursive = TRUE
-  ))))
+  # Pin the backend scripts, every installed file of those packages and the
+  # three executables.
   files <- c(
     list.files(system.file("bounded", package = "reflowR"), full.names = TRUE),
     unlist(lapply(find.package(packages), list.files, recursive = TRUE,

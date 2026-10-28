@@ -40,13 +40,25 @@ reflow_artifact_resume_bounded(spec, directory, supervisor_directory,
  seed for stochastic writers. RNG state is not copied.}
 \value{A verified artifact descriptor after successful guardian cleanup.}
 \examples{
-# Needs Linux with processx, ps, prlimit and nice. A run starts a guardian
-# and a worker process and pins every installed file they load.
+# Needs Linux with processx, ps, prlimit and nice, and a package library
+# without symbolic links (R CMD check --as-cran links its packages). A run
+# starts a guardian and a worker process and pins every installed file they
+# load, which takes a while.
 \donttest{
-if (identical(Sys.info()[["sysname"]], "Linux") &&
-    requireNamespace("processx", quietly = TRUE) &&
-    requireNamespace("ps", quietly = TRUE) && ps::ps_is_supported() &&
-    nzchar(Sys.which("prlimit")) && nzchar(Sys.which("nice"))) {
+roots <- c("reflowR", "processx", "ps", "digest", "base")
+usable <- identical(Sys.info()[["sysname"]], "Linux") &&
+  requireNamespace("processx", quietly = TRUE) &&
+  requireNamespace("ps", quietly = TRUE) && ps::ps_is_supported() &&
+  nzchar(Sys.which("prlimit")) && nzchar(Sys.which("nice"))
+if (usable) {
+  # reflowR, processx, ps, digest, the writer package (base) and their imports
+  packages <- unique(c(roots, unlist(tools::package_dependencies(
+    roots, db = utils::installed.packages(), which = c("Depends", "Imports"),
+    recursive = TRUE
+  ))))
+  usable <- !any(nzchar(Sys.readlink(find.package(packages))))
+}
+if (usable) {
   root <- tempfile("bounded-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
   work <- file.path(root, c("tmp", "cache"))
   for (path in c(root, work)) dir.create(path)
@@ -63,13 +75,8 @@ if (identical(Sys.info()[["sysname"]], "Linux") &&
     prlimit = normalizePath(Sys.which("prlimit")),
     nice_command = normalizePath(Sys.which("nice"))
   )
-  # Pin the backend scripts, the three executables and every installed file
-  # of reflowR, processx, ps, digest, the writer package and their imports.
-  roots <- c("reflowR", "processx", "ps", "digest", spec$package)
-  packages <- unique(c(roots, unlist(tools::package_dependencies(
-    roots, db = utils::installed.packages(), which = c("Depends", "Imports"),
-    recursive = TRUE
-  ))))
+  # Pin the backend scripts, every installed file of those packages and the
+  # three executables.
   files <- c(
     list.files(system.file("bounded", package = "reflowR"), full.names = TRUE),
     unlist(lapply(find.package(packages), list.files, recursive = TRUE,
