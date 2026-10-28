@@ -1,4 +1,8 @@
-# Development
+# reflowR (development version)
+
+* Package closures (artifact definitions, imaging plans and bounded runs)
+  follow Depends and Imports only. LinkingTo packages supply headers at build
+  time and need not be installed; their effect is in the hashed compiled code.
 
 * Site schemes are now the nine CTTIR v5 topic families (spectral, spatial,
   omics, clinical, methods, simulation, evidence, platform and brand), built
@@ -82,14 +86,10 @@
   Address-space limits are per process and thread settings are requests;
   guardian loss remains an unresolved failure requiring external cleanup.
 
-# Development version
-
 - Added a serial artifact dependency core with deferred logical references,
   authenticated producer lineage and immutable generations that reuse unchanged
   bundles in place. Failed attempts require explicit reconciliation. Resource
   enforcement and targets integration remain outside this dependency core.
-
-# reflowR (development version)
 
 * Add a separate declared artifact bundle API for trusted installed writers,
   complete file/resource fingerprints, immutable accepted receipts and verified
@@ -115,6 +115,12 @@
 * This first orchestration slice returns R objects; resource scheduling, external
   engine qualification, dashboards and report recipes remain separate work.
 
+* Added a versioned strict research workflow with separate domain, data-origin
+  and design declarations, canonical stage ordering and established colours.
+* Added inert scaffold creation, external hash review, explicit execution
+  readiness and stage provenance validation. These checks do not establish
+  scientific or legal approval.
+
 # reflowR 0.1.0
 
 Initial release.
@@ -128,10 +134,3 @@ Initial release.
 * `reflow_schemes()` and `reflow_presets()` convenience functions.
 * Full compatibility with workflowr commands (wflow_build, wflow_publish, etc.).
 * Two vignettes: Getting Started and Color Schemes Reference.
-# reflowR 0.1.0.9000
-
-* Added a versioned strict research workflow with separate domain, data-origin
-  and design declarations, canonical stage ordering and established colours.
-* Added inert scaffold creation, external hash review, explicit execution
-  readiness and stage provenance validation. These checks do not establish
-  scientific or legal approval.
