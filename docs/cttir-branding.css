@@ -1,0 +1,8 @@
+/* Named v5 branding for existing pkgdown pages. */
+:root { --themakr-navbar-offset: 96px; }
+.navbar-brand { display: inline-flex; align-items: center; gap: 0.625rem; padding-top: 0; padding-bottom: 0; }
+img.themakr-navbar-logo { height: 64px; width: auto; border: 0; background: transparent; box-shadow: none; }
+.row > main, .row > aside { margin-top: var(--themakr-navbar-offset); }
+html, body { scroll-padding-top: var(--themakr-navbar-offset); }
+@media (min-width: 576px) { #toc { top: var(--themakr-navbar-offset); max-height: calc(100vh - var(--themakr-navbar-offset) - 1rem); } }
+@media (max-width: 575.98px) { :root { --themakr-navbar-offset: 80px; } img.themakr-navbar-logo { height: 48px; } }

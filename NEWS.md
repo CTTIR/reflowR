@@ -1,5 +1,9 @@
 # Development
 
+* Standardize the named v5 package logo across README, documentation pages
+  and available application headers, with matching light and dark artwork.
+
+
 * Add a stage-call restart for external condition handlers to reject a condition
   through the imaging executor's existing durable failure receipts. Default
   warning handling and the run/resume interfaces remain unchanged.
