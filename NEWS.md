@@ -1,5 +1,7 @@
 # reflowR (development version)
 
+* `reflow_preview()` no longer requires htmltools, which it never used.
+
 * `_workflowr.yml` records the installed workflowr version instead of a fixed
   1.7.2.
 

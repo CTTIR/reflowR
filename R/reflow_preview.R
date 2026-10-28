@@ -17,10 +17,6 @@
 #'
 #' @export
 reflow_preview <- function(scheme = "brand") {
-  if (!requireNamespace("htmltools", quietly = TRUE)) {
-    cli::cli_abort("Package {.pkg htmltools} is required for preview.")
-  }
-
   s <- reflow_scheme(scheme)
   ink <- function(colour) {
     if (.cttir_contrast(colour, s$heading_light) >= .cttir_contrast(colour, s$page_light)) {

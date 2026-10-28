@@ -57,10 +57,13 @@ test_that("reflow_preview errors for an invalid scheme name", {
   )
 })
 
-test_that("reflow_preview aborts when htmltools is unavailable", {
+test_that("reflow_preview does not need htmltools", {
+  available <- base::requireNamespace
   testthat::local_mocked_bindings(
-    requireNamespace = function(pkg, ...) if (identical(pkg, "htmltools")) FALSE else TRUE,
+    requireNamespace = function(package, ...) {
+      if (identical(package, "htmltools")) FALSE else available(package, ...)
+    },
     .package = "base"
   )
-  expect_error(reflow_preview("brand"), "htmltools")
+  expect_match(capture_preview("brand")$html, reflow_scheme("brand")$label, fixed = TRUE)
 })
