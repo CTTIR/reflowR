@@ -1,5 +1,7 @@
 # Getting Started with reflowR
 
+![reflowR logo](figures/logo.svg)![reflowR logo](figures/logo-dark.svg)
+
 [![R-CMD-check](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/CTTIR/reflowR/actions/workflows/pkgdown.yaml/badge.svg)](https://cttir.github.io/reflowR/)
 [![CRAN

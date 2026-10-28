@@ -1,5 +1,7 @@
 # Consistent research workflows
 
+![reflowR logo](figures/logo.svg)![reflowR logo](figures/logo-dark.svg)
+
 The strict profile fixes the project structure in deterministic
 templates. The research declaration chooses domain, data origin and
 study design independently. The same eleven stages remain visible in
