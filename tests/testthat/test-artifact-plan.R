@@ -26,6 +26,15 @@ test_that("deferred references enforce a canonical dependency graph", {
   expect_error(graph_stage("a", list(x = reflow_imaging_ref("b"))), "Object")
 })
 
+test_that("stage ids that differ only in case are refused on every platform", {
+  expect_error(reflow_artifact_plan(graph_stage("a"), graph_stage("A")), "Duplicate")
+  expect_error(reflow_artifact_plan(graph_stage("Step_1"), graph_stage("step_1")), "Duplicate")
+  expect_error(reflow_imaging_plan(
+    reflow_imaging_stage("load", "base", "identity", list(x = 1)),
+    reflow_imaging_stage("Load", "base", "identity", list(x = 2))
+  ), "Duplicate")
+})
+
 test_that("installed writers consume files and immutable generations reuse safely", {
   root <- normalizePath(tempdir(), winslash = "/", mustWork = TRUE)
   root <- tempfile("artifact graph ", root)

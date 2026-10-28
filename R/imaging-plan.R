@@ -4,7 +4,8 @@
 #' Scientific methods and validation remain in the called packages. Calls must
 #' return serializable values and must not mutate their inputs or write external
 #' outputs. This executor is not a sandbox: use trusted package functions only.
-#' @param id Unique stage identifier containing letters, digits, underscores.
+#' @param id Stage identifier containing letters, digits, underscores; unique
+#'   within a plan even when letter case is ignored.
 #' @param package Installed package name.
 #' @param fun Exported function name.
 #' @param args Named list of arguments, including explicit references if needed.
@@ -85,7 +86,8 @@ reflow_imaging_plan <- function(..., packages = character()) {
     stop("Supply at least one stage.")
   }
   ids <- vapply(stages, `[[`, character(1), "id")
-  if (anyDuplicated(ids)) stop("Duplicate stage ids.")
+  # Ids name receipt files, so they must also differ in more than case.
+  if (anyDuplicated(tolower(ids))) stop("Duplicate stage ids.")
   seen <- character()
   for (s in stages) {
     do.call(reflow_imaging_stage, unclass(s))

@@ -7,7 +7,8 @@
 reflow_imaging_stage(id, package, fun, args = list(), seed = NULL)
 }
 \arguments{
-\item{id}{Unique stage identifier containing letters, digits, underscores.}
+\item{id}{Stage identifier containing letters, digits, underscores; unique
+within a plan even when letter case is ignored.}
 
 \item{package}{Installed package name.}
 

@@ -1,5 +1,10 @@
 # reflowR (development version)
 
+* Artifact and imaging plans refuse stage ids that differ only in letter
+  case on every platform. They name folders and receipt files, which collide
+  on case-insensitive file systems; the check used to run on Windows only for
+  artifact plans and nowhere for imaging plans.
+
 * `reflow_preview()` no longer requires htmltools, which it never used.
 
 * `_workflowr.yml` records the installed workflowr version instead of a fixed

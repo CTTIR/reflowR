@@ -25,7 +25,8 @@ reflow_artifact_ref <- function(stage, artifact, read = FALSE) {
 #' Static declarations are validated immediately; future artifact paths are
 #' resolved only after their producers have been authenticated. Scientific
 #' methods remain in trusted installed exports. No writer runs here.
-#' @param id Unique stage identifier.
+#' @param id Stage identifier, unique within a plan even when letter case is
+#'   ignored.
 #' @param package,fun,args,outputs,inventory,allow_empty,seed,packages,runtime_files
 #'   See [reflow_artifact_spec()].
 #' @return A deferred writer declaration.
@@ -71,8 +72,9 @@ reflow_artifact_plan <- function(...) {
     if (!identical(s, rebuilt)) stop("Noncanonical deferred stage.")
   }
   ids <- vapply(stages, `[[`, character(1), "id")
-  if (anyDuplicated(ids) ||
-    .Platform$OS.type == "windows" && anyDuplicated(tolower(ids))) {
+  # Stage ids name folders; ids that differ only in case collide on
+  # case-insensitive file systems (Windows, macOS), so refuse them everywhere.
+  if (anyDuplicated(tolower(ids))) {
     stop("Duplicate stage ids.")
   }
   names(stages) <- ids

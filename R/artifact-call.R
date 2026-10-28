@@ -54,7 +54,8 @@ reflow_call_writer <- function(fun, args = list(), path, tsv = NULL) {
 #' plain data frames). The package of `fun` and any `packages` are
 #' fingerprinted. Refer to the value downstream with
 #' `reflow_artifact_ref(id, "value", read = TRUE)`.
-#' @param id Unique stage identifier.
+#' @param id Stage identifier, unique within a plan even when letter case is
+#'   ignored.
 #' @param fun One string `"package::function"` naming an exported function.
 #' @param args Uniquely named list of arguments; may contain
 #'   [reflow_artifact_ref()] and [reflow_imaging_input()] values at any depth.

@@ -18,7 +18,8 @@ reflow_artifact_stage(
 )
 }
 \arguments{
-\item{id}{Unique stage identifier.}
+\item{id}{Stage identifier, unique within a plan even when letter case is
+ignored.}
 
 \item{package, fun, args, outputs, inventory, allow_empty, seed, packages, runtime_files}{See \code{\link[=reflow_artifact_spec]{reflow_artifact_spec()}}.}
 }

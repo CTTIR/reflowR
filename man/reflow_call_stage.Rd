@@ -7,7 +7,8 @@
 reflow_call_stage(id, fun, args = list(), seed = NULL, packages = character())
 }
 \arguments{
-\item{id}{Unique stage identifier.}
+\item{id}{Stage identifier, unique within a plan even when letter case is
+ignored.}
 
 \item{fun}{One string \code{"package::function"} naming an exported function.}
 
