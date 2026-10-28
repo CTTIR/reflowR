@@ -238,6 +238,8 @@ test_that(
 test_that(
   "installed exported writer failures, RNG and resources are authenticated",
   {
+    # Installs a fixture package with R CMD INSTALL.
+    skip_on_cran()
     root <- artifact_tempfile()
     dir.create(root)
     on.exit(

@@ -36,6 +36,8 @@ test_that("stage ids that differ only in case are refused on every platform", {
 })
 
 test_that("installed writers consume files and immutable generations reuse safely", {
+  # Installs a fixture package with R CMD INSTALL.
+  skip_on_cran()
   root <- normalizePath(tempdir(), winslash = "/", mustWork = TRUE)
   root <- tempfile("artifact graph ", root)
   dir.create(root)
