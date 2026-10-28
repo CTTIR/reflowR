@@ -75,3 +75,18 @@ test_that("the diverging scales use two distinct Okabe-Ito hues for every family
     expect_false(identical(scheme$blue, scheme$red))
   }
 })
+
+test_that("the setup script reports missing packages instead of installing them", {
+  code <- parse(text = setup_code(reflow_scheme("brand")), keep.source = FALSE)
+  used <- all.names(as.call(c(as.name("{"), as.list(code))))
+  expect_false(any(c("install.packages", "p_load") %in% used))
+  expect_false("pacman" %in% used)
+  # Run the loader with one available and one missing package.
+  first <- which(vapply(code, function(e) identical(e[[2]], as.name("wf_packages")),
+                        logical(1)))
+  env <- new.env()
+  env$wf_packages <- c("stats", "reflowRabsentpackage")
+  loader <- code[(first + 1):(first + 3)]
+  expect_message(for (e in loader) eval(e, env), "reflowRabsentpackage")
+  expect_identical(unname(env$wf_available), c(TRUE, FALSE))
+})

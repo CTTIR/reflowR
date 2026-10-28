@@ -1,5 +1,9 @@
 # reflowR (development version)
 
+* The generated `code/00_setup.R` no longer installs packages (it used
+  `install.packages("pacman")` and `pacman::p_load()`); it attaches the
+  packages that are installed and lists the missing ones in a message.
+
 * Artifact and imaging plans refuse stage ids that differ only in letter
   case on every platform. They name folders and receipt files, which collide
   on case-insensitive file systems; the check used to run on Windows only for

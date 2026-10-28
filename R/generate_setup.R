@@ -21,30 +21,39 @@ generate_setup_script <- function(project_dir, scheme) {
 # ============================================================
 
 # ── Load packages ──
-if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
-pacman::p_load(
+# Packages are not installed automatically; install missing ones yourself,
+# for example with install.packages().
+wf_packages <- c(
   # Data wrangling
-
-tidyverse, data.table, janitor, lubridate,
+  "tidyverse", "data.table", "janitor", "lubridate",
   # Paths
-  here,
+  "here",
   # Tables
-  gtsummary, gt, flextable, knitr, rmarkdown,
+  "gtsummary", "gt", "flextable", "knitr", "rmarkdown",
   # Plotting
-  ggplot2, patchwork, ggrepel, scales, ggpubr, rstatix,
+  "ggplot2", "patchwork", "ggrepel", "scales", "ggpubr", "rstatix",
   # Statistics
-  broom, effectsize,
+  "broom", "effectsize",
   # Missing data
-  naniar,
+  "naniar",
   # Modelling
-  tidymodels, glmnet, ranger,
+  "tidymodels", "glmnet", "ranger",
   # Dimensionality reduction
-  FactoMineR, factoextra, umap, Rtsne,
+  "FactoMineR", "factoextra", "umap", "Rtsne",
   # I/O
-  readxl, writexl, haven, rio,
+  "readxl", "writexl", "haven", "rio",
   # Workflow
-  workflowr
+  "workflowr"
 )
+wf_available <- vapply(wf_packages, requireNamespace, logical(1), quietly = TRUE)
+if (!all(wf_available)) {{
+  message("Packages not installed: ",
+          paste(wf_packages[!wf_available], collapse = ", "),
+          ". Steps that use them will fail until they are installed.")
+}}
+for (wf_package in wf_packages[wf_available]) {{
+  suppressPackageStartupMessages(library(wf_package, character.only = TRUE))
+}}
 
 # ── Project paths ──
 paths <- list(
