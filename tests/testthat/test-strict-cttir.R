@@ -37,7 +37,7 @@ cttir_profile_project <- function(fixture, one_stage = FALSE) {
 test_that("composed control and stage inventory is finite and immutable", {
   fixture <- cttir_profile_fixture()
   project <- cttir_profile_project(fixture)
-  expect_identical(project$profile$primary_color, "#C8102E")
+  expect_identical(project$profile$primary_color, "#D55E00")
   expect_identical(project$profile$badge, "SECONDARY DATA")
   expect_identical(vapply(project$profile$stages, `[[`, "", "id"), .strict_stage_ids)
   expect_true(all(.strict_cttir_controls %in% names(project$files)))

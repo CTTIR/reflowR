@@ -29,6 +29,30 @@ strict_json <- function(x) {
 
 strict_sha <- function(x) digest::digest(charToRaw(enc2utf8(x)), algo = "sha256", serialize = FALSE)
 
+# Domain and design select a CTTIR v5 family; data origin stays a text badge.
+strict_scheme <- function(domain, design) {
+  if (design == "synthesis") return("evidence")
+  if (design %in% c("simulation", "software") || domain %in% c("methods", "software")) return("methods")
+  c(clinical = "clinical", basic = "brand", other = "platform")[[domain]]
+}
+
+# Declarations written before the v5 palette keep their recorded scheme, colour
+# and stylesheet, so existing strict projects still validate unchanged.
+.strict_legacy_colours <- c(clinical = "#C8102E", basic = "#4682B4", code = "#228B22",
+                            special = "#6A0DAD", other = "#2C2C2C")
+
+strict_legacy_scheme <- function(domain, design) {
+  if (design == "synthesis") return("special")
+  if (design %in% c("simulation", "software") || domain %in% c("methods", "software")) return("code")
+  domain
+}
+
+strict_profile_legacy <- function(profile) {
+  scheme <- profile$scheme
+  is.character(scheme) && length(scheme) == 1L && scheme %in% names(.strict_legacy_colours) &&
+    identical(profile$primary_color, .strict_legacy_colours[[scheme]])
+}
+
 #' Declare a Strict Research Workflow Profile
 #'
 #' Creates a versioned declaration for a research-group project. Domain, data
@@ -88,8 +112,7 @@ reflow_profile <- function(domain, data_origin, design, seed = 1L, stages = NULL
     list(id = id, applicable = applicable, reason = reason,
          analysis = paste0("analysis/", stem, ".Rmd"), code = paste0("code/stages/", stem, ".R"))
   })
-  scheme <- if (design == "synthesis") "special" else if (
-    design %in% c("simulation", "software") || domain %in% c("methods", "software")) "code" else domain
+  scheme <- strict_scheme(domain, design)
   result <- list(profile_version = profile_version, domain = domain,
                  data_origin = data_origin, design = design, seed = as.integer(seed),
                  data_access = data_access, jurisdiction = jurisdiction,
@@ -114,6 +137,11 @@ strict_profile_canonical <- function(profile) {
   canonical <- reflow_profile(profile$domain, profile$data_origin, profile$design,
                               profile$seed, overrides, profile$profile_version,
                               profile$data_access, profile$jurisdiction, profile$legal_basis)
+  legacy <- strict_legacy_scheme(canonical$domain, canonical$design)
+  if (strict_profile_legacy(profile) && identical(profile$scheme, legacy)) {
+    canonical$scheme <- legacy
+    canonical$primary_color <- .strict_legacy_colours[[legacy]]
+  }
   if (!identical(strict_json(unclass(profile)), strict_json(unclass(canonical))))
     stop("Profile differs from its canonical version or paths", call. = FALSE)
   canonical

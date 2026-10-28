@@ -6,7 +6,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["clinical", "basic", "code", "special", "other"]
+          "value": ["spectral", "spatial", "omics", "clinical", "methods", "simulation", "evidence", "platform", "brand"]
         }
       },
       "value": [
@@ -16,7 +16,724 @@
             "names": {
               "type": "character",
               "attributes": {},
-              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "green", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette"]
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
+            }
+          },
+          "value": [
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["spectral"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Spectral imaging"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["icon_spectral.svg"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#B2D4E7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0C3E62"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E69F00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D55E00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#B2D4E7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0C3E62"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2", "#D55E00", "#009E73", "#E69F00", "#CC79A7", "#56B4E9", "#000000", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["spectral"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D7E6EF"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#193443"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FFFFFF"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#42A5F5"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#2B2B2B"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "attributes": {
+            "names": {
+              "type": "character",
+              "attributes": {},
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
+            }
+          },
+          "value": [
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["spatial"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Spatial biology"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["icon_spatial.svg"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#B2E1D5"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0C4E4B"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E69F00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D55E00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#B2E1D5"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0C4E4B"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73", "#0072B2", "#D55E00", "#E69F00", "#CC79A7", "#56B4E9", "#000000", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["spatial"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D7EDE7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#193F34"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FFFFFF"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#42A5F5"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#2B2B2B"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "attributes": {
+            "names": {
+              "type": "character",
+              "attributes": {},
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
+            }
+          },
+          "value": [
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["omics"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Molecular data"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["icon_omics.svg"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#CC79A7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#EFD6E4"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#CC79A7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#56415E"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E69F00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D55E00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#EFD6E4"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#56415E"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#CC79A7", "#0072B2", "#D55E00", "#009E73", "#E69F00", "#56B4E9", "#000000", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["omics"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#CC79A7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F3E7EE"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#4A3641"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FFFFFF"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#42A5F5"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#2B2B2B"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "attributes": {
+            "names": {
+              "type": "character",
+              "attributes": {},
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
             }
           },
           "value": [
@@ -28,62 +745,157 @@
             {
               "type": "character",
               "attributes": {},
-              "value": ["Clinical Research"]
+              "value": ["Clinical science"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["🏥"]
+              "value": ["icon_clinical.svg"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#C8102E"]
+              "value": ["#D55E00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#E63946"]
+              "value": ["#F2CEB2"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#A50021"]
+              "value": ["#D55E00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#8B0000"]
+              "value": ["#593721"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F4A261"]
+              "value": ["#F0E442"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#E76F51"]
+              "value": ["#E69F00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2A9D8F"]
+              "value": ["#D55E00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F2F2F2"]
+              "value": ["#009E73"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#6C757D"]
+              "value": ["#0072B2"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1A1A2E"]
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F2CEB2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#593721"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D55E00", "#0072B2", "#009E73", "#E69F00", "#CC79A7", "#56B4E9", "#000000", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["clinical"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D55E00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F4E4D7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#4C2F19"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
             },
             {
               "type": "character",
@@ -93,17 +905,64 @@
             {
               "type": "character",
               "attributes": {},
-              "value": ["#C8102E"]
+              "value": ["#42A5F5"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#8B0000"]
+              "value": ["#2B2B2B"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#C8102E", "#E63946", "#A50021", "#F4A261", "#E76F51", "#2A9D8F", "#264653", "#6C757D"]
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
             }
           ]
         },
@@ -113,79 +972,169 @@
             "names": {
               "type": "character",
               "attributes": {},
-              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette"]
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
             }
           },
           "value": [
             {
               "type": "character",
               "attributes": {},
-              "value": ["basic"]
+              "value": ["methods"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["Basic Research"]
+              "value": ["Learning & inference"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["🔬"]
+              "value": ["icon_methods.svg"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#4682B4"]
+              "value": ["#56B4E9"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#5B9BD5"]
+              "value": ["#CCE8F8"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2C5F8A"]
+              "value": ["#56B4E9"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1B3A5C"]
+              "value": ["#2B5675"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F1C40F"]
+              "value": ["#F0E442"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F39C11"]
+              "value": ["#E69F00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#E84C3D"]
+              "value": ["#D55E00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#27AE61"]
+              "value": ["#009E73"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#ECF0F1"]
+              "value": ["#0072B2"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#7F8C8D"]
+              "value": ["#E9E9E9"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2C3E50"]
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#CCE8F8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#2B5675"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#56B4E9", "#0072B2", "#D55E00", "#009E73", "#E69F00", "#CC79A7", "#000000", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["methods"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#56B4E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E3F0F7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#2D4451"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
             },
             {
               "type": "character",
@@ -195,17 +1144,64 @@
             {
               "type": "character",
               "attributes": {},
-              "value": ["#4682B4"]
+              "value": ["#42A5F5"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1B3A5C"]
+              "value": ["#2B2B2B"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#4682B4", "#5B9BD5", "#2C5F8A", "#F1C40F", "#E84C3D", "#27AE61", "#F39C11", "#7F8C8D"]
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
             }
           ]
         },
@@ -215,79 +1211,169 @@
             "names": {
               "type": "character",
               "attributes": {},
-              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette"]
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
             }
           },
           "value": [
             {
               "type": "character",
               "attributes": {},
-              "value": ["code"]
+              "value": ["simulation"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["Code & Statistics"]
+              "value": ["Systems & simulation"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["💻"]
+              "value": ["icon_simulation.svg"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#228B22"]
+              "value": ["#E69F00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#3CB371"]
+              "value": ["#F7E2B2"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1B6B1B"]
+              "value": ["#E69F00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#0D3D0D"]
+              "value": ["#5F4F21"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#DAA520"]
+              "value": ["#F0E442"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#CC7722"]
+              "value": ["#E69F00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#CD5C5C"]
+              "value": ["#D55E00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#4682B4"]
+              "value": ["#009E73"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F0F4F0"]
+              "value": ["#0072B2"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#6B8E6B"]
+              "value": ["#E9E9E9"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1A2E1A"]
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F7E2B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#5F4F21"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E69F00", "#0072B2", "#D55E00", "#009E73", "#CC79A7", "#56B4E9", "#000000", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["simulation"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E69F00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F7EDD7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#503F19"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
             },
             {
               "type": "character",
@@ -297,17 +1383,64 @@
             {
               "type": "character",
               "attributes": {},
-              "value": ["#228B22"]
+              "value": ["#42A5F5"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#0D3D0D"]
+              "value": ["#2B2B2B"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#228B22", "#3CB371", "#1B6B1B", "#DAA520", "#CD5C5C", "#4682B4", "#CC7722", "#6B8E6B"]
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
             }
           ]
         },
@@ -317,79 +1450,169 @@
             "names": {
               "type": "character",
               "attributes": {},
-              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette"]
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
             }
           },
           "value": [
             {
               "type": "character",
               "attributes": {},
-              "value": ["special"]
+              "value": ["evidence"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["Special"]
+              "value": ["Evidence & discovery"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["📜"]
+              "value": ["icon_evidence.svg"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#6A0DAD"]
+              "value": ["#F0E442"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#9B59B6"]
+              "value": ["#FAF6C6"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#4A0078"]
+              "value": ["#F0E442"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2E004F"]
+              "value": ["#636739"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F4D03F"]
+              "value": ["#F0E442"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#EB984E"]
+              "value": ["#E69F00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#E74C3C"]
+              "value": ["#D55E00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1ABC9C"]
+              "value": ["#009E73"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F4F0F8"]
+              "value": ["#0072B2"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#8E7AA0"]
+              "value": ["#E9E9E9"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1A0A2E"]
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAF6C6"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#636739"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F0E442", "#0072B2", "#D55E00", "#009E73", "#E69F00", "#CC79A7", "#56B4E9", "#000000"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["evidence"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F8F6E0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#524F28"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
             },
             {
               "type": "character",
@@ -399,17 +1622,64 @@
             {
               "type": "character",
               "attributes": {},
-              "value": ["#6A0DAD"]
+              "value": ["#42A5F5"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2E004F"]
+              "value": ["#2B2B2B"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#6A0DAD", "#9B59B6", "#4A0078", "#F4D03F", "#E74C3C", "#1ABC9C", "#EB984E", "#8E7AA0"]
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
             }
           ]
         },
@@ -419,79 +1689,169 @@
             "names": {
               "type": "character",
               "attributes": {},
-              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette"]
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
             }
           },
           "value": [
             {
               "type": "character",
               "attributes": {},
-              "value": ["other"]
+              "value": ["platform"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["Other"]
+              "value": ["Research infrastructure"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["📁"]
+              "value": ["icon_platform.svg"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2C2C2C"]
+              "value": ["#000000"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#555555"]
+              "value": ["#DDE5EB"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#444444"]
+              "value": ["#000000"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1A1A1A"]
+              "value": ["#405265"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#BFBFBF"]
+              "value": ["#F0E442"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#999999"]
+              "value": ["#E69F00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#777777"]
+              "value": ["#D55E00"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#666666"]
+              "value": ["#009E73"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#F5F5F5"]
+              "value": ["#0072B2"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#808080"]
+              "value": ["#E9E9E9"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1A1A1A"]
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DDE5EB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#405265"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#000000", "#0072B2", "#D55E00", "#009E73", "#E69F00", "#CC79A7", "#56B4E9", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["platform"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#8FAABD"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D7D7D7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#191919"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
             },
             {
               "type": "character",
@@ -501,17 +1861,303 @@
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2C2C2C"]
+              "value": ["#42A5F5"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#1A1A1A"]
+              "value": ["#2B2B2B"]
             },
             {
               "type": "character",
               "attributes": {},
-              "value": ["#2C2C2C", "#555555", "#444444", "#808080", "#999999", "#BFBFBF", "#666666", "#1A1A1A"]
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "attributes": {
+            "names": {
+              "type": "character",
+              "attributes": {},
+              "value": ["name", "label", "navbar_icon", "primary", "primary_light", "accent", "secondary", "yellow", "orange", "red", "green", "blue", "light_grey", "grey", "dark", "white", "gradient_from", "gradient_to", "palette", "family", "material", "face_light", "face_dark", "page_light", "text_light", "heading_light", "link_light", "code_surface_light", "border_light", "muted_light", "page_dark", "text_dark", "heading_dark", "link_dark", "code_surface_dark", "border_dark", "muted_dark", "syntax_light", "syntax_dark", "font_body", "font_code", "font_brand", "brand_weight"]
+            }
+          },
+          "value": [
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["brand"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Science, connected"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["icon_brand.svg"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#B2D4E7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0C3E62"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E69F00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D55E00"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#009E73"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#B2D4E7"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0C3E62"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2", "#D55E00", "#009E73", "#E69F00", "#CC79A7", "#56B4E9", "#000000", "#F0E442"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["brand"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#0072B2"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D7E6EF"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#193443"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FAFAFA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#1565C0"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#E9E9E9"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#D8D8D8"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#212121"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#DADADA"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#FFFFFF"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#42A5F5"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#2B2B2B"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#4F4F4F"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#356E91", "#0A6356", "#7D631D", "#705070", "#74431D", "#575757"]
+            },
+            {
+              "type": "character",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["keyword", "string", "number", "function", "alert", "comment"]
+                }
+              },
+              "value": ["#7BC4ED", "#38B391", "#EBB438", "#D796BA", "#DE8138", "#ABABAB"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["Inter"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "character",
+              "attributes": {},
+              "value": ["JetBrains Mono"]
+            },
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [600]
             }
           ]
         }

@@ -7,18 +7,32 @@
 reflow_scheme(name)
 }
 \arguments{
-\item{name}{Character. One of \code{"clinical"}, \code{"basic"}, \code{"code"},
-\code{"special"}, \code{"other"}.}
+\item{name}{Character. One of the v5 families \code{"spectral"}, \code{"spatial"},
+\code{"omics"}, \code{"clinical"}, \code{"methods"}, \code{"simulation"}, \code{"evidence"},
+\code{"platform"} or \code{"brand"}. The earlier names remain accepted as aliases:
+\code{"basic"} (brand), \code{"code"} (methods), \code{"special"} (evidence) and
+\code{"other"} (platform). An alias prints a one-time message per session.}
 }
 \value{
-A named list containing color values, palette, label, and icon info.
+A named list. \code{family}, \code{label}, \code{accent} and \code{navbar_icon}
+identify the family. Surfaces are given per colour mode as \verb{page_*},
+\verb{text_*}, \verb{heading_*}, \verb{link_*}, \verb{code_surface_*}, \verb{border_*} and
+\verb{muted_*} with suffix \verb{_light} or \verb{_dark}; \code{face_light} and \code{face_dark}
+are the tinted tile faces, \code{syntax_light} and \code{syntax_dark} the code token
+colours, \code{palette} the Okabe-Ito topic colours starting with the family
+accent, and \code{font_body}, \code{font_code}, \code{font_brand} and \code{brand_weight} the
+typography. The earlier fields (\code{primary}, \code{primary_light}, \code{secondary},
+\code{light_grey}, \code{grey}, \code{dark}, \code{white}, \code{gradient_from}, \code{gradient_to} and
+the named hues) remain available and are derived from the same tokens.
 }
 \description{
-Returns the full color scheme list for a given scheme name.
+Returns the site scheme for one CTTIR v5 topic family. Every colour, surface
+and font is derived from \code{inst/cttir/design_tokens.csv}, the token table
+shared with hexmakR and the themakR documentation template.
 }
 \examples{
 s <- reflow_scheme("clinical")
-s$primary
+s$accent
 s$palette
 
 }

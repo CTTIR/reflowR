@@ -1,3 +1,5 @@
 tests/testthat/fixtures/finalized-figures-65fda310.R -text
 tests/testthat/fixtures/figure-api-feda7a9.R -text
 tests/testthat/fixtures/numeric-tiles-v3.R -text
+tools/branding/design_tokens.csv -text
+inst/cttir/design_tokens.csv -text

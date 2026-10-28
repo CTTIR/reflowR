@@ -8,7 +8,7 @@ test_that("generate_site_yml builds menu entries for every preset file", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
   preset <- reflow_preset("standard")
-  ret <- generate_site_yml(root, name = "MyProj", scheme = reflow_scheme("basic"),
+  ret <- generate_site_yml(root, name = "MyProj", scheme = reflow_scheme("brand"),
                            preset = preset)
   expect_true(file.exists(ret))
   yml <- paste(readLines(ret, warn = FALSE), collapse = "\n")
@@ -24,7 +24,7 @@ test_that("generate_site_yml builds menu entries for every preset file", {
 test_that("generate_site_yml adds github and website right-nav items when supplied", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
-  generate_site_yml(root, name = "P", scheme = reflow_scheme("code"),
+  generate_site_yml(root, name = "P", scheme = reflow_scheme("methods"),
                     preset = reflow_preset("minimal"),
                     github_url = "https://github.com/foo/bar",
                     website = "https://example.org")
@@ -40,7 +40,7 @@ test_that("generate_site_yml adds github and website right-nav items when suppli
 test_that("generate_site_yml omits right-nav block when no links given", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
-  generate_site_yml(root, name = "P", scheme = reflow_scheme("other"),
+  generate_site_yml(root, name = "P", scheme = reflow_scheme("platform"),
                     preset = reflow_preset("minimal"))
   yml <- paste(readLines(file.path(root, "analysis", "_site.yml"), warn = FALSE),
                collapse = "\n")
@@ -51,7 +51,7 @@ test_that("generate_site_yml omits right-nav block when no links given", {
 test_that("generate_site_yml only github (no website) yields github but not globe", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
-  generate_site_yml(root, name = "P", scheme = reflow_scheme("special"),
+  generate_site_yml(root, name = "P", scheme = reflow_scheme("evidence"),
                     preset = reflow_preset("minimal"),
                     github_url = "https://github.com/x/y")
   yml <- paste(readLines(file.path(root, "analysis", "_site.yml"), warn = FALSE),
@@ -63,7 +63,7 @@ test_that("generate_site_yml only github (no website) yields github but not glob
 test_that("generate_site_yml capitalises and numbers menu step text", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
-  generate_site_yml(root, name = "P", scheme = reflow_scheme("basic"),
+  generate_site_yml(root, name = "P", scheme = reflow_scheme("brand"),
                     preset = reflow_preset("minimal"))
   yml <- paste(readLines(file.path(root, "analysis", "_site.yml"), warn = FALSE),
                collapse = "\n")
@@ -71,19 +71,23 @@ test_that("generate_site_yml capitalises and numbers menu step text", {
   expect_match(yml, "01 -- Read data", fixed = TRUE)
 })
 
-test_that("generate_site_yml writes valid YAML that renders into docs/", {
+test_that("generate_site_yml writes valid YAML with the family icon in the navbar", {
   skip_if_not_installed("yaml")
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
   preset <- reflow_preset("extended")
-  generate_site_yml(root, name = 'A "quoted" & <odd> name', scheme = reflow_scheme("clinical"),
+  generate_site_yml(root, name = 'A "quoted" & <odd> name', scheme = reflow_scheme("omics"),
                     preset = preset, github_url = "https://github.com/x/y")
   site <- yaml::read_yaml(file.path(root, "analysis", "_site.yml"))
   expect_identical(site$name, 'A "quoted" & <odd> name')
   expect_identical(site$output_dir, "../docs")
+  expect_identical(site$navbar$title,
+    '<img src="assets/icon.svg" alt="" height="30"> A "quoted" &amp; &lt;odd&gt; name')
   menu <- site$navbar$left[[2]]$menu
   expect_length(menu, length(preset$files))
   expect_identical(vapply(menu, `[[`, "", "href"), paste0(preset$files, ".html"))
   expect_identical(site$navbar$right[[1]]$href, "https://github.com/x/y")
   expect_identical(site$output$`workflowr::wflow_html`$highlight, "tango")
+  yml <- paste(readLines(file.path(root, "analysis", "_site.yml"), warn = FALSE), collapse = "\n")
+  expect_false(grepl("[^\x01-\x7F]", yml, perl = TRUE))
 })

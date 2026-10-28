@@ -1,67 +1,74 @@
 #' Preview a Color Scheme
 #'
-#' Opens an HTML preview in the RStudio viewer (or browser) showing
-#' color swatches, the scheme icon, and the navbar gradient.
+#' Opens an HTML preview in the RStudio viewer (or browser) showing the
+#' family icon on a flat navbar with its accent rule, the light and dark
+#' surfaces, the identity colours and the Okabe-Ito palette.
 #'
-#' @param scheme Character. Scheme name (e.g., `"clinical"`).
+#' @param scheme Character. A v5 family key (e.g., `"clinical"`) or an earlier
+#'   scheme name, see [reflow_scheme()].
 #'
 #' @return Invisibly returns the scheme list.
 #'
 #' @examples
 #' \dontrun{
 #' reflow_preview("clinical")
-#' reflow_preview("basic")
+#' reflow_preview("brand")
 #' }
 #'
 #' @export
-reflow_preview <- function(scheme = "basic") {
+reflow_preview <- function(scheme = "brand") {
   if (!requireNamespace("htmltools", quietly = TRUE)) {
     cli::cli_abort("Package {.pkg htmltools} is required for preview.")
   }
 
   s <- reflow_scheme(scheme)
-
-  # Build color swatches
-  color_names <- c("primary", "primary_light", "accent", "secondary",
-                   "light_grey", "grey", "dark", "white")
-  swatches <- vapply(color_names, function(cn) {
-    color <- s[[cn]]
-    if (is.null(color)) return("")
-    text_color <- if (cn %in% c("light_grey", "white")) "#333" else "#FFF"
+  ink <- function(colour) {
+    if (.cttir_contrast(colour, s$heading_light) >= .cttir_contrast(colour, s$page_light)) {
+      s$heading_light
+    } else {
+      s$page_light
+    }
+  }
+  swatch <- function(label, colour) {
     glue::glue(
-      '<div style="display:inline-block;width:100px;height:60px;',
-      'background-color:{color};color:{text_color};text-align:center;',
-      'line-height:60px;margin:4px;border-radius:6px;font-size:11px;',
-      'border:1px solid #ddd;">{cn}<br>{color}</div>'
+      '<div style="display:inline-block;width:104px;height:60px;',
+      'background-color:{colour};color:{ink(colour)};text-align:center;',
+      'line-height:1.35;padding-top:12px;box-sizing:border-box;margin:4px;',
+      'border-radius:4px;font-size:11px;border:1px solid {s$border_light};">',
+      '{label}<br><code>{colour}</code></div>'
     )
-  }, character(1))
-
-  palette_swatches <- vapply(seq_along(s$palette), function(i) {
-    color <- s$palette[i]
-    glue::glue(
-      '<div style="display:inline-block;width:80px;height:50px;',
-      'background-color:{color};color:#FFF;text-align:center;',
-      'line-height:50px;margin:4px;border-radius:6px;font-size:10px;',
-      'border:1px solid #ddd;">{i}<br>{color}</div>'
-    )
-  }, character(1))
+  }
+  row <- function(fields, suffix = "") {
+    paste(vapply(fields, function(f) swatch(f, s[[paste0(f, suffix)]]), character(1)),
+          collapse = "")
+  }
+  surfaces <- c("page", "text", "heading", "link", "code_surface", "border", "muted")
+  palette <- paste(vapply(seq_along(s$palette), function(i) {
+    swatch(i, s$palette[i])
+  }, character(1)), collapse = "")
 
   html <- glue::glue('
 <html>
 <head><title>reflowR Preview: {s$label}</title></head>
-<body style="font-family:sans-serif;max-width:700px;margin:40px auto;padding:20px;">
-<div style="background:linear-gradient(135deg,{s$gradient_from},{s$gradient_to});
-  padding:20px;border-radius:8px;color:white;margin-bottom:20px;">
-  <h1 style="margin:0;">{s$navbar_icon} {s$label}</h1>
-  <p style="margin:5px 0 0 0;opacity:0.9;">reflowR scheme preview</p>
+<body style="background:{s$page_light};color:{s$text_light};margin:0;
+  font-family:\'{s$font_body}\',system-ui,sans-serif;">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 20px;
+  background:{s$page_light};box-shadow:inset 0 -3px 0 {s$accent};">
+  <img src="{reflow_icon_base64(s$family)}" alt="" height="30">
+  <span style="font-family:\'{s$font_brand}\',ui-monospace,monospace;
+    font-weight:{s$brand_weight};color:{s$heading_light};">{s$label}</span>
+  <span style="color:{s$muted_light};">CTTIR v5 family <code>{s$family}</code></span>
 </div>
-<h2>Theme Colors</h2>
-<div>{paste(swatches, collapse = "")}</div>
-<h2>Palette (8 colors)</h2>
-<div>{paste(palette_swatches, collapse = "")}</div>
-<h2>Gradient</h2>
-<div style="height:40px;border-radius:6px;
-  background:linear-gradient(135deg,{s$gradient_from},{s$gradient_to});"></div>
+<div style="max-width:780px;margin:24px auto;padding:0 20px;">
+<h2 style="color:{s$heading_light};">Identity</h2>
+<div>{swatch("accent", s$accent)}{swatch("face (light)", s$face_light)}{swatch("face (dark)", s$face_dark)}</div>
+<h2 style="color:{s$heading_light};">Light surfaces</h2>
+<div>{row(surfaces, "_light")}</div>
+<h2 style="color:{s$heading_light};">Dark surfaces</h2>
+<div>{row(surfaces, "_dark")}</div>
+<h2 style="color:{s$heading_light};">Palette (Okabe-Ito, accent first)</h2>
+<div>{palette}</div>
+</div>
 </body>
 </html>')
 

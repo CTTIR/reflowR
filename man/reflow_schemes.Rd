@@ -7,11 +7,12 @@
 reflow_schemes()
 }
 \value{
-Invisibly returns a character vector of scheme names.
+Invisibly returns a character vector of the nine v5 family keys.
 }
 \description{
-Prints a formatted table of all available reflowR color schemes and
-returns their names invisibly.
+Prints the CTTIR v5 topic families with their labels and accents, followed
+by the earlier scheme names that remain accepted as aliases, and returns
+the family keys invisibly.
 }
 \examples{
 reflow_schemes()

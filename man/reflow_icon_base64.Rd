@@ -7,16 +7,18 @@
 reflow_icon_base64(scheme_name)
 }
 \arguments{
-\item{scheme_name}{Character. The scheme name (e.g., \code{"clinical"}).}
+\item{scheme_name}{Character. A v5 family key (e.g., \code{"clinical"}) or one
+of the earlier scheme names, which resolve to their v5 family icon.}
 }
 \value{
 A character string containing the base64 data URI
 (e.g., \code{"data:image/svg+xml;base64,..."}).
 }
 \description{
-Reads the scheme-specific SVG icon from the package's \verb{inst/icons/}
-directory and returns it as a base64-encoded data URI suitable for
-embedding in HTML.
+Reads the CTTIR v5 family icon from the package's \verb{inst/icons/} directory
+and returns it as a base64-encoded data URI suitable for embedding in HTML.
+The icon is the v5 hex on a light surface: a tinted face, the family accent
+as rim and a small family glyph, with a transparent exterior.
 }
 \examples{
 \donttest{

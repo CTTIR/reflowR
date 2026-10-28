@@ -1,10 +1,20 @@
-test_that("reflow_preview writes HTML, invokes the viewer, and returns the scheme", {
-  seen <- NULL
+capture_preview <- function(...) {
   html <- NULL
   res <- withr::with_options(
     list(viewer = function(url) {
-      seen <<- url
       html <<- paste(readLines(url, warn = FALSE), collapse = "\n")
+      invisible(url)
+    }),
+    reflow_preview(...)
+  )
+  list(html = html, scheme = res)
+}
+
+test_that("reflow_preview writes HTML, invokes the viewer, and returns the scheme", {
+  seen <- NULL
+  res <- withr::with_options(
+    list(viewer = function(url) {
+      seen <<- url
       invisible(url)
     }),
     reflow_preview("clinical")
@@ -14,26 +24,30 @@ test_that("reflow_preview writes HTML, invokes the viewer, and returns the schem
   # returns scheme invisibly
   expect_invisible(withr::with_options(
     list(viewer = function(url) invisible(url)),
-    reflow_preview("basic")
+    reflow_preview("brand")
   ))
   expect_identical(res$name, "clinical")
-  # generated HTML embeds scheme label, gradient and palette colors
-  expect_match(html, reflow_scheme("clinical")$label, fixed = TRUE)
-  expect_match(html, reflow_scheme("clinical")$gradient_from, fixed = TRUE)
-  expect_match(html, "Palette (8 colors)", fixed = TRUE)
-  expect_match(html, "Theme Colors", fixed = TRUE)
 })
 
-test_that("reflow_preview default scheme is basic", {
-  html <- NULL
-  withr::with_options(
-    list(viewer = function(url) {
-      html <<- paste(readLines(url, warn = FALSE), collapse = "\n")
-      invisible(url)
-    }),
-    reflow_preview()
-  )
-  expect_match(html, reflow_scheme("basic")$label, fixed = TRUE)
+test_that("reflow_preview shows the v5 navbar, surfaces and palette", {
+  p <- capture_preview("clinical")
+  s <- reflow_scheme("clinical")
+  expect_match(p$html, s$label, fixed = TRUE)
+  expect_match(p$html, paste0("box-shadow:inset 0 -3px 0 ", s$accent), fixed = TRUE)
+  expect_match(p$html, reflow_icon_base64("clinical"), fixed = TRUE)
+  expect_match(p$html, "Palette (Okabe-Ito, accent first)", fixed = TRUE)
+  expect_match(p$html, "Light surfaces", fixed = TRUE)
+  expect_match(p$html, "Dark surfaces", fixed = TRUE)
+  for (colour in c(s$palette, s$face_light, s$face_dark, s$page_dark, s$link_light)) {
+    expect_match(p$html, colour, fixed = TRUE)
+  }
+  expect_false(grepl("gradient", p$html, fixed = TRUE))
+})
+
+test_that("reflow_preview default scheme is brand and aliases still preview", {
+  expect_match(capture_preview()$html, reflow_scheme("brand")$label, fixed = TRUE)
+  alias <- suppressMessages(capture_preview("special"))
+  expect_identical(alias$scheme$family, "evidence")
 })
 
 test_that("reflow_preview errors for an invalid scheme name", {
@@ -48,5 +62,5 @@ test_that("reflow_preview aborts when htmltools is unavailable", {
     requireNamespace = function(pkg, ...) if (identical(pkg, "htmltools")) FALSE else TRUE,
     .package = "base"
   )
-  expect_error(reflow_preview("basic"), "htmltools")
+  expect_error(reflow_preview("brand"), "htmltools")
 })

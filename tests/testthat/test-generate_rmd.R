@@ -3,7 +3,7 @@ test_that("generate_rmd writes an analysis Rmd with title, author, description",
   dir.create(file.path(root, "analysis"))
   ret <- generate_rmd(root, file_name = "01_read_data", author = "A. Author",
                       description = "Import the data",
-                      scheme = reflow_scheme("basic"),
+                      scheme = reflow_scheme("brand"),
                       preset = reflow_preset("standard"))
   expect_true(file.exists(ret))
   rmd <- paste(readLines(ret, warn = FALSE), collapse = "\n")
@@ -18,7 +18,7 @@ test_that("generate_rmd capitalises multi-word step titles", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
   generate_rmd(root, file_name = "04_quality_control", author = "A",
-               description = "QC step", scheme = reflow_scheme("code"),
+               description = "QC step", scheme = reflow_scheme("methods"),
                preset = reflow_preset("extended"))
   rmd <- paste(readLines(file.path(root, "analysis", "04_quality_control.Rmd"),
                          warn = FALSE), collapse = "\n")
@@ -29,7 +29,7 @@ test_that("generate_rmd fallback content is used for unknown steps", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
   generate_rmd(root, file_name = "99_mystery", author = "A",
-               description = "Unknown", scheme = reflow_scheme("basic"),
+               description = "Unknown", scheme = reflow_scheme("brand"),
                preset = reflow_preset("minimal"))
   rmd <- paste(readLines(file.path(root, "analysis", "99_mystery.Rmd"),
                          warn = FALSE), collapse = "\n")
@@ -43,7 +43,7 @@ test_that("get_rmd_content dispatches to a distinct body for every known step", 
              "final_report")
   bodies <- vapply(steps, function(st) {
     as.character(get_rmd_content(paste0("01_", st),
-                                 reflow_scheme("basic"),
+                                 reflow_scheme("brand"),
                                  reflow_preset("standard")))
   }, character(1))
   # each known step returns non-empty content
@@ -56,7 +56,7 @@ test_that("get_rmd_content dispatches to a distinct body for every known step", 
 
 test_that("get_rmd_content returns the TODO fallback for unknown steps", {
   body <- as.character(get_rmd_content("07_does_not_exist",
-                                       reflow_scheme("basic"),
+                                       reflow_scheme("brand"),
                                        reflow_preset("standard")))
   expect_match(body, "## TODO", fixed = TRUE)
 })
@@ -81,7 +81,7 @@ test_that("generate_index_rmd includes email contact line when email given", {
   dir.create(file.path(root, "analysis"))
   ret <- generate_index_rmd(root, name = "MyProj", author = "A. Author",
                             email = "a@example.org",
-                            scheme = reflow_scheme("basic"),
+                            scheme = reflow_scheme("brand"),
                             preset = reflow_preset("standard"))
   rmd <- paste(readLines(ret, warn = FALSE), collapse = "\n")
   expect_match(rmd, "[a@example.org](mailto:a@example.org)", fixed = TRUE)
@@ -96,7 +96,7 @@ test_that("generate_index_rmd omits contact line when email is NULL", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
   generate_index_rmd(root, name = "MyProj", author = "A. Author", email = NULL,
-                     scheme = reflow_scheme("basic"),
+                     scheme = reflow_scheme("brand"),
                      preset = reflow_preset("minimal"))
   rmd <- paste(readLines(file.path(root, "analysis", "index.Rmd"), warn = FALSE),
                collapse = "\n")
@@ -125,7 +125,7 @@ test_that("generate_about_rmd omits detail lines when all optional args NULL", {
   dir.create(file.path(root, "analysis"))
   generate_about_rmd(root, name = "MyProj", author = "A. Author",
                      email = NULL, affiliation = NULL, orcid = NULL,
-                     website = NULL, scheme = reflow_scheme("other"),
+                     website = NULL, scheme = reflow_scheme("platform"),
                      preset = reflow_preset("minimal"))
   rmd <- paste(readLines(file.path(root, "analysis", "about.Rmd"), warn = FALSE),
                collapse = "\n")
@@ -138,9 +138,9 @@ test_that("rmd generators return invisibly", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "analysis"))
   expect_invisible(generate_rmd(root, "01_read_data", "A", "desc",
-                                reflow_scheme("basic"), reflow_preset("minimal")))
+                                reflow_scheme("brand"), reflow_preset("minimal")))
   expect_invisible(generate_index_rmd(root, "P", "A", NULL,
-                                      reflow_scheme("basic"), reflow_preset("minimal")))
+                                      reflow_scheme("brand"), reflow_preset("minimal")))
   expect_invisible(generate_about_rmd(root, "P", "A", NULL, NULL, NULL, NULL,
-                                      reflow_scheme("basic"), reflow_preset("minimal")))
+                                      reflow_scheme("brand"), reflow_preset("minimal")))
 })

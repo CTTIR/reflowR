@@ -6,6 +6,12 @@ strict_template <- function(name) {
 
 strict_yaml_scalar <- function(x) as.character(jsonlite::toJSON(x, auto_unbox = TRUE))
 
+# The stylesheet is part of the canonical scaffold; its bytes enter strict-v1
+# file hashes.
+strict_css <- function(profile) {
+  paste0(":root { --research-primary: ", profile$primary_color, "; }\n.navbar { border-bottom: 4px solid var(--research-primary); }\nh1, h2, a { color: var(--research-primary); }\n.research-badge { border: 1px solid var(--research-primary); padding: .2em .5em; }\n")
+}
+
 strict_stage_rmd <- function(stage, profile, author) {
   title <- paste(gsub("_", " ", tools::file_path_sans_ext(basename(stage$analysis))), collapse = " ")
   header <- c("---", paste0("title: ", strict_yaml_scalar(title)),
@@ -72,7 +78,7 @@ reflow_scaffold <- function(profile, name, author, dependency_lock, composition 
   files[["analysis/_site.yml"]] <- paste0(paste(c(paste0("name: ", strict_yaml_scalar(name)), "output_dir: ../docs", "navbar:",
     paste0("  title: ", strict_yaml_scalar(name)), "  left:", '  - text: "Home"', "    href: index.html", '  - text: "Stages"', "    menu:", links,
     "output:", "  workflowr::wflow_html:", "    toc: true", "    toc_depth: 3", "    theme: flatly", "    css: strict.css", "    code_folding: show"), collapse = "\n"), "\n")
-  files[["analysis/strict.css"]] <- paste0(":root { --research-primary: ", profile$primary_color, "; }\n.navbar { border-bottom: 4px solid var(--research-primary); }\nh1, h2, a { color: var(--research-primary); }\n.research-badge { border: 1px solid var(--research-primary); padding: .2em .5em; }\n")
+  files[["analysis/strict.css"]] <- strict_css(profile)
   files[["analysis/index.Rmd"]] <- paste0(paste(c("---", paste0("title: ", strict_yaml_scalar(name)), "site: workflowr::wflow_site", "output: workflowr::wflow_html", "---", "",
     paste0("**", profile$badge, "** | Domain: ", profile$domain, " | Design: ", profile$design), "",
     "This is a planned research workflow. No statistical method is mandatory merely because a stage exists.", "",

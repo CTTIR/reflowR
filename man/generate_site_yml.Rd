@@ -31,6 +31,7 @@ Invisibly returns the output file path.
 }
 \description{
 Creates a \verb{_site.yml} file in the project's \verb{analysis/} directory with
-themed navbar, icon, and pipeline menu entries.
+the family icon and project name in the navbar, pipeline menu entries and
+the themed \code{workflowr::wflow_html} output. The site is written to \verb{docs/}.
 }
 \keyword{internal}

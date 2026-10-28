@@ -2,7 +2,7 @@ test_that("generate_report_qmd writes report.qmd with dual html/pdf format", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "report"))
   ret <- generate_report_qmd(root, name = "MyProj", author = "A. Author",
-                             scheme = reflow_scheme("basic"),
+                             scheme = reflow_scheme("brand"),
                              preset = reflow_preset("standard"))
   expect_true(file.exists(ret))
   qmd <- paste(readLines(ret, warn = FALSE), collapse = "\n")
@@ -32,9 +32,9 @@ test_that("report and readme generators return invisibly", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "report"))
   expect_invisible(generate_report_qmd(root, name = "P", author = "A",
-                                       scheme = reflow_scheme("code"),
+                                       scheme = reflow_scheme("methods"),
                                        preset = reflow_preset("minimal")))
   expect_invisible(generate_project_readme(root, name = "P", author = "A",
-                                           scheme = reflow_scheme("code"),
+                                           scheme = reflow_scheme("methods"),
                                            preset = reflow_preset("minimal")))
 })

@@ -20,11 +20,11 @@ test_that("generate_utils_script is scheme-agnostic in body but labels header", 
   root2 <- withr::local_tempdir()
   dir.create(file.path(root1, "code"))
   dir.create(file.path(root2, "code"))
-  generate_utils_script(root1, scheme = reflow_scheme("basic"))
-  generate_utils_script(root2, scheme = reflow_scheme("code"))
+  generate_utils_script(root1, scheme = reflow_scheme("brand"))
+  generate_utils_script(root2, scheme = reflow_scheme("methods"))
   c1 <- readLines(file.path(root1, "code", "utils.R"), warn = FALSE)
   c2 <- readLines(file.path(root2, "code", "utils.R"), warn = FALSE)
-  # both contain the Basic / Code labels respectively
-  expect_true(any(grepl("Basic Research", c1, fixed = TRUE)))
-  expect_true(any(grepl("Code & Statistics", c2, fixed = TRUE)))
+  # both contain the v5 family labels respectively
+  expect_true(any(grepl("Science, connected", c1, fixed = TRUE)))
+  expect_true(any(grepl("Learning & inference", c2, fixed = TRUE)))
 })

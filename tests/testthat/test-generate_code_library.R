@@ -1,7 +1,7 @@
 test_that("generate_code_library writes all four library files", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "code"))
-  ret <- generate_code_library(root, scheme = reflow_scheme("basic"),
+  ret <- generate_code_library(root, scheme = reflow_scheme("brand"),
                                preset = reflow_preset("standard"))
   expect_length(ret, 4)
   for (f in c("formulary.R", "data_io.R", "table_helpers.R", "plot_helpers.R")) {
@@ -19,7 +19,7 @@ test_that("formulary content contains analysis recipes", {
 })
 
 test_that("data_io content contains read/write helpers", {
-  txt <- as.character(generate_data_io_content(reflow_scheme("code")))
+  txt <- as.character(generate_data_io_content(reflow_scheme("methods")))
   expect_match(txt, "data_io.R", fixed = TRUE)
   expect_match(txt, "wf_read_data <- function", fixed = TRUE)
   expect_match(txt, "wf_read_all <- function", fixed = TRUE)
@@ -27,14 +27,14 @@ test_that("data_io content contains read/write helpers", {
 })
 
 test_that("table_helpers content references gt and gtsummary helpers", {
-  txt <- as.character(generate_table_helpers_content(reflow_scheme("special")))
+  txt <- as.character(generate_table_helpers_content(reflow_scheme("evidence")))
   expect_match(txt, "table_helpers.R", fixed = TRUE)
   expect_match(txt, "wf_tbl_summary <- function", fixed = TRUE)
   expect_match(txt, "wf_crosstab <- function", fixed = TRUE)
 })
 
 test_that("plot_helpers content references plotting helpers", {
-  txt <- as.character(generate_plot_helpers_content(reflow_scheme("other")))
+  txt <- as.character(generate_plot_helpers_content(reflow_scheme("platform")))
   expect_match(txt, "plot_helpers.R", fixed = TRUE)
   expect_match(txt, "wf_forest_plot <- function", fixed = TRUE)
   expect_match(txt, "wf_roc_plot <- function", fixed = TRUE)
@@ -43,9 +43,9 @@ test_that("plot_helpers content references plotting helpers", {
 test_that("content generators are stable across schemes (scheme-independent body)", {
   # The content templates take a scheme arg but emit scheme-independent code;
   # verify they return identical, non-empty content for any scheme.
-  ref <- as.character(generate_formulary_content(reflow_scheme("basic")))
+  ref <- as.character(generate_formulary_content(reflow_scheme("brand")))
   expect_true(nzchar(ref))
-  for (s in c("clinical", "code", "special", "other")) {
+  for (s in c("clinical", "methods", "evidence", "platform", "spectral")) {
     expect_identical(as.character(generate_formulary_content(reflow_scheme(s))), ref)
   }
 })
@@ -53,6 +53,6 @@ test_that("content generators are stable across schemes (scheme-independent body
 test_that("generate_code_library returns invisibly", {
   root <- withr::local_tempdir()
   dir.create(file.path(root, "code"))
-  expect_invisible(generate_code_library(root, scheme = reflow_scheme("basic"),
+  expect_invisible(generate_code_library(root, scheme = reflow_scheme("brand"),
                                          preset = reflow_preset("minimal")))
 })

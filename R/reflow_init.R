@@ -13,9 +13,13 @@
 #' @param affiliation Character. Author's institutional affiliation (optional).
 #' @param orcid Character. Author's ORCID iD (optional, format: "0000-0000-0000-0000").
 #' @param website Character. URL to author's or project website (optional).
-#' @param scheme Character. Color scheme to apply. One of \code{"clinical"},
-#'   \code{"basic"}, \code{"code"}, \code{"special"}, \code{"other"}.
-#'   Defaults to \code{"basic"}.
+#' @param scheme Character. CTTIR v5 family whose colours, icon and fonts
+#'   style the site: one of \code{"brand"} (default), \code{"spectral"},
+#'   \code{"spatial"}, \code{"omics"}, \code{"clinical"}, \code{"methods"},
+#'   \code{"simulation"}, \code{"evidence"} or \code{"platform"}. The earlier
+#'   names \code{"basic"}, \code{"code"}, \code{"special"} and \code{"other"}
+#'   remain accepted as aliases of brand, methods, evidence and platform.
+#'   See \code{\link{reflow_schemes}}.
 #' @param depth Character. Rmd pipeline depth. One of \code{"minimal"},
 #'   \code{"standard"}, \code{"extended"}. Defaults to \code{"standard"}.
 #' @param seed Integer. Random seed for workflowr reproducibility.
@@ -67,7 +71,7 @@
 #' reflow_init(
 #'   directory = "~/projects/simulation_study",
 #'   author    = "Raban Heller",
-#'   scheme    = "code",
+#'   scheme    = "simulation",
 #'   depth     = "minimal"
 #' )
 #'
@@ -91,7 +95,9 @@ reflow_init <- function(
   affiliation = NULL,
   orcid       = NULL,
   website     = NULL,
-  scheme      = c("basic", "clinical", "code", "special", "other"),
+  scheme      = c("brand", "spectral", "spatial", "omics", "clinical",
+                  "methods", "simulation", "evidence", "platform",
+                  "basic", "code", "special", "other"),
   depth       = c("standard", "minimal", "extended"),
   seed        = as.integer(format(Sys.Date(), "%Y%m%d")),
   github_url  = NULL,
@@ -151,10 +157,9 @@ reflow_init <- function(
   generate_css(s, fs::path(project_dir, "assets", "theme.css"))
   generate_scss(s, fs::path(project_dir, "assets", "_theme.scss"))
 
-  # 2d. Copy scheme icon
+  # 2d. Copy the family icon (aliases resolve to their v5 family)
   cli::cli_alert("Adding scheme icon...")
-  icon_src <- system.file("icons", paste0("icon_", scheme, ".svg"),
-                          package = "reflowR")
+  icon_src <- system.file("icons", s$navbar_icon, package = "reflowR")
   fs::file_copy(icon_src, fs::path(project_dir, "assets", "icon.svg"))
   fs::file_copy(icon_src, fs::path(project_dir, "docs", "assets", "icon.svg"))
 

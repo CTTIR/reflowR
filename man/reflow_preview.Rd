@@ -4,22 +4,24 @@
 \alias{reflow_preview}
 \title{Preview a Color Scheme}
 \usage{
-reflow_preview(scheme = "basic")
+reflow_preview(scheme = "brand")
 }
 \arguments{
-\item{scheme}{Character. Scheme name (e.g., \code{"clinical"}).}
+\item{scheme}{Character. A v5 family key (e.g., \code{"clinical"}) or an earlier
+scheme name, see \code{\link[=reflow_scheme]{reflow_scheme()}}.}
 }
 \value{
 Invisibly returns the scheme list.
 }
 \description{
-Opens an HTML preview in the RStudio viewer (or browser) showing
-color swatches, the scheme icon, and the navbar gradient.
+Opens an HTML preview in the RStudio viewer (or browser) showing the
+family icon on a flat navbar with its accent rule, the light and dark
+surfaces, the identity colours and the Okabe-Ito palette.
 }
 \examples{
 \dontrun{
 reflow_preview("clinical")
-reflow_preview("basic")
+reflow_preview("brand")
 }
 
 }

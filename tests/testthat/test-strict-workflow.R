@@ -30,11 +30,16 @@ test_that("initialization rejects a linked ancestor before creating project file
 
 test_that("domain, data origin and research design retain explicit palette semantics", {
   p <- reflow_profile("clinical", "secondary", "observational")
-  expect_identical(p$primary_color, "#C8102E")
+  expect_identical(p$scheme, "clinical")
+  expect_identical(p$primary_color, "#D55E00")
   expect_identical(p$badge, "SECONDARY DATA")
-  expect_identical(reflow_profile("basic", "primary", "experimental")$primary_color, "#4682B4")
-  expect_identical(reflow_profile("clinical", "secondary", "synthesis")$primary_color, "#6A0DAD")
-  expect_identical(reflow_profile("basic", "primary", "simulation")$primary_color, "#228B22")
+  expect_identical(reflow_profile("basic", "primary", "experimental")[c("scheme", "primary_color")],
+                   list(scheme = "brand", primary_color = "#0072B2"))
+  expect_identical(reflow_profile("clinical", "secondary", "synthesis")[c("scheme", "primary_color")],
+                   list(scheme = "evidence", primary_color = "#F0E442"))
+  expect_identical(reflow_profile("basic", "primary", "simulation")[c("scheme", "primary_color")],
+                   list(scheme = "methods", primary_color = "#56B4E9"))
+  expect_identical(reflow_profile("other", "primary", "observational")$scheme, "platform")
   expect_length(p$stages, 11L)
   expect_false(any(grepl("PCA|dimension", vapply(p$stages, `[[`, "", "id"))))
   expect_error(reflow_profile("clinical", "secondary", "observational", stages = list(primary = list(applicable = FALSE, reason = ""))), "nonempty")
@@ -141,4 +146,39 @@ test_that("completion requires current stage outputs and externally retained rec
   expect_true(reflow_validate_strict(s$directory, s$declaration, reviewed, receipt)$completed)
   writeLines("changed result", "output/summary.csv")
   expect_false(reflow_validate_strict(s$directory, s$declaration, reviewed, receipt)$completed)
+})
+
+test_that("declarations written with the earlier palette still validate unchanged", {
+  legacy <- list(
+    list(domain = "clinical", design = "observational", scheme = "clinical", colour = "#C8102E"),
+    list(domain = "basic", design = "experimental", scheme = "basic", colour = "#4682B4"),
+    list(domain = "basic", design = "simulation", scheme = "code", colour = "#228B22"),
+    list(domain = "clinical", design = "synthesis", scheme = "special", colour = "#6A0DAD"),
+    list(domain = "other", design = "observational", scheme = "other", colour = "#2C2C2C"))
+  for (case in legacy) {
+    p <- reflow_profile(case$domain, "secondary", case$design)
+    p$scheme <- case$scheme
+    p$primary_color <- case$colour
+    scaffold <- reflow_scaffold(p, "Study", "Group", strict_test_lock())
+    expect_identical(scaffold$profile$scheme, case$scheme)
+    expect_identical(scaffold$profile$primary_color, case$colour)
+    expect_identical(scaffold$files[["analysis/strict.css"]], paste0(
+      ":root { --research-primary: ", case$colour, "; }\n.navbar { border-bottom: 4px solid var(--research-primary); }\n",
+      "h1, h2, a { color: var(--research-primary); }\n.research-badge { border: 1px solid var(--research-primary); padding: .2em .5em; }\n"))
+  }
+  # Mixing a legacy colour with another legacy scheme is not canonical.
+  p <- reflow_profile("clinical", "secondary", "observational")
+  p$scheme <- "basic"
+  p$primary_color <- "#4682B4"
+  expect_error(reflow_scaffold(p, "Study", "Group", strict_test_lock()), "canonical")
+  p$scheme <- "clinical"
+  p$primary_color <- "#4682B4"
+  expect_error(reflow_scaffold(p, "Study", "Group", strict_test_lock()), "canonical")
+
+  # A project written by the earlier release validates with its declaration.
+  p <- reflow_profile("clinical", "secondary", "observational")
+  p$scheme <- "clinical"
+  p$primary_color <- "#C8102E"
+  s <- strict_test_project(p)
+  expect_true(reflow_validate_strict(s$directory, s$declaration)$valid)
 })
