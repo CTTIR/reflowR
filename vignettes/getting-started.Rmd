@@ -71,9 +71,9 @@ library(reflowR)
 
 # Create a clinical research project with the standard 8-step pipeline
 reflow_init(
-  directory = "~/projects/sepsis_trial",
-  author    = "Raban Heller",
-  email     = "raban.heller@outlook.com",
+  directory = "~/projects/my_project",
+  author    = "Your Name",
+  email     = "you@example.com",
   scheme    = "clinical",
   depth     = "standard"
 )
