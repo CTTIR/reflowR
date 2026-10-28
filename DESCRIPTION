@@ -39,7 +39,8 @@ Suggests:
     knitr,
     rmarkdown,
     withr,
-    targets
+    targets,
+    yaml
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/Needs/website: CTTIR/themakR, pkgdown

@@ -70,3 +70,20 @@ test_that("generate_site_yml capitalises and numbers menu step text", {
   # "01_read_data" -> "01 -- Read data"
   expect_match(yml, "01 -- Read data", fixed = TRUE)
 })
+
+test_that("generate_site_yml writes valid YAML that renders into docs/", {
+  skip_if_not_installed("yaml")
+  root <- withr::local_tempdir()
+  dir.create(file.path(root, "analysis"))
+  preset <- reflow_preset("extended")
+  generate_site_yml(root, name = 'A "quoted" & <odd> name', scheme = reflow_scheme("clinical"),
+                    preset = preset, github_url = "https://github.com/x/y")
+  site <- yaml::read_yaml(file.path(root, "analysis", "_site.yml"))
+  expect_identical(site$name, 'A "quoted" & <odd> name')
+  expect_identical(site$output_dir, "../docs")
+  menu <- site$navbar$left[[2]]$menu
+  expect_length(menu, length(preset$files))
+  expect_identical(vapply(menu, `[[`, "", "href"), paste0(preset$files, ".html"))
+  expect_identical(site$navbar$right[[1]]$href, "https://github.com/x/y")
+  expect_identical(site$output$`workflowr::wflow_html`$highlight, "tango")
+})
