@@ -12,10 +12,8 @@
 #'   (e.g., `"data:image/svg+xml;base64,..."`).
 #'
 #' @examples
-#' \donttest{
 #' uri <- reflow_icon_base64("clinical")
 #' nchar(uri)
-#' }
 #'
 #' @export
 reflow_icon_base64 <- function(scheme_name) {

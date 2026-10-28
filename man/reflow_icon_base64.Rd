@@ -21,9 +21,7 @@ The icon is the v5 hex on a light surface: a tinted face, the family accent
 as rim and a small family glyph, with a transparent exterior.
 }
 \examples{
-\donttest{
 uri <- reflow_icon_base64("clinical")
 nchar(uri)
-}
 
 }
