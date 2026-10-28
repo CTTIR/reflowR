@@ -114,3 +114,15 @@ Numeric coordinates are supplied directly: no aggregation, filtering, jitter,
 automatic offsets or implicit reordering is performed. Plotted rows retain
 input order; categorical display order follows the declared levels.
 }
+\examples{
+recipe <- reflow_figure_recipe(
+  "tile_heatmap",
+  mapping = c(x = "sample", y = "marker", value = "score"),
+  row_key = "id",
+  levels = list(x = c("s1", "s2"), y = c("CD3", "CD8")),
+  midpoint = 0,
+  labels = list(title = "Finalized scores", fill = "z-score")
+)
+recipe$type
+recipe$mapping
+}

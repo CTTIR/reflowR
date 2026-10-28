@@ -12,6 +12,13 @@
 #' @param seed Optional integer seed for stochastic calls. Calls consuming the
 #'   ambient random stream without an explicit stage seed fail.
 #' @return A stage specification.
+#' @examples
+#' stage <- reflow_imaging_stage("summary", "base", "summary",
+#'                               args = list(object = c(2, 4, 4, 5)))
+#' stage$id
+#' # Stochastic calls need an explicit seed
+#' noisy <- reflow_imaging_stage("noise", "stats", "rnorm", list(n = 3), seed = 1L)
+#' noisy$seed
 #' @export
 reflow_imaging_stage <- function(id, package, fun, args = list(), seed = NULL) {
   for (x in list(id, package, fun)) {
@@ -42,6 +49,17 @@ reflow_imaging_stage <- function(id, package, fun, args = list(), seed = NULL) {
 #' @param stage Identifier of an earlier stage.
 #' @param select Character vector of nested list components to extract.
 #' @return An explicit dependency reference.
+#' @examples
+#' # Pass the value of an earlier stage, or one component of it
+#' reflow_imaging_ref("fit")
+#' reflow_imaging_ref("fit", select = "coefficients")
+#'
+#' # Track an input file: its contents are hashed into the run definition
+#' path <- tempfile(fileext = ".rds")
+#' saveRDS(c(2, 4, 4, 5), path)
+#' input <- reflow_imaging_input(path, read = TRUE)
+#' input$read
+#' unlink(path)
 #' @export
 reflow_imaging_ref <- function(stage, select = character()) {
   if (!is.character(stage) || length(stage) != 1L || is.na(stage) ||
@@ -75,6 +93,14 @@ reflow_imaging_input <- function(path, read = FALSE) {
 #' @param packages Additional installed packages to fingerprint, for example
 #'   optional backends used by a stage. Declare these explicitly.
 #' @return A versioned plan; no stage is executed.
+#' @examples
+#' plan <- reflow_imaging_plan(
+#'   reflow_imaging_stage("values", "base", "identity",
+#'                        list(x = c(2, 4, 4, 5))),
+#'   reflow_imaging_stage("mean", "base", "mean",
+#'                        list(x = reflow_imaging_ref("values")))
+#' )
+#' vapply(plan$stages, `[[`, character(1), "id")
 #' @export
 reflow_imaging_plan <- function(..., packages = character()) {
   if (!is.character(packages) || anyNA(packages) || any(!nzchar(packages))) {

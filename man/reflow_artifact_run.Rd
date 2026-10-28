@@ -40,3 +40,19 @@ Receipts use atomic rename visibility, not a power-loss durability guarantee.
 Writers are trusted: observable input changes are detected, but transient
 restored changes and escaped subprocesses are not prevented.
 }
+\examples{
+spec <- reflow_artifact_spec(
+  "base", "writeLines",
+  args = list(text = c("alpha", "beta")),
+  outputs = list(con = list(path = "lines.txt", type = "file")),
+  inventory = c(lines = "lines.txt")
+)
+run <- tempfile("artifact-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+bundle <- reflow_artifact_run(spec, run)
+readLines(file.path(bundle$bundle, "lines.txt"))
+bundle$inventory
+
+# Resume re-verifies the accepted bundle without calling the writer
+identical(reflow_artifact_resume(spec, run), bundle)
+unlink(run, recursive = TRUE)
+}

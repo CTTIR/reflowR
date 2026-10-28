@@ -30,6 +30,16 @@
 #'   The caller
 #'   must ensure the writer actually dispatches these binaries/resources.
 #' @return A versioned declaration; no writer is invoked.
+#' @examples
+#' spec <- reflow_artifact_spec(
+#'   "utils", "write.csv",
+#'   args = list(x = data.frame(id = 1:3, value = c(2.5, 3.1, 4.7)),
+#'               row.names = FALSE),
+#'   outputs = list(file = list(path = "table.csv", type = "file")),
+#'   inventory = c(table = "table.csv")
+#' )
+#' spec$outputs
+#' spec$inventory
 #' @export
 reflow_artifact_spec <- function(
   package, fun, args = list(), outputs, inventory, allow_empty = character(),
@@ -372,6 +382,21 @@ rfa_inventory <- function(spec, bundle) {
 #'   before a fresh retry. This is not automatic process verification.
 #' @return An authenticated descriptor with stable bundle path and file
 #'   manifest.
+#' @examples
+#' spec <- reflow_artifact_spec(
+#'   "base", "writeLines",
+#'   args = list(text = c("alpha", "beta")),
+#'   outputs = list(con = list(path = "lines.txt", type = "file")),
+#'   inventory = c(lines = "lines.txt")
+#' )
+#' run <- tempfile("artifact-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+#' bundle <- reflow_artifact_run(spec, run)
+#' readLines(file.path(bundle$bundle, "lines.txt"))
+#' bundle$inventory
+#'
+#' # Resume re-verifies the accepted bundle without calling the writer
+#' identical(reflow_artifact_resume(spec, run), bundle)
+#' unlink(run, recursive = TRUE)
 #' @export
 reflow_artifact_run <- function(spec, directory) {
   rfa_no_links(directory)

@@ -43,3 +43,21 @@ Writes a new project from canonical templates, without installing dependencies,
 committing, rendering or publishing. Existing paths and symbolic links are
 rejected. Raw data files and their directory are made read-only.
 }
+\examples{
+pins <- c(digest = "0.6.37", jsonlite = "1.8.9", knitr = "1.49",
+          rmarkdown = "2.29", workflowr = "1.7.1")
+lock <- list(
+  R = list(Version = "4.4.2"),
+  Packages = lapply(stats::setNames(names(pins), names(pins)), function(p) {
+    list(Package = p, Version = pins[[p]], Source = "Repository")
+  })
+)
+profile <- reflow_profile("clinical", "secondary", "observational")
+project <- tempfile("strict-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+scaffold <- reflow_init_strict(project, profile, "Example study", "Your Name", lock)
+list.files(project)
+
+# Raw data are read-only; make them writable again before deleting
+Sys.chmod(file.path(project, "data", "raw"), "0755")
+unlink(project, recursive = TRUE)
+}

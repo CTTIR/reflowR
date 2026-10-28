@@ -37,3 +37,27 @@ child attempts retain the explicit reconciliation contract of
 \code{\link[=reflow_artifact_resume]{reflow_artifact_resume()}}. Atomic writes provide rename visibility, not
 power-loss durability. Keep prior generations available while referenced.
 }
+\examples{
+plan <- reflow_artifact_plan(
+  reflow_artifact_stage(
+    "data", "base", "saveRDS",
+    args = list(object = c("alpha", "beta")),
+    outputs = list(file = list(path = "labels.rds", type = "file")),
+    inventory = c(labels = "labels.rds")
+  ),
+  reflow_artifact_stage(
+    "report", "base", "writeLines",
+    args = list(text = reflow_artifact_ref("data", "labels", read = TRUE)),
+    outputs = list(con = list(path = "report.txt", type = "file")),
+    inventory = c(report = "report.txt")
+  )
+)
+root <- tempfile("graph-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+dir.create(root)
+graph <- reflow_artifact_plan_run(plan, file.path(root, "first"))
+readLines(file.path(graph$nodes$report$descriptor$bundle, "report.txt"))
+
+# Resume checks the accepted files again without calling any writer
+identical(reflow_artifact_plan_resume(plan, file.path(root, "first")), graph)
+unlink(root, recursive = TRUE)
+}

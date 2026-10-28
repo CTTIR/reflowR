@@ -20,3 +20,12 @@ Stages must be in dependency order. Forward references and cycles fail.
 File inputs must use \code{\link[=reflow_imaging_input]{reflow_imaging_input()}} so content changes invalidate a
 resume. Plain character arguments are configuration, not tracked file inputs.
 }
+\examples{
+plan <- reflow_imaging_plan(
+  reflow_imaging_stage("values", "base", "identity",
+                       list(x = c(2, 4, 4, 5))),
+  reflow_imaging_stage("mean", "base", "mean",
+                       list(x = reflow_imaging_ref("values")))
+)
+vapply(plan$stages, `[[`, character(1), "id")
+}

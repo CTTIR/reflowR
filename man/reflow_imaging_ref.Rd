@@ -24,3 +24,15 @@ An explicit dependency reference.
 \description{
 Reference an upstream result or an input file
 }
+\examples{
+# Pass the value of an earlier stage, or one component of it
+reflow_imaging_ref("fit")
+reflow_imaging_ref("fit", select = "coefficients")
+
+# Track an input file: its contents are hashed into the run definition
+path <- tempfile(fileext = ".rds")
+saveRDS(c(2, 4, 4, 5), path)
+input <- reflow_imaging_input(path, read = TRUE)
+input$read
+unlink(path)
+}

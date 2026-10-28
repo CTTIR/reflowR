@@ -32,3 +32,13 @@ Static declarations are validated immediately; future artifact paths are
 resolved only after their producers have been authenticated. Scientific
 methods remain in trusted installed exports. No writer runs here.
 }
+\examples{
+stage <- reflow_artifact_stage(
+  "data", "base", "saveRDS",
+  args = list(object = c(alpha = 1.5, beta = 2.5)),
+  outputs = list(file = list(path = "values.rds", type = "file")),
+  inventory = c(values = "values.rds")
+)
+stage$id
+stage$declaration$inventory
+}

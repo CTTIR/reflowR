@@ -1,5 +1,8 @@
 # reflowR (development version)
 
+* Every exported function now has a runnable example; the `reflow_init()`
+  example writes to a temporary folder.
+
 * The generated `code/00_setup.R` no longer installs packages (it used
   `install.packages("pacman")` and `pacman::p_load()`); it attaches the
   packages that are installed and lists the missing ones in a message.

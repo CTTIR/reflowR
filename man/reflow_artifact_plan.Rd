@@ -18,3 +18,22 @@ available stages. This dependency core is not a resource scheduler or a
 targets adapter. Existing files use \code{\link[=reflow_imaging_input]{reflow_imaging_input()}}; no external
 execution is inferred from an input path. Plain strings are configuration.
 }
+\examples{
+plan <- reflow_artifact_plan(
+  reflow_artifact_stage(
+    "report", "base", "writeLines",
+    args = list(text = reflow_artifact_ref("data", "labels", read = TRUE)),
+    outputs = list(con = list(path = "report.txt", type = "file")),
+    inventory = c(report = "report.txt")
+  ),
+  reflow_artifact_stage(
+    "data", "base", "saveRDS",
+    args = list(object = c("alpha", "beta")),
+    outputs = list(file = list(path = "labels.rds", type = "file")),
+    inventory = c(labels = "labels.rds")
+  )
+)
+# Producers come before their consumers, whatever the declaration order
+names(plan$stages)
+plan$dependencies
+}

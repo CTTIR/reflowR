@@ -51,6 +51,19 @@ strict_stage_rmd <- function(stage, profile, author) {
 #'
 #' @return A list containing the validated profile, trusted declaration, named
 #'   relative file contents, directories, and content fingerprints.
+#' @examples
+#' # A parsed renv lockfile; in practice use jsonlite::read_json("renv.lock")
+#' pins <- c(digest = "0.6.37", jsonlite = "1.8.9", knitr = "1.49",
+#'           rmarkdown = "2.29", workflowr = "1.7.1")
+#' lock <- list(
+#'   R = list(Version = "4.4.2"),
+#'   Packages = lapply(stats::setNames(names(pins), names(pins)), function(p) {
+#'     list(Package = p, Version = pins[[p]], Source = "Repository")
+#'   })
+#' )
+#' profile <- reflow_profile("clinical", "secondary", "observational")
+#' scaffold <- reflow_scaffold(profile, "Example study", "Your Name", lock)
+#' head(names(scaffold$files))
 #' @export
 reflow_scaffold <- function(profile, name, author, dependency_lock, composition = NULL) {
   profile <- strict_profile_canonical(profile)
@@ -129,6 +142,23 @@ reflow_scaffold <- function(profile, name, author, dependency_lock, composition 
 #'   No commit is made and Git identity configuration is not changed.
 #'
 #' @return Invisibly, the scaffold with its absolute project directory.
+#' @examples
+#' pins <- c(digest = "0.6.37", jsonlite = "1.8.9", knitr = "1.49",
+#'           rmarkdown = "2.29", workflowr = "1.7.1")
+#' lock <- list(
+#'   R = list(Version = "4.4.2"),
+#'   Packages = lapply(stats::setNames(names(pins), names(pins)), function(p) {
+#'     list(Package = p, Version = pins[[p]], Source = "Repository")
+#'   })
+#' )
+#' profile <- reflow_profile("clinical", "secondary", "observational")
+#' project <- tempfile("strict-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+#' scaffold <- reflow_init_strict(project, profile, "Example study", "Your Name", lock)
+#' list.files(project)
+#'
+#' # Raw data are read-only; make them writable again before deleting
+#' Sys.chmod(file.path(project, "data", "raw"), "0755")
+#' unlink(project, recursive = TRUE)
 #' @export
 reflow_init_strict <- function(directory, profile, name, author, dependency_lock, git = FALSE, composition = NULL) {
   if (!is.character(directory) || length(directory) != 1L || is.na(directory) || !nzchar(directory))

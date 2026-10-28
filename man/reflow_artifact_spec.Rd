@@ -59,3 +59,14 @@ library that nothing modifies during the run.
 \code{options(reflowR.input_hash_cache = TRUE)} does the same for tracked input
 files; otherwise inputs are re-read for every fingerprint.
 }
+\examples{
+spec <- reflow_artifact_spec(
+  "utils", "write.csv",
+  args = list(x = data.frame(id = 1:3, value = c(2.5, 3.1, 4.7)),
+              row.names = FALSE),
+  outputs = list(file = list(path = "table.csv", type = "file")),
+  inventory = c(table = "table.csv")
+)
+spec$outputs
+spec$inventory
+}

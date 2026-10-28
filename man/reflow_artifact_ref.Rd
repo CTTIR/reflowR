@@ -19,3 +19,8 @@ A deferred artifact reference.
 \description{
 References identify logical inventory names, not arbitrary output paths.
 }
+\examples{
+# The "values" artifact of stage "data", read back as an R object
+ref <- reflow_artifact_ref("data", "values", read = TRUE)
+str(ref)
+}

@@ -39,3 +39,59 @@ reflow_artifact_resume_bounded(spec, directory, supervisor_directory,
  Parent in-process changes are not silently replayed; use an explicit artifact
  seed for stochastic writers. RNG state is not copied.}
 \value{A verified artifact descriptor after successful guardian cleanup.}
+\examples{
+# Needs Linux with processx, ps, prlimit and nice. A run starts a guardian
+# and a worker process and pins every installed file they load.
+\donttest{
+if (identical(Sys.info()[["sysname"]], "Linux") &&
+    requireNamespace("processx", quietly = TRUE) &&
+    requireNamespace("ps", quietly = TRUE) && ps::ps_is_supported() &&
+    nzchar(Sys.which("prlimit")) && nzchar(Sys.which("nice"))) {
+  root <- tempfile("bounded-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+  work <- file.path(root, c("tmp", "cache"))
+  for (path in c(root, work)) dir.create(path)
+  spec <- reflow_artifact_spec(
+    "base", "writeLines",
+    args = list(text = c("alpha", "beta")),
+    outputs = list(con = list(path = "lines.txt", type = "file")),
+    inventory = c(lines = "lines.txt")
+  )
+  resources <- list(
+    timeout_seconds = 60, address_space_bytes = 8 * 1024^3, nice = 10L,
+    threads = 1L, temp_directory = work[1], cache_directory = work[2],
+    rscript = normalizePath(file.path(R.home("bin"), "Rscript")),
+    prlimit = normalizePath(Sys.which("prlimit")),
+    nice_command = normalizePath(Sys.which("nice"))
+  )
+  # Pin the backend scripts, the three executables and every installed file
+  # of reflowR, processx, ps, digest, the writer package and their imports.
+  roots <- c("reflowR", "processx", "ps", "digest", spec$package)
+  packages <- unique(c(roots, unlist(tools::package_dependencies(
+    roots, db = utils::installed.packages(), which = c("Depends", "Imports"),
+    recursive = TRUE
+  ))))
+  files <- c(
+    list.files(system.file("bounded", package = "reflowR"), full.names = TRUE),
+    unlist(lapply(find.package(packages), list.files, recursive = TRUE,
+                  full.names = TRUE, all.files = TRUE)),
+    resources$rscript, resources$prlimit, resources$nice_command
+  )
+  files <- unique(normalizePath(files, winslash = "/"))
+  pins <- vapply(files, digest::digest, character(1), algo = "sha256", file = TRUE)
+
+  # The parent thread settings must equal the requested thread count.
+  threads <- c("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS")
+  saved <- Sys.getenv(threads, unset = NA)
+  Sys.setenv(OPENBLAS_NUM_THREADS = 1, OMP_NUM_THREADS = 1, MKL_NUM_THREADS = 1)
+  bundle <- reflow_artifact_run_bounded(spec, file.path(root, "run"),
+                                        file.path(root, "supervisor"),
+                                        resources, pins)
+  print(readLines(file.path(bundle$bundle, "lines.txt")))
+
+  for (name in threads) {
+    if (is.na(saved[[name]])) Sys.unsetenv(name) else do.call(Sys.setenv, as.list(saved[name]))
+  }
+  unlink(root, recursive = TRUE)
+}
+}
+}

@@ -34,6 +34,20 @@
 #' @param plan A [reflow_imaging_plan()].
 #' @param directory New run directory, or existing run directory for resume.
 #' @return Invisibly, a named list of stage result objects.
+#' @examples
+#' plan <- reflow_imaging_plan(
+#'   reflow_imaging_stage("values", "base", "identity",
+#'                        list(x = c(2, 4, 4, 5))),
+#'   reflow_imaging_stage("mean", "base", "mean",
+#'                        list(x = reflow_imaging_ref("values")))
+#' )
+#' run <- tempfile("imaging-")
+#' results <- reflow_imaging_run(plan, run)
+#' results$mean
+#'
+#' # Resume verifies the recorded results instead of calling the stages again
+#' identical(reflow_imaging_resume(plan, run), results)
+#' unlink(run, recursive = TRUE)
 #' @export
 reflow_imaging_run <- function(plan, directory) {
   signature <- rf_signature(plan)

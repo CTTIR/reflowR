@@ -5,6 +5,10 @@
 #' @param artifact One logical artifact name in the producer inventory.
 #' @param read Read the verified artifact as RDS; otherwise pass its path.
 #' @return A deferred artifact reference.
+#' @examples
+#' # The "values" artifact of stage "data", read back as an R object
+#' ref <- reflow_artifact_ref("data", "values", read = TRUE)
+#' str(ref)
 #' @export
 reflow_artifact_ref <- function(stage, artifact, read = FALSE) {
   rfg_text(stage)
@@ -30,6 +34,15 @@ reflow_artifact_ref <- function(stage, artifact, read = FALSE) {
 #' @param package,fun,args,outputs,inventory,allow_empty,seed,packages,runtime_files
 #'   See [reflow_artifact_spec()].
 #' @return A deferred writer declaration.
+#' @examples
+#' stage <- reflow_artifact_stage(
+#'   "data", "base", "saveRDS",
+#'   args = list(object = c(alpha = 1.5, beta = 2.5)),
+#'   outputs = list(file = list(path = "values.rds", type = "file")),
+#'   inventory = c(values = "values.rds")
+#' )
+#' stage$id
+#' stage$declaration$inventory
 #' @export
 reflow_artifact_stage <- function(
   id, package, fun, args = list(), outputs, inventory,
@@ -56,6 +69,24 @@ reflow_artifact_stage <- function(
 #' execution is inferred from an input path. Plain strings are configuration.
 #' @param ... Deferred [reflow_artifact_stage()] declarations.
 #' @return A canonical acyclic plan, without executing writers.
+#' @examples
+#' plan <- reflow_artifact_plan(
+#'   reflow_artifact_stage(
+#'     "report", "base", "writeLines",
+#'     args = list(text = reflow_artifact_ref("data", "labels", read = TRUE)),
+#'     outputs = list(con = list(path = "report.txt", type = "file")),
+#'     inventory = c(report = "report.txt")
+#'   ),
+#'   reflow_artifact_stage(
+#'     "data", "base", "saveRDS",
+#'     args = list(object = c("alpha", "beta")),
+#'     outputs = list(file = list(path = "labels.rds", type = "file")),
+#'     inventory = c(labels = "labels.rds")
+#'   )
+#' )
+#' # Producers come before their consumers, whatever the declaration order
+#' names(plan$stages)
+#' plan$dependencies
 #' @export
 reflow_artifact_plan <- function(...) {
   stages <- list(...)

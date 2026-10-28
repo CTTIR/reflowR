@@ -28,3 +28,11 @@ Scientific methods and validation remain in the called packages. Calls must
 return serializable values and must not mutate their inputs or write external
 outputs. This executor is not a sandbox: use trusted package functions only.
 }
+\examples{
+stage <- reflow_imaging_stage("summary", "base", "summary",
+                              args = list(object = c(2, 4, 4, 5)))
+stage$id
+# Stochastic calls need an explicit seed
+noisy <- reflow_imaging_stage("noise", "stats", "rnorm", list(n = 3), seed = 1L)
+noisy$seed
+}
