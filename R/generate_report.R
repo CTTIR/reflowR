@@ -14,8 +14,8 @@
 #' @keywords internal
 generate_report_qmd <- function(project_dir, name, author, scheme, preset) {
   qmd <- glue::glue('---
-title: "{name} -- Report"
-author: "{author}"
+title: {strict_yaml_scalar(paste(name, "-- Report"))}
+author: {strict_yaml_scalar(author)}
 date: today
 date-format: "DD MMMM YYYY"
 params:

@@ -144,3 +144,24 @@ test_that("rmd generators return invisibly", {
   expect_invisible(generate_about_rmd(root, "P", "A", NULL, NULL, NULL, NULL,
                                       reflow_scheme("brand"), reflow_preset("minimal")))
 })
+
+test_that("quotes and colons in titles and authors keep the front matter valid", {
+  skip_if_not_installed("yaml")
+  root <- withr::local_tempdir()
+  dir.create(file.path(root, "analysis"))
+  author <- 'Ann "AJ" Lee: \\ lab'
+  name <- 'Trial "B": #1'
+  front <- function(path) {
+    lines <- readLines(path, warn = FALSE)
+    ends <- which(lines == "---")
+    yaml::yaml.load(paste(lines[(ends[1] + 1):(ends[2] - 1)], collapse = "\n"))
+  }
+  rmd <- generate_rmd(root, file_name = "01_read_data", author = author,
+                      description = "Import", scheme = reflow_scheme("brand"),
+                      preset = reflow_preset("minimal"))
+  expect_identical(front(rmd)$author, author)
+  expect_identical(front(rmd)$title, "01 -- Read data")
+  generate_index_rmd(root, name = name, author = author, email = NULL,
+                     scheme = reflow_scheme("brand"), preset = reflow_preset("minimal"))
+  expect_identical(front(file.path(root, "analysis", "index.Rmd"))$title, name)
+})

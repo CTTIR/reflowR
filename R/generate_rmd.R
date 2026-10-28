@@ -25,8 +25,8 @@ generate_rmd <- function(project_dir, file_name, author, description,
   content <- get_rmd_content(file_name, scheme, preset)
 
   rmd <- glue::glue('---
-title: "{title}"
-author: "{author}"
+title: {strict_yaml_scalar(title)}
+author: {strict_yaml_scalar(author)}
 date: "`r format(Sys.Date(), \'%d %B %Y\')`"
 output:
   workflowr::wflow_html:
@@ -96,7 +96,7 @@ generate_index_rmd <- function(project_dir, name, author, email, scheme, preset)
   } else ""
 
   rmd <- glue::glue('---
-title: "{name}"
+title: {strict_yaml_scalar(name)}
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:

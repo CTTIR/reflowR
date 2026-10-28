@@ -1,5 +1,9 @@
 # reflowR (development version)
 
+* `reflow_init()` escapes the project name and author in the YAML headers of the
+  generated pages and report, so quotes, colons or backslashes in them no
+  longer produce invalid front matter.
+
 * The Zenodo DOI is no longer listed in the README and `CITATION.cff`; the
   record is not published yet, and the DOI will be added once it is.
 

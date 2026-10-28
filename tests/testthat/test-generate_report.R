@@ -38,3 +38,17 @@ test_that("report and readme generators return invisibly", {
                                            scheme = reflow_scheme("methods"),
                                            preset = reflow_preset("minimal")))
 })
+
+test_that("quotes in the project name and author keep the report header valid", {
+  skip_if_not_installed("yaml")
+  root <- withr::local_tempdir()
+  dir.create(file.path(root, "report"))
+  path <- generate_report_qmd(root, name = 'Trial "B": #1', author = 'Ann "AJ" Lee',
+                              scheme = reflow_scheme("brand"),
+                              preset = reflow_preset("minimal"))
+  lines <- readLines(path, warn = FALSE)
+  ends <- which(lines == "---")
+  header <- yaml::yaml.load(paste(lines[(ends[1] + 1):(ends[2] - 1)], collapse = "\n"))
+  expect_identical(header$title, 'Trial "B": #1 -- Report')
+  expect_identical(header$author, 'Ann "AJ" Lee')
+})
