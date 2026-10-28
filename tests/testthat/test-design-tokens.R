@@ -24,6 +24,8 @@ test_that("the shipped tokens are byte-identical to tools/branding", {
 })
 
 test_that("the shipped tokens are byte-identical to hexmakR's v5 library", {
+  # hexmakR is a separate CTTIR package that is not on CRAN.
+  skip_on_cran()
   skip_if_not_installed("hexmakR", minimum_version = "0.3.0")
   hexmakr <- system.file("cttir", "design_tokens.csv", package = "hexmakR")
   skip_if_not(nzchar(hexmakr), "hexmakR does not ship design_tokens.csv")
