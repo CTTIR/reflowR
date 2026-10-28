@@ -10,6 +10,12 @@
 #' Installed package resources (including templates), tracked inputs and
 #'   declared
 #' external runtime files are fingerprinted. Undeclared ambient state is not.
+#' With `options(reflowR.package_hash_cache = TRUE)` the hashes of installed
+#' package files are reused within one R process while a file keeps its
+#' device, inode, size, modification and change times; use it only with a
+#' library that nothing modifies during the run.
+#' `options(reflowR.input_hash_cache = TRUE)` does the same for tracked input
+#' files; otherwise inputs are re-read for every fingerprint.
 #' @param package,fun Installed package and exported writer function.
 #' @param args Uniquely named ordinary arguments, excluding output arguments.
 #' @param outputs Named list keyed by output argument, each an exact list with
@@ -229,40 +235,35 @@ rfa_tree <- function(path) {
   rfa_no_links(path)
   if (!rfa_directory(path))
     stop("Missing directory: ", path)
-  entries <- character()
+  files <- character()
+  directories <- character()
   pending <- path
   while (length(pending)) {
     directory <- pending[[1L]]
     pending <- pending[-1L]
     children <- list.files(directory, all.files = TRUE,
                            full.names = TRUE, no.. = TRUE)
-    for (entry in children) rfa_no_links(entry)
-    entries <- c(entries, children)
-    pending <- c(pending, children[rfa_directory(children)])
+    # The directory and its ancestors are already checked; only the entries
+    # themselves can still be links.
+    links <- Sys.readlink(children)
+    if (any(!is.na(links) & nzchar(links))) {
+      stop("Symbolic links are not allowed: ", children[!is.na(links) & nzchar(links)][1L])
+    }
+    # No entry is a link (checked above), so stat-based dir.exists() equals
+    # rfa_directory() here.
+    nested <- dir.exists(children)
+    files <- c(files, children[!nested])
+    directories <- c(directories, children[nested])
+    pending <- c(pending, children[nested])
   }
-  files <- entries[!rfa_directory(entries)]
-  if (any(
-    !vapply(
-      files, function(file) rfa_regular(file),
-      logical(1)
-    )
-  )) {
+  # One type query for all files; identical to rfa_regular() per file.
+  types <- as.character(fs::file_info(files, follow = FALSE, fail = FALSE)$type)
+  if (length(files) && any(is.na(types) | types != "file")) {
     stop("Only regular files are supported.")
   }
   list(
-    files = sort(
-      substring(
-        files, nchar(path) +
-          2L
-      )
-    ),
-    directories = sort(
-      substring(
-        entries[rfa_directory(entries)],
-        nchar(path) +
-          2L
-      )
-    )
+    files = sort(substring(files, nchar(path) + 2L)),
+    directories = sort(substring(directories, nchar(path) + 2L))
   )
 }
 
@@ -299,13 +300,17 @@ rfa_signature <- function(spec) {
                                               recursive = TRUE)
   packages <- sort(unique(c("reflowR", "digest", direct,
                             unlist(dependencies, use.names = FALSE))))
+  # Each package is bound by one digest of its folder layout and file hashes;
+  # keeping the full listing in every definition made graph journals grow by
+  # megabytes per node.
   resources <- lapply(packages, function(package) {
     path <- rfa_canonical(find.package(package))
     tree <- rfa_tree(path)
-    list(path = path, directories = tree$directories,
-         files = stats::setNames(vapply(file.path(path, tree$files),
-                                        rf_file_hash, character(1)),
-                                 tree$files))
+    files <- stats::setNames(rf_package_hashes(file.path(path, tree$files)),
+                             tree$files)
+    list(path = path, tree_hash = rf_hash(list(
+      directories = tree$directories, files = files
+    )))
   })
   names(resources) <- packages
   base <- rf_signature(reflow_imaging_plan(stage, packages = spec$packages))
@@ -313,7 +318,7 @@ rfa_signature <- function(spec) {
     stop("Package closure changed.")
   }
   list(
-    schema = "reflow_artifact_definition_1", spec = spec, base = base,
+    schema = "reflow_artifact_definition_2", spec = spec, base = base,
     resources = resources, tracked = tracked, runtime = stats::setNames(
       vapply(spec$runtime_files, rf_file_hash, character(1)),
       spec$runtime_files
@@ -348,7 +353,7 @@ rfa_inventory <- function(spec, bundle) {
   data.frame(
     name = names(spec$inventory),
     path = unname(spec$inventory),
-    bytes = bytes, sha256 = unname(vapply(paths, rf_file_hash, character(1))),
+    bytes = bytes, sha256 = rf_file_hashes(paths),
     stringsAsFactors = FALSE
   )
 }

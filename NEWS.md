@@ -26,6 +26,26 @@
 * Standardize the named v5 package logo across README, documentation pages
   and available application headers, with matching light and dark artwork.
 
+* Artifact definitions bind each package of the closure by one digest of its
+  folder layout and file hashes instead of storing every file hash, so graph
+  journals no longer grow by megabytes per node. The definition schema is now
+  `reflow_artifact_definition_2`; generations written before cannot be reused
+  as `previous`.
+
+* `options(reflowR.input_hash_cache = TRUE)` reuses the hashes of tracked
+  input files within one R process in the same way as the package hash cache;
+  tree walks check links of a folder's entries in one call.
+* Artifact fingerprints hash files in one call (`tools::sha256sum()` on R >= 4.5.0,
+  same values) and walk package trees with one type query per folder.
+  `options(reflowR.package_hash_cache = TRUE)` reuses installed-package file
+  hashes within one R process while device, inode, size, modification and
+  change times are unchanged; it is off by default and inputs are always
+  re-read.
+
+* Add `reflow_call_writer()`, a generic artifact writer that calls one exported
+  function of an installed package and saves its value as RDS with an optional
+  tab-separated copy, and `reflow_call_stage()`, which declares such a stage and
+  fingerprints the called package. Existing artifact APIs are unchanged.
 
 * Add a stage-call restart for external condition handlers to reject a condition
   through the imaging executor's existing durable failure receipts. Default

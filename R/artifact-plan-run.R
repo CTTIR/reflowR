@@ -323,7 +323,7 @@ rfg_saved_definition <- function(x) {
       names(signature),
       c("schema", "spec", "base", "resources", "tracked", "runtime")
     ) ||
-      !identical(signature$schema, "reflow_artifact_definition_1") ||
+      !identical(signature$schema, "reflow_artifact_definition_2") ||
       !identical(signature$spec, spec)) {
       stop("Malformed historical stage definition.")
     }

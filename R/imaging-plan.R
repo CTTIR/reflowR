@@ -120,7 +120,61 @@ rf_hash <- function(x) {
     algo = "sha256", serialize = FALSE
   )
 }
-rf_file_hash <- function(path) digest::digest(file = path, algo = "sha256")
+rf_file_hash <- function(path) rf_file_hashes(path)
+
+# SHA-256 of file contents, one call for many files. tools::sha256sum()
+# (R >= 4.5.0) gives the same values as digest and is faster.
+rf_file_hashes <- function(paths) {
+  paths <- as.character(paths)
+  if (!length(paths)) return(character())
+  hashes <- if (getRversion() >= "4.5.0") {
+    unname(getExportedValue("tools", "sha256sum")(paths))
+  } else {
+    vapply(paths, function(p) digest::digest(file = p, algo = "sha256"),
+      character(1), USE.NAMES = FALSE)
+  }
+  if (anyNA(hashes)) {
+    stop("Cannot read file for hashing: ", paths[is.na(hashes)][1L])
+  }
+  hashes
+}
+
+rf_package_cache <- new.env(parent = emptyenv())
+
+# Hashes of installed package files. With
+# options(reflowR.package_hash_cache = TRUE) a hash is reused within the R
+# process while the file keeps its device, inode, size, modification and
+# change times; otherwise every call reads every file.
+rf_package_hashes <- function(paths) rf_stamped_hashes(paths, "reflowR.package_hash_cache")
+
+# Hashes of tracked input files, reused in the same way with
+# options(reflowR.input_hash_cache = TRUE). Large raw inputs referenced by
+# many stages are then read once per process.
+rf_input_hashes <- function(paths) rf_stamped_hashes(paths, "reflowR.input_hash_cache")
+
+rf_stamped_hashes <- function(paths, option) {
+  paths <- as.character(paths)
+  if (!length(paths) || !isTRUE(getOption(option, FALSE))) {
+    return(rf_file_hashes(paths))
+  }
+  info <- fs::file_info(paths, follow = FALSE, fail = FALSE)
+  stamp <- function(x) sprintf("%.9f", as.numeric(x))
+  keys <- paste(paths, info$device_id, info$inode, info$size,
+    stamp(info$modification_time), stamp(info$change_time),
+    sep = "\r"
+  )
+  known <- vapply(keys, exists, logical(1),
+    envir = rf_package_cache, inherits = FALSE, USE.NAMES = FALSE
+  )
+  if (any(!known) || anyNA(info$inode)) {
+    todo <- !known | is.na(info$inode)
+    fresh <- rf_file_hashes(paths[todo])
+    for (i in seq_along(fresh)) assign(keys[todo][i], fresh[i], envir = rf_package_cache)
+  }
+  vapply(keys, get, character(1),
+    envir = rf_package_cache, inherits = FALSE, USE.NAMES = FALSE
+  )
+}
 
 rf_tree <- function(path) {
   if (!file.exists(path)) stop("Missing tracked input: ", path)
@@ -134,7 +188,7 @@ rf_tree <- function(path) {
   }
   files <- files[!dir.exists(files)]
   stats::setNames(
-    vapply(files, rf_file_hash, character(1)),
+    rf_input_hashes(files),
     if (dir.exists(path)) substring(files, nchar(path) + 2L) else basename(path)
   )
 }
@@ -163,7 +217,7 @@ rf_packages <- function(stages, extra = character()) {
     list(
       version = as.character(utils::packageVersion(p)),
       files = stats::setNames(
-        vapply(files, rf_file_hash, character(1)),
+        rf_package_hashes(files),
         substring(files, nchar(root) + 2L)
       )
     )
