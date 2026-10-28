@@ -162,7 +162,7 @@ workflowr::wflow_use_github("username", "repo")
 
 ## Customization
 
-- **CSS**: Edit `assets/theme.css` to customize styling
+- **CSS**: Edit `analysis/theme.css` to customize styling
 - **New Rmd files**: Add to `analysis/` and update `_site.yml` navbar
 - **Navbar**: Edit `analysis/_site.yml`
 - **ggplot theme**: Modify `theme_wf()` in `code/00_setup.R`

@@ -132,8 +132,8 @@ editor_options:
 
 ```
 {name}/
-+-- analysis/    # Rmd pipeline files (rendered to docs/)
-+-- assets/      # Theme CSS, SCSS, and icon
++-- analysis/    # Rmd pipeline files and theme.css (rendered to docs/)
++-- assets/      # Quarto theme SCSS and icon
 +-- code/        # R scripts (setup, utils, helpers)
 +-- data/raw/    # Raw data (never modify)
 +-- data/processed/  # Cleaned data

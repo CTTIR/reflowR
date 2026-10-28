@@ -140,8 +140,8 @@ generate_project_readme <- function(project_dir, name, author, scheme, preset) {
 
 ```
 {name}/
-+-- analysis/    # Rmd pipeline files
-+-- assets/      # Theme CSS, SCSS, icon
++-- analysis/    # Rmd pipeline files and theme.css
++-- assets/      # Quarto theme SCSS, icon
 +-- code/        # R scripts (setup, utils, helpers)
 +-- data/raw/    # Raw data (never modify)
 +-- data/processed/  # Cleaned data

@@ -104,7 +104,7 @@ message:
 
 ## Generated site styling
 
-`reflow_init()` writes `assets/theme.css` (workflowr) and `assets/_theme.scss`
+`reflow_init()` writes `analysis/theme.css` (workflowr) and `assets/_theme.scss`
 (Quarto report). Both follow the themakR surface:
 
 | Role | Light | Dark |

@@ -19,6 +19,9 @@
   stylesheet and still validate.
 * The generated `_site.yml` is valid YAML again and renders the site into
   `docs/`, as workflowr expects.
+* `reflow_init()` writes the site stylesheet to `analysis/theme.css` so that
+  workflowr copies it into `docs/`; the earlier `../assets/theme.css` link
+  pointed outside the published site.
 
 * Standardize the named v5 package logo across README, documentation pages
   and available application headers, with matching light and dark artwork.

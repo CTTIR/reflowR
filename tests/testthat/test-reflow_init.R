@@ -13,7 +13,7 @@ test_that("reflow_init creates workflowr-compatible project", {
   expect_true(file.exists(file.path(proj, "test_project.Rproj")))
 
   # reflowR additions
-  expect_true(file.exists(file.path(proj, "assets", "theme.css")))
+  expect_true(file.exists(file.path(proj, "analysis", "theme.css")))
   expect_true(file.exists(file.path(proj, "assets", "_theme.scss")))
   expect_true(file.exists(file.path(proj, "assets", "icon.svg")))
   expect_true(file.exists(file.path(proj, "code", "00_setup.R")))
@@ -68,7 +68,7 @@ test_that("all v5 families produce the v5 CSS and their family icon", {
     proj <- file.path(tmp, paste0("test_", s))
     reflow_init(directory = proj, author = "A", scheme = s,
                 depth = "minimal", git = FALSE, change_wd = FALSE, open = FALSE)
-    css <- readLines(file.path(proj, "assets", "theme.css"))
+    css <- readLines(file.path(proj, "analysis", "theme.css"))
     expect_true(any(grepl("--cttir-page", css, fixed = TRUE)))
     expect_true(any(grepl(paste0("--cttir-topic: ", reflow_scheme(s)$accent, ";"), css, fixed = TRUE)))
     icon <- system.file("icons", paste0("icon_", s, ".svg"), package = "reflowR")
@@ -84,7 +84,7 @@ test_that("reflow_init defaults to the brand family", {
   proj <- file.path(tmp, "default_scheme")
   reflow_init(directory = proj, author = "A", depth = "minimal",
               git = FALSE, change_wd = FALSE, open = FALSE)
-  css <- readLines(file.path(proj, "assets", "theme.css"))
+  css <- readLines(file.path(proj, "analysis", "theme.css"))
   expect_true(any(grepl("--cttir-topic: #0072B2;", css, fixed = TRUE)))
   readme <- readLines(file.path(proj, "README.md"))
   expect_true(any(grepl("Science, connected", readme, fixed = TRUE)))
@@ -96,7 +96,7 @@ test_that("earlier scheme names still create projects in their v5 family", {
   suppressMessages(reflow_init(directory = proj, author = "A", scheme = "code",
                                depth = "minimal", git = FALSE, change_wd = FALSE,
                                open = FALSE))
-  css <- readLines(file.path(proj, "assets", "theme.css"))
+  css <- readLines(file.path(proj, "analysis", "theme.css"))
   expect_true(any(grepl("--cttir-topic: #56B4E9;", css, fixed = TRUE)))
   icon <- system.file("icons", "icon_methods.svg", package = "reflowR")
   expect_identical(unname(tools::md5sum(file.path(proj, "assets", "icon.svg"))),
@@ -117,7 +117,10 @@ test_that("the generated _site.yml is valid and renders the site into docs/", {
   expect_length(site$navbar$left[[2]]$menu, 8L)
   expect_identical(vapply(site$navbar$right, `[[`, "", "href"),
                    c("https://github.com/foo/bar", "https://example.org"))
-  expect_identical(site$output$`workflowr::wflow_html`$css, "../assets/theme.css")
+  expect_identical(site$output$`workflowr::wflow_html`$css, "theme.css")
+  # The stylesheet sits next to the pages, so it is copied into docs/ and
+  # still applies after the site is published.
+  expect_true(file.exists(file.path(proj, "analysis", site$output$`workflowr::wflow_html`$css)))
 })
 
 test_that("reflow_init errors on invalid scheme", {
@@ -196,5 +199,5 @@ test_that("existing = TRUE works on pre-existing directory", {
               git = FALSE, change_wd = FALSE, open = FALSE)
   expect_true(file.exists(file.path(proj, "my_data.csv")))
   expect_true(file.exists(file.path(proj, "_workflowr.yml")))
-  expect_true(file.exists(file.path(proj, "assets", "theme.css")))
+  expect_true(file.exists(file.path(proj, "analysis", "theme.css")))
 })

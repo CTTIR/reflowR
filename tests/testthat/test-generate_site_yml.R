@@ -13,7 +13,7 @@ test_that("generate_site_yml builds menu entries for every preset file", {
   expect_true(file.exists(ret))
   yml <- paste(readLines(ret, warn = FALSE), collapse = "\n")
   expect_match(yml, "workflowr::wflow_html", fixed = TRUE)
-  expect_match(yml, "../assets/theme.css", fixed = TRUE)
+  expect_match(yml, "css: theme.css", fixed = TRUE)
   expect_match(yml, 'name: "MyProj"', fixed = TRUE)
   # one href per pipeline file
   for (f in preset$files) {

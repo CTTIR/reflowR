@@ -154,7 +154,9 @@ reflow_init <- function(
 
   # 2c. Generate CSS and SCSS from scheme
   cli::cli_alert("Generating theme CSS/SCSS...")
-  generate_css(s, fs::path(project_dir, "assets", "theme.css"))
+  # The site stylesheet lives next to the pages so that workflowr copies it
+  # into docs/; a link outside docs/ would break once the site is published.
+  generate_css(s, fs::path(project_dir, "analysis", "theme.css"))
   generate_scss(s, fs::path(project_dir, "assets", "_theme.scss"))
 
   # 2d. Copy the family icon (aliases resolve to their v5 family)

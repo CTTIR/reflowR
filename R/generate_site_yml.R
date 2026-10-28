@@ -77,7 +77,7 @@ generate_site_yml <- function(project_dir, name, scheme, preset,
     "    theme: flatly",
     "    highlight: tango",
     "    code_folding: show",
-    "    css: ../assets/theme.css",
+    "    css: theme.css",
     "    fig_width: 8",
     "    fig_height: 5",
     "    fig_retina: 2"
