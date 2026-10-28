@@ -10,8 +10,9 @@
 
 * local: Ubuntu 26.04, R 4.6.1 (`R CMD check --as-cran`, also with
   `_R_CHECK_DEPENDS_ONLY_=true`)
-* GitHub Actions: ubuntu-latest (R devel, release, oldrel-1), macOS-latest
-  (R release), windows-latest (R release)
+* GitHub Actions: the repository's R-CMD-check workflow, with ubuntu-latest
+  (R devel, release, oldrel-1), macOS-latest (R release) and windows-latest
+  (R release). It will be run on the submitted commit.
 
 ## Notes on the code
 
@@ -35,8 +36,11 @@
   `reflow_artifact_plan_run_bounded()` are in `\donttest{}`: they start
   subprocesses and hash every installed file of the package closure (20 to
   40 seconds). They also run only on Linux with 'processx', 'ps', `prlimit`
-  and `nice` available and a package library without symbolic links, which
-  the guardian requires.
+  and `nice` available, a package library without symbolic links (which the
+  guardian requires), and a process priority of at most 10 and an
+  address-space limit of at least 8 GiB (which the examples request);
+  otherwise they do nothing. They restore the thread environment variables
+  they set, also when a run fails.
 * Tests that install fixture packages with `R CMD INSTALL` and the long
   recovery scenarios of the artifact selector are skipped on CRAN; the test
   suite takes about 40 seconds there.
