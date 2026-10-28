@@ -50,7 +50,8 @@ test_that("the input hash cache is opt-in, separate and follows file changes", {
 
 test_that("tree walks refuse links below the root", {
   skip_on_os("windows")
-  dir <- withr::local_tempdir()
+  # Resolved, because the temporary folder can lie below a link (/var on macOS).
+  dir <- normalizePath(withr::local_tempdir())
   dir.create(file.path(dir, "sub"))
   writeLines("x", file.path(dir, "sub", "a.txt"))
   expect_identical(rfa_tree(dir)$files, "sub/a.txt")
