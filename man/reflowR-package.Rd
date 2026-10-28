@@ -4,11 +4,11 @@
 \name{reflowR-package}
 \alias{reflowR}
 \alias{reflowR-package}
-\title{reflowR: Themed Extensions for Workflowr Research Workflows}
+\title{reflowR: Themed Extensions for 'workflowr' Research Workflows}
 \description{
 \if{html}{\figure{logo.svg}{options: style='float: right' alt='logo' width='120'}}
 
-Extends the workflowr package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. Wraps workflowr::wflow_start() and adds the nine CTTIR v5 topic families as site schemes (Okabe-Ito accents, light and dark surfaces, Inter and JetBrains Mono typography from shared design tokens), three depth presets for the Rmd pipeline (minimal, standard, extended), CSS/SCSS theming, SVG family icons, ggplot2 theme functions, and a Quarto report template. All generated projects remain fully compatible with standard workflowr commands.
+Extends the 'workflowr' package with themed colour schemes, structured analysis pipeline templates and utility scripts for reproducible research. Wraps wflow_start() from 'workflowr' and adds the nine topic families of the Computational Trauma and Tissue Injury Research (CTTIR) v5 design language as site schemes (Okabe-Ito accents, light and dark surfaces, Inter and JetBrains Mono typography from shared design tokens), three depth presets for the R Markdown pipeline (minimal, standard, extended), CSS/SCSS theming, SVG family icons, 'ggplot2' theme functions and a 'Quarto' report template. All generated projects remain fully compatible with standard 'workflowr' commands. Further interfaces run file-producing analysis steps and imaging workflows of installed package functions as fingerprinted, resumable pipelines with verified receipts, and scaffold and validate strict project profiles.
 }
 \seealso{
 Useful links:
@@ -20,11 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: R. Heller \email{raban.heller@uni-ulm.de} (\href{https://orcid.org/0000-0001-8006-9742}{ORCID})
+\strong{Maintainer}: R. Heller \email{raban.heller@uni-ulm.de} (\href{https://orcid.org/0000-0001-8006-9742}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
-  \item R. Heller \email{raban.heller@uni-ulm.de} (\href{https://orcid.org/0000-0001-8006-9742}{ORCID})
+  \item R. Heller \email{raban.heller@uni-ulm.de} (\href{https://orcid.org/0000-0001-8006-9742}{ORCID}) [copyright holder]
 }
 
 }
