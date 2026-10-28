@@ -230,3 +230,19 @@ test_that("the checked file list matches what reflow_init adds", {
   rmds <- list.files(file.path(proj, "analysis"), pattern = "^\\d+.*\\.Rmd$")
   expect_setequal(file.path("analysis", rmds), grep("^analysis/\\d", added, value = TRUE))
 })
+
+test_that("_workflowr.yml records the installed workflowr version", {
+  installed <- utils::packageVersion
+  local_mocked_bindings(
+    packageVersion = function(pkg, ...) {
+      if (identical(pkg, "workflowr")) package_version("99.1.2") else installed(pkg, ...)
+    },
+    .package = "utils"
+  )
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "version_proj")
+  reflow_init(directory = proj, author = "A", depth = "minimal",
+              git = FALSE, change_wd = FALSE, open = FALSE)
+  wf <- readLines(file.path(proj, "_workflowr.yml"), warn = FALSE)
+  expect_true("workflowr_version: 99.1.2" %in% wf)
+})

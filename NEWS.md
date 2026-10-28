@@ -1,5 +1,8 @@
 # reflowR (development version)
 
+* `_workflowr.yml` records the installed workflowr version instead of a fixed
+  1.7.2.
+
 * `reflow_init()` checks all files it adds before writing anything and stops
   with a clear message if one already exists. A repeated call with
   `existing = TRUE` used to overwrite `_site.yml` and the theme and then fail

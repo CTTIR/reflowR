@@ -185,7 +185,7 @@ reflow_init <- function(
   writeLines(c(
     paste0("seed: ", seed),
     'knit_root_dir: "."',
-    "workflowr_version: 1.7.2"
+    paste0("workflowr_version: ", utils::packageVersion("workflowr"))
   ), wf_yml)
 
   # 2f. Generate R scripts
