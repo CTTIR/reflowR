@@ -278,7 +278,7 @@ rfb_packages <- function(roots) {
     }
     paths[[name]] <- path
     description <- read.dcf(file.path(path, "DESCRIPTION"))
-    fields <- intersect(c("Depends", "Imports", "LinkingTo"), colnames(description))
+    fields <- intersect(c("Depends", "Imports"), colnames(description))
     text <- paste(description[1, fields], collapse = ",")
     dependencies <- trimws(sub("[[:space:]]*\\(.*", "", strsplit(text, ",", fixed = TRUE)[[1]]))
     pending <- unique(c(pending, setdiff(dependencies[nzchar(dependencies)], "R")))

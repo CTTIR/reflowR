@@ -294,12 +294,7 @@ rfa_signature <- function(spec) {
   database <- utils::installed.packages()
   direct <- unique(c(spec$package, spec$packages))
   if (!all(direct %in% rownames(database))) stop("Missing declared package.")
-  dependencies <- tools::package_dependencies(direct, db = database,
-                                              which = c("Depends",
-                                                        "Imports", "LinkingTo"),
-                                              recursive = TRUE)
-  packages <- sort(unique(c("reflowR", "digest", direct,
-                            unlist(dependencies, use.names = FALSE))))
+  packages <- rf_closure(direct, database)
   # Each package is bound by one digest of its folder layout and file hashes;
   # keeping the full listing in every definition made graph journals grow by
   # megabytes per node.

@@ -130,7 +130,9 @@ rf_file_hashes <- function(paths) {
   hashes <- if (getRversion() >= "4.5.0") {
     unname(getExportedValue("tools", "sha256sum")(paths))
   } else {
-    vapply(paths, function(p) digest::digest(file = p, algo = "sha256"),
+    # digest stops with its own message on unreadable paths; NA keeps the error below.
+    vapply(paths, function(p) tryCatch(digest::digest(file = p, algo = "sha256"),
+                                       error = function(e) NA_character_),
       character(1), USE.NAMES = FALSE)
   }
   if (anyNA(hashes)) {
@@ -193,6 +195,15 @@ rf_tree <- function(path) {
   )
 }
 
+# Runtime closure of packages: Depends and Imports, recursively, plus reflowR
+# and digest. LinkingTo packages only supply headers at build time; what they
+# contribute is in the compiled libs/ of the linking package, which is hashed.
+rf_closure <- function(packages, db = utils::installed.packages()) {
+  deps <- tools::package_dependencies(packages, db = db, which = c("Depends", "Imports"),
+                                      recursive = TRUE)
+  sort(unique(c("reflowR", "digest", packages, unlist(deps, use.names = FALSE))))
+}
+
 rf_packages <- function(stages, extra = character()) {
   pkgs <- unique(c(extra, vapply(stages, `[[`, character(1), "package")))
   db <- utils::installed.packages()
@@ -200,12 +211,7 @@ rf_packages <- function(stages, extra = character()) {
   if (length(missing)) {
     stop("Missing packages: ", paste(missing, collapse = ", "))
   }
-  deps <- tools::package_dependencies(pkgs,
-    db = db, which = c("Depends", "Imports", "LinkingTo"),
-    recursive = TRUE
-  )
-  pkgs <- sort(unique(c("reflowR", "digest", pkgs,
-                        unlist(deps, use.names = FALSE))))
+  pkgs <- rf_closure(pkgs, db)
   stats::setNames(lapply(pkgs, function(p) {
     root <- find.package(p)
     files <- c(
