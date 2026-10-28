@@ -201,3 +201,32 @@ test_that("existing = TRUE works on pre-existing directory", {
   expect_true(file.exists(file.path(proj, "_workflowr.yml")))
   expect_true(file.exists(file.path(proj, "analysis", "theme.css")))
 })
+
+test_that("a repeated call on an existing project changes nothing", {
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "again_proj")
+  reflow_init(directory = proj, author = "A", scheme = "brand", depth = "minimal",
+              git = FALSE, change_wd = FALSE, open = FALSE)
+  files <- list.files(proj, recursive = TRUE, all.files = TRUE, full.names = TRUE)
+  before <- tools::md5sum(files)
+  expect_error(
+    reflow_init(directory = proj, author = "B", scheme = "clinical",
+                depth = "minimal", existing = TRUE, git = FALSE,
+                change_wd = FALSE, open = FALSE),
+    "nothing was changed"
+  )
+  expect_identical(tools::md5sum(list.files(proj, recursive = TRUE,
+                                            all.files = TRUE, full.names = TRUE)),
+                   before)
+})
+
+test_that("the checked file list matches what reflow_init adds", {
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "listed_proj")
+  reflow_init(directory = proj, author = "A", depth = "extended",
+              git = FALSE, change_wd = FALSE, open = FALSE)
+  added <- reflow_init_added(reflow_preset("extended"))
+  expect_true(all(file.exists(file.path(proj, added))))
+  rmds <- list.files(file.path(proj, "analysis"), pattern = "^\\d+.*\\.Rmd$")
+  expect_setequal(file.path("analysis", rmds), grep("^analysis/\\d", added, value = TRUE))
+})

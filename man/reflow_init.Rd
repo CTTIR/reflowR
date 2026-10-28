@@ -97,6 +97,10 @@ committing yet.
 analysis pipeline Rmd files, CSS/SCSS, icon, setup script, utility script,
 Quarto report template, and additional subdirectories. If \code{git = TRUE},
 initializes git and commits all files.
+
+If any of the files that Phase 2 adds already exists in \code{directory},
+for example after an earlier call, the function stops before writing
+anything, so a project is never left partly updated.
 }
 \examples{
 \dontrun{

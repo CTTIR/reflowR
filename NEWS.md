@@ -1,5 +1,10 @@
 # reflowR (development version)
 
+* `reflow_init()` checks all files it adds before writing anything and stops
+  with a clear message if one already exists. A repeated call with
+  `existing = TRUE` used to overwrite `_site.yml` and the theme and then fail
+  on the icon, leaving the project partly updated.
+
 * `reflow_init()` escapes the project name and author in the YAML headers of the
   generated pages and report, so quotes, colons or backslashes in them no
   longer produce invalid front matter.

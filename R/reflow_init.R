@@ -54,6 +54,10 @@
 #' Quarto report template, and additional subdirectories. If \code{git = TRUE},
 #' initializes git and commits all files.
 #'
+#' If any of the files that Phase 2 adds already exists in \code{directory},
+#' for example after an earlier call, the function stops before writing
+#' anything, so a project is never left partly updated.
+#'
 #' @examples
 #' \dontrun{
 #' library(reflowR)
@@ -112,6 +116,17 @@ reflow_init <- function(
   scheme <- match.arg(scheme)
   depth  <- match.arg(depth)
   if (is.null(name)) name <- basename(directory)
+  p <- reflow_preset(depth)
+
+  # Check every file that Phase 2 adds before anything is written.
+  added <- reflow_init_added(p)
+  present <- added[file.exists(file.path(directory, added))]
+  if (length(present)) {
+    cli::cli_abort(c(
+      "reflowR files already exist in {.path {directory}}; nothing was changed.",
+      "i" = "Move or remove {.file {present}} first."
+    ))
+  }
 
   cli::cli_h1("Creating reflowR project: {.val {name}}")
   cli::cli_alert_info("Scheme: {.val {scheme}} | Depth: {.val {depth}}")
@@ -134,7 +149,6 @@ reflow_init <- function(
   # --- Phase 2: reflowR theming ---
   cli::cli_h2("Phase 2: reflowR theming")
   s <- reflow_scheme(scheme)
-  p <- reflow_preset(depth)
 
   # 2a. Create additional directories
   cli::cli_alert("Creating directory structure...")
@@ -248,4 +262,17 @@ reflow_init <- function(
   }
 
   invisible(project_dir)
+}
+
+# Files that Phase 2 of reflow_init() adds on top of the workflowr scaffold,
+# relative to the project directory.
+reflow_init_added <- function(preset) {
+  c(
+    file.path("analysis", c("theme.css", paste0(preset$files, ".Rmd"))),
+    file.path("assets", c("_theme.scss", "icon.svg")),
+    file.path("docs", "assets", "icon.svg"),
+    file.path("code", c("00_setup.R", "utils.R", "formulary.R", "data_io.R",
+                        "table_helpers.R", "plot_helpers.R")),
+    file.path("report", "report.qmd")
+  )
 }
