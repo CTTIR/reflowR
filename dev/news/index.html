@@ -53,28 +53,56 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="reflowr-development-version">reflowR (development version)<a class="anchor" aria-label="anchor" href="#reflowr-development-version"></a></h2>
-<ul><li><p>Add a separate declared artifact bundle API for trusted installed writers, complete file/resource fingerprints, immutable accepted receipts and verified reuse. Failed attempts require explicit process reconciliation before retry; this is not a scheduler, sandbox or complete artifact DAG.</p></li>
+<ul><li><p>Package closures (artifact definitions, imaging plans and bounded runs) follow Depends and Imports only. LinkingTo packages supply headers at build time and need not be installed; their effect is in the hashed compiled code.</p></li>
+<li><p>Site schemes are now the nine CTTIR v5 topic families (spectral, spatial, omics, clinical, methods, simulation, evidence, platform and brand), built from <code>inst/cttir/design_tokens.csv</code>, the token table shared with hexmakR and themakR. <code><a href="../reference/reflow_init.html">reflow_init()</a></code> defaults to <code>brand</code>. The earlier names remain accepted with a one-time message: <code>basic</code> is <code>brand</code>, <code>code</code> is <code>methods</code>, <code>special</code> is <code>evidence</code> and <code>other</code> is <code>platform</code>; <code>clinical</code> keeps its name with the v5 vermillion. Existing scheme fields remain and gain explicit light/dark surface, tint, code token and font fields.</p></li>
+<li><p>Generated CSS and SCSS follow the themakR surface: flat navbar on the page background, light and dark modes, Inter and JetBrains Mono font stacks without downloads, links in the link token and the family accent only for identity rules. The gradient navbar and emoji titles are gone; each family has an R-drawn hex icon (<code>tools/branding/family-icons.R</code>).</p></li>
+<li><p>Generated setup, utility and plot scripts, the preview, the startup message and new strict profiles take colours and fonts from the v5 scheme. Strict declarations recorded with the earlier palette keep their colour and stylesheet and still validate.</p></li>
+<li><p>The generated <code>_site.yml</code> is valid YAML again and renders the site into <code>docs/</code>, as workflowr expects.</p></li>
+<li><p><code><a href="../reference/reflow_init.html">reflow_init()</a></code> writes the site stylesheet to <code>analysis/theme.css</code> so that workflowr copies it into <code>docs/</code>; the earlier <code>../assets/theme.css</code> link pointed outside the published site.</p></li>
+<li><p>Standardize the named v5 package logo across README, documentation pages and available application headers, with matching light and dark artwork.</p></li>
+<li><p>Artifact definitions bind each package of the closure by one digest of its folder layout and file hashes instead of storing every file hash, so graph journals no longer grow by megabytes per node. The definition schema is now <code>reflow_artifact_definition_2</code>; generations written before cannot be reused as <code>previous</code>.</p></li>
+<li><p><code>options(reflowR.input_hash_cache = TRUE)</code> reuses the hashes of tracked input files within one R process in the same way as the package hash cache; tree walks check links of a folder’s entries in one call.</p></li>
+<li><p>Artifact fingerprints hash files in one call (<code><a href="https://rdrr.io/r/tools/sha256sum.html" class="external-link">tools::sha256sum()</a></code> on R &gt;= 4.5.0, same values) and walk package trees with one type query per folder. <code>options(reflowR.package_hash_cache = TRUE)</code> reuses installed-package file hashes within one R process while device, inode, size, modification and change times are unchanged; it is off by default and inputs are always re-read.</p></li>
+<li><p>Add <code><a href="../reference/reflow_call_writer.html">reflow_call_writer()</a></code>, a generic artifact writer that calls one exported function of an installed package and saves its value as RDS with an optional tab-separated copy, and <code><a href="../reference/reflow_call_stage.html">reflow_call_stage()</a></code>, which declares such a stage and fingerprints the called package. Existing artifact APIs are unchanged.</p></li>
+<li><p>Add a stage-call restart for external condition handlers to reject a condition through the imaging executor’s existing durable failure receipts. Default warning handling and the run/resume interfaces remain unchanged.</p></li>
+<li><p>Add an opt-in <code>strict-cttir-v1</code> composition with three fixed data controls, immutable stage entrypoints, complete installed cttiR file pins and current execution receipts. The original <code>strict-v1</code> defaults remain unchanged.</p></li>
+<li><p>Add explicit categorical numeric tiles with fixed dimensions, equal aspect and an optional legend text size independent of the base theme.</p></li>
+<li><p>Numeric tiles can explicitly preserve x-axis blank-element inheritance with <code>tile$axis_text_x_inherit_blank</code>; omitted and NULL values retain existing recipe bytes and plotting defaults. Other figure types are unchanged.</p></li>
+<li><p>Add opt-in numeric point layouts with wrapped free-y panels, explicit point opacity, and a separate keyed corner annotation table. Existing recipes and strict finite input validation remain unchanged.</p></li>
+<li><p>Allow explicitly declared finite bounded-stage deadlines from 1 through 86400 seconds. Guardian liveness, transport and cleanup intervals remain unchanged; this ceiling is not a long-duration reliability guarantee.</p></li>
+<li><p>Preserve the authenticated legacy figure fixture bytes across Git checkout line-ending settings.</p></li>
+<li><p>Add supplied numeric-point recipes with explicit fixed axes, categorical colours and facets, optional horizontal references and annotation policies. Existing recipe defaults remain unchanged; device-visible annotation coverage requires separate rendering checks.</p></li>
+<li><p>Add optional serial bounded graph run/resume entry points with per-stage resource policies and separately bound guardian provenance. Graph and control locks retain explicit recovery requirements.</p></li>
+<li><p>Finalized figure recipes accept an optional root text size without changing geometry defaults.</p></li>
+<li><p>Add optional literal categorical axis and facet display-label maps to finalized figure recipes without changing scientific payloads or default recipes.</p></li>
+<li><p>Add an explicit immutable generation registry and compact always-verified targets adapter. Interrupted selections require reconciliation; cached pointers remain unverified until consumption checks. Every completed generation remains verified even if explicitly closed failed before publication. This serial Linux-local increment does not add resource supervision or complete workflow orchestration.</p></li>
+<li><p>Add optional Linux guardian-backed artifact run and explicit resume APIs. Address-space limits are per process and thread settings are requests; guardian loss remains an unresolved failure requiring external cleanup.</p></li>
+<li><p>Added a serial artifact dependency core with deferred logical references, authenticated producer lineage and immutable generations that reuse unchanged bundles in place. Failed attempts require explicit reconciliation. Resource enforcement and targets integration remain outside this dependency core.</p></li>
+<li><p>Add a separate declared artifact bundle API for trusted installed writers, complete file/resource fingerprints, immutable accepted receipts and verified reuse. Failed attempts require explicit process reconciliation before retry; this is not a scheduler, sandbox or complete artifact DAG.</p></li>
 <li><p>Allow an explicit right-side facet-strip text angle in finalized figure recipes; the default preserves the existing -90-degree presentation.</p></li>
 <li><p>Build finalized tile heatmaps and effect-point plots from explicit keyed recipes, supplied categorical orders and midpoints, without aggregation or filtering. Keep scientific payload hashes separate from styling/provenance.</p></li>
 <li><p>Record common numerical thread environment settings in imaging definitions and runtime fingerprints; reject resume when those settings change.</p></li>
 <li><p>Add a sequential imaging plan/run/resume API for explicit exported package calls, upstream object references and tracked file or directory inputs.</p></li>
 <li><p>Record content, configuration, installed code, runtime and result hashes in durable receipts; reject stale or corrupt caches and concurrent run attempts. Retries preserve prior attempt artifacts. These APIs do not initialize Git, publish, download data or install packages.</p></li>
 <li><p>This first orchestration slice returns R objects; resource scheduling, external engine qualification, dashboards and report recipes remain separate work.</p></li>
+<li><p>Added a versioned strict research workflow with separate domain, data-origin and design declarations, canonical stage ordering and established colours.</p></li>
+<li><p>Added inert scaffold creation, external hash review, explicit execution readiness and stage provenance validation. These checks do not establish scientific or legal approval.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="reflowr-010">reflowR 0.1.0<a class="anchor" aria-label="anchor" href="#reflowr-010"></a></h2>
 <p>Initial release.</p>
-<ul><li><p><code><a href="../reference/reflow_init.html">reflow_init()</a></code> – main function wrapping <code><a href="https://workflowr.github.io/workflowr/reference/wflow_start.html" class="external-link">workflowr::wflow_start()</a></code> with theming.</p></li>
-<li><p>Five color schemes: clinical (red), basic (steelblue), code (forest green), special (purple), other (grey).</p></li>
-<li><p>Three depth presets: minimal (3 steps), standard (8 steps), extended (12 steps).</p></li>
-<li><p>Custom SVG icons per scheme embedded in navbar.</p></li>
-<li><p>CSS/SCSS theme generation from color scheme definitions.</p></li>
-<li><p><code><a href="../reference/reflow_preview.html">reflow_preview()</a></code> for interactive color preview.</p></li>
-<li><p><code><a href="../reference/reflow_schemes.html">reflow_schemes()</a></code> and <code><a href="../reference/reflow_presets.html">reflow_presets()</a></code> convenience functions.</p></li>
-<li><p>Full compatibility with workflowr commands (wflow_build, wflow_publish, etc.).</p></li>
-<li><p>Two vignettes: Getting Started and Color Schemes Reference. # reflowR 0.1.0.9000</p></li>
-<li><p>Added a versioned strict research workflow with separate domain, data-origin and design declarations, canonical stage ordering and established colours.</p></li>
-<li><p>Added inert scaffold creation, external hash review, explicit execution readiness and stage provenance validation. These checks do not establish scientific or legal approval.</p></li>
+<ul><li>
+<code><a href="../reference/reflow_init.html">reflow_init()</a></code> – main function wrapping <code><a href="https://workflowr.github.io/workflowr/reference/wflow_start.html" class="external-link">workflowr::wflow_start()</a></code> with theming.</li>
+<li>Five color schemes: clinical (red), basic (steelblue), code (forest green), special (purple), other (grey).</li>
+<li>Three depth presets: minimal (3 steps), standard (8 steps), extended (12 steps).</li>
+<li>Custom SVG icons per scheme embedded in navbar.</li>
+<li>CSS/SCSS theme generation from color scheme definitions.</li>
+<li>
+<code><a href="../reference/reflow_preview.html">reflow_preview()</a></code> for interactive color preview.</li>
+<li>
+<code><a href="../reference/reflow_schemes.html">reflow_schemes()</a></code> and <code><a href="../reference/reflow_presets.html">reflow_presets()</a></code> convenience functions.</li>
+<li>Full compatibility with workflowr commands (wflow_build, wflow_publish, etc.).</li>
+<li>Two vignettes: Getting Started and Color Schemes Reference.</li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
