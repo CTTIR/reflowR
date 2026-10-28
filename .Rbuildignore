@@ -14,7 +14,6 @@
 ^Meta$
 ^_coverage$
 ^\.lintr$
-^_pkgdown\.yml$
 ^instructions$
 
 ^CITATION\.cff$
@@ -23,3 +22,4 @@
 ^\.git$
 ^\.gitattributes$
 ^tools/branding$
+^man/figures/(?!(logo\.svg|logo-with-name\.png|logo-with-name-dark\.png)$)
