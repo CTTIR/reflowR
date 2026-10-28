@@ -34,6 +34,15 @@ usable <- identical(Sys.info()[["sysname"]], "Linux") &&
   requireNamespace("ps", quietly = TRUE) && ps::ps_is_supported() &&
   nzchar(Sys.which("prlimit")) && nzchar(Sys.which("nice"))
 if (usable) {
+  # The worker runs at priority 10 with 8 GiB of address space, which an
+  # unprivileged session can only request when its own settings allow it.
+  space <- grep("^Max address space", readLines("/proc/self/limits"), value = TRUE)
+  space <- strsplit(trimws(sub("^Max address space", "", space)), " +")[[1]][1:2]
+  usable <- ps::ps_get_nice(ps::ps_handle()) <= 10 && isTRUE(all(
+    space == "unlimited" | suppressWarnings(as.numeric(space)) >= 8 * 1024^3
+  ))
+}
+if (usable) {
   # reflowR, processx, ps, digest, the writer package (base) and their imports
   packages <- unique(c(roots, unlist(tools::package_dependencies(
     roots, db = utils::installed.packages(), which = c("Depends", "Imports"),
@@ -69,20 +78,24 @@ if (usable) {
   files <- unique(normalizePath(files, winslash = "/"))
   pins <- vapply(files, digest::digest, character(1), algo = "sha256", file = TRUE)
 
-  # The parent thread settings must equal the requested thread count.
+  # The parent thread settings must equal the requested thread count; they
+  # are restored afterwards, also when the run fails.
   threads <- c("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS")
   saved <- Sys.getenv(threads, unset = NA)
   Sys.setenv(OPENBLAS_NUM_THREADS = 1, OMP_NUM_THREADS = 1, MKL_NUM_THREADS = 1)
-  # One resource list per stage, in the canonical stage order
-  graph <- reflow_artifact_plan_run_bounded(plan, file.path(root, "graph"),
-                                            file.path(root, "supervisor"),
-                                            list(lines = resources), pins)
-  print(readLines(file.path(graph$nodes$lines$descriptor$bundle, "lines.txt")))
-
-  for (name in threads) {
-    if (is.na(saved[[name]])) Sys.unsetenv(name) else do.call(Sys.setenv, as.list(saved[name]))
-  }
-  unlink(root, recursive = TRUE)
+  tryCatch({
+    # One resource list per stage, in the canonical stage order
+    graph <- reflow_artifact_plan_run_bounded(plan, file.path(root, "graph"),
+                                              file.path(root, "supervisor"),
+                                              list(lines = resources), pins)
+    print(readLines(file.path(graph$nodes$lines$descriptor$bundle, "lines.txt")))
+  }, finally = {
+    for (name in threads) {
+      if (is.na(saved[[name]])) Sys.unsetenv(name)
+      else do.call(Sys.setenv, as.list(saved[name]))
+    }
+    unlink(root, recursive = TRUE)
+  })
 }
 }
 }
