@@ -1,4 +1,4 @@
-#' Get a Color Scheme Definition
+#' Get a Colour Scheme Definition
 #'
 #' Returns the site scheme for one CTTIR v5 topic family. Every colour, surface
 #' and font is derived from `inst/cttir/design_tokens.csv`, the token table

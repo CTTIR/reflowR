@@ -92,7 +92,7 @@
 #'   midpoint and display_labels are unsupported. Status must be available.
 #'   Labels accept title/subtitle/x/y/fill/caption. No categories are inferred.
 #' @details Numeric-only options must remain NULL for existing types.
-#'   Their default omission preserves existing recipe structure and behavior.
+#'   Their default omission preserves existing recipe structure and behaviour.
 #'   Numeric coordinates are supplied directly: no aggregation, filtering, jitter,
 #'   automatic offsets or implicit reordering is performed. Plotted rows retain
 #'   input order; categorical display order follows the declared levels.

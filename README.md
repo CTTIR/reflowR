@@ -12,7 +12,7 @@
 
 ## Overview
 
-**reflowR** extends the [workflowr](https://workflowr.github.io/workflowr/) package with themed color schemes, structured analysis pipeline templates, and utility scripts for reproducible research. It wraps `workflowr::wflow_start()` to create a standard workflowr project, then layers on a complete theming and scaffolding system.
+**reflowR** extends the [workflowr](https://workflowr.github.io/workflowr/) package with themed colour schemes, structured analysis pipeline templates, and utility scripts for reproducible research. It wraps `workflowr::wflow_start()` to create a standard workflowr project, then layers on a complete theming and scaffolding system.
 
 ### Theming
 
@@ -61,7 +61,7 @@ workflowr::wflow_build()
 workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
 ```
 
-## Color Schemes
+## Colour Schemes
 
 | Scheme | Label | Accent | Use Case |
 |--------|-------|--------|----------|

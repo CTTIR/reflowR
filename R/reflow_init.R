@@ -1,7 +1,7 @@
-#' Initialize a Themed Workflowr Project
+#' Initialize a Themed workflowr Project
 #'
 #' Wraps \code{\link[workflowr]{wflow_start}} to create a standard workflowr
-#' project, then extends it with a themed color scheme, structured Rmd analysis
+#' project, then extends it with a themed colour scheme, structured Rmd analysis
 #' pipeline, utility scripts, and a Quarto report template.
 #'
 #' @param directory Character. Path where the project will be created.

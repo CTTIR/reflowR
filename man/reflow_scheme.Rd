@@ -2,7 +2,7 @@
 % Please edit documentation in R/schemes.R
 \name{reflow_scheme}
 \alias{reflow_scheme}
-\title{Get a Color Scheme Definition}
+\title{Get a Colour Scheme Definition}
 \usage{
 reflow_scheme(name)
 }

@@ -1,4 +1,4 @@
-#' Preview a Color Scheme
+#' Preview a Colour Scheme
 #'
 #' Opens an HTML preview in the RStudio viewer (or browser) showing the
 #' family icon on a flat navbar with its accent rule, the light and dark

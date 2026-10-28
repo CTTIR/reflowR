@@ -2,7 +2,7 @@
 % Please edit documentation in R/reflow_init.R
 \name{reflow_init}
 \alias{reflow_init}
-\title{Initialize a Themed Workflowr Project}
+\title{Initialize a Themed workflowr Project}
 \usage{
 reflow_init(
   directory,
@@ -82,7 +82,7 @@ Invisibly returns the path to the created project directory.
 }
 \description{
 Wraps \code{\link[workflowr]{wflow_start}} to create a standard workflowr
-project, then extends it with a themed color scheme, structured Rmd analysis
+project, then extends it with a themed colour scheme, structured Rmd analysis
 pipeline, utility scripts, and a Quarto report template.
 }
 \details{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_css.R
 \name{generate_scss}
 \alias{generate_scss}
-\title{Generate Theme SCSS from a Color Scheme}
+\title{Generate Theme SCSS from a Colour Scheme}
 \usage{
 generate_scss(scheme, output_path)
 }

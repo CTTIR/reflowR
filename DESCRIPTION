@@ -19,6 +19,7 @@ Description: Extends the 'workflowr' package with themed colour schemes,
     receipts, and scaffold and validate strict project profiles.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-GB
 Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.1.0)

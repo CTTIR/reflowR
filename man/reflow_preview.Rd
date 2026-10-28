@@ -2,7 +2,7 @@
 % Please edit documentation in R/reflow_preview.R
 \name{reflow_preview}
 \alias{reflow_preview}
-\title{Preview a Color Scheme}
+\title{Preview a Colour Scheme}
 \usage{
 reflow_preview(scheme = "brand")
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_css.R
 \name{generate_css}
 \alias{generate_css}
-\title{Generate Theme CSS from a Color Scheme}
+\title{Generate Theme CSS from a Colour Scheme}
 \usage{
 generate_css(scheme, output_path)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/reflow_schemes.R
 \name{reflow_schemes}
 \alias{reflow_schemes}
-\title{List Available Color Schemes}
+\title{List Available Colour Schemes}
 \usage{
 reflow_schemes()
 }

@@ -1,4 +1,4 @@
-#' Generate Theme CSS from a Color Scheme
+#' Generate Theme CSS from a Colour Scheme
 #'
 #' Creates the CTTIR v5 site stylesheet for a workflowr (Bootstrap 3) site:
 #' the themakR surface with page, text, heading, link, code and border colours
@@ -465,7 +465,7 @@ footer, .footer, #footer {
 }
 
 
-#' Generate Theme SCSS from a Color Scheme
+#' Generate Theme SCSS from a Colour Scheme
 #'
 #' Creates a Quarto-compatible SCSS file on the CTTIR v5 surface. Bootstrap
 #' defaults take the light tokens (links use the link token, as in themakR);
