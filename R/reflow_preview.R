@@ -10,9 +10,9 @@
 #' @return Invisibly returns the scheme list.
 #'
 #' @examples
-#' \dontrun{
-#' reflow_preview("clinical")
-#' reflow_preview("brand")
+#' if (interactive()) {
+#'   reflow_preview("clinical")
+#'   reflow_preview("brand")
 #' }
 #'
 #' @export

@@ -103,30 +103,23 @@ for example after an earlier call, the function stops before writing
 anything, so a project is never left partly updated.
 }
 \examples{
-\dontrun{
-library(reflowR)
-
-# Clinical trial project with full pipeline
+# A clinical project with the three-step pipeline, in a temporary folder
+project <- file.path(tempdir(), "my_project")
 reflow_init(
-  directory = "~/projects/sepsis_trial",
-  author    = "Raban Heller",
-  email     = "raban.heller@outlook.com",
+  directory = project,
+  author    = "Your Name",
+  email     = "you@example.com",
   scheme    = "clinical",
-  depth     = "standard"
+  depth     = "minimal",
+  git       = FALSE,
+  change_wd = FALSE,
+  open      = FALSE
 )
+list.files(file.path(project, "analysis"))
 
-# Quick stats project
-reflow_init(
-  directory = "~/projects/simulation_study",
-  author    = "Raban Heller",
-  scheme    = "simulation",
-  depth     = "minimal"
-)
-
-# Then use standard workflowr commands:
-workflowr::wflow_build()
-workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
-}
+# In a real project, continue with the standard workflowr commands, e.g.
+# workflowr::wflow_build() and workflowr::wflow_publish().
+unlink(project, recursive = TRUE)
 
 }
 \seealso{

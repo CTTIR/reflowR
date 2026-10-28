@@ -19,9 +19,9 @@ family icon on a flat navbar with its accent rule, the light and dark
 surfaces, the identity colours and the Okabe-Ito palette.
 }
 \examples{
-\dontrun{
-reflow_preview("clinical")
-reflow_preview("brand")
+if (interactive()) {
+  reflow_preview("clinical")
+  reflow_preview("brand")
 }
 
 }
