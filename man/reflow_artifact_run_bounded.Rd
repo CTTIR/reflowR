@@ -17,7 +17,7 @@ reflow_artifact_resume_bounded(spec, directory, supervisor_directory,
  nice (absolute 0--19), threads (1--2), temp_directory, cache_directory,
  rscript, prlimit, nice_command. Paths are canonical and link-free.}
 \item{runtime_files}{Named SHA-256 vector including installed backend scripts,
- every file of the backend and declared writer Depends/Imports/LinkingTo
+ every file of the backend and declared writer Depends/Imports
  closure and the three executables. Other runtime files
  must be explicitly declared; no complete ELF closure is inferred.}
 \item{cancel}{Callback returning one nonmissing logical value. Errors cancel.}
