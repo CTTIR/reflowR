@@ -300,12 +300,17 @@ rfa_signature <- function(spec) {
                                               recursive = TRUE)
   packages <- sort(unique(c("reflowR", "digest", direct,
                             unlist(dependencies, use.names = FALSE))))
+  # Each package is bound by one digest of its folder layout and file hashes;
+  # keeping the full listing in every definition made graph journals grow by
+  # megabytes per node.
   resources <- lapply(packages, function(package) {
     path <- rfa_canonical(find.package(package))
     tree <- rfa_tree(path)
-    list(path = path, directories = tree$directories,
-         files = stats::setNames(rf_package_hashes(file.path(path, tree$files)),
-                                 tree$files))
+    files <- stats::setNames(rf_package_hashes(file.path(path, tree$files)),
+                             tree$files)
+    list(path = path, tree_hash = rf_hash(list(
+      directories = tree$directories, files = files
+    )))
   })
   names(resources) <- packages
   base <- rf_signature(reflow_imaging_plan(stage, packages = spec$packages))
@@ -313,7 +318,7 @@ rfa_signature <- function(spec) {
     stop("Package closure changed.")
   }
   list(
-    schema = "reflow_artifact_definition_1", spec = spec, base = base,
+    schema = "reflow_artifact_definition_2", spec = spec, base = base,
     resources = resources, tracked = tracked, runtime = stats::setNames(
       vapply(spec$runtime_files, rf_file_hash, character(1)),
       spec$runtime_files

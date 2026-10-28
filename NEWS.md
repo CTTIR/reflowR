@@ -1,5 +1,11 @@
 # Development
 
+* Artifact definitions bind each package of the closure by one digest of its
+  folder layout and file hashes instead of storing every file hash, so graph
+  journals no longer grow by megabytes per node. The definition schema is now
+  `reflow_artifact_definition_2`; generations written before cannot be reused
+  as `previous`.
+
 * `options(reflowR.input_hash_cache = TRUE)` reuses the hashes of tracked
   input files within one R process in the same way as the package hash cache;
   tree walks check links of a folder's entries in one call.
