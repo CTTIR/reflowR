@@ -13,9 +13,9 @@ Extends the 'workflowr' package with themed colour schemes, structured analysis 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/cttir/reflowR}
+  \item \url{https://github.com/CTTIR/reflowR}
   \item \url{https://cttir.github.io/reflowR/}
-  \item Report bugs at \url{https://github.com/cttir/reflowR/issues}
+  \item Report bugs at \url{https://github.com/CTTIR/reflowR/issues}
 }
 
 }

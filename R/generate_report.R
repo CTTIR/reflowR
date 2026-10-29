@@ -160,7 +160,7 @@ generate_project_readme <- function(project_dir, name, author, scheme, preset) {
 ## Built With
 
 - [workflowr](https://workflowr.github.io/workflowr/) -- Reproducible research framework
-- [reflowR](https://github.com/cttir/reflowR) -- Themed workflowr extensions
+- [reflowR](https://github.com/CTTIR/reflowR) -- Themed workflowr extensions
 ')
 
   writeLines(readme, fs::path(project_dir, "README.md"))

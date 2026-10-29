@@ -106,7 +106,7 @@ reflowR calls `workflowr::wflow_start()` to create the standard workflowr scaffo
 
 - Browse the [function reference](https://cttir.github.io/reflowR/reference/index.html)
 - Read the [Getting Started vignette](https://cttir.github.io/reflowR/articles/getting-started.html)
-- File issues at [GitHub Issues](https://github.com/cttir/reflowR/issues)
+- File issues at [GitHub Issues](https://github.com/CTTIR/reflowR/issues)
 
 ## Citation
 

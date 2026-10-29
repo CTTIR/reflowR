@@ -48,7 +48,7 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/Needs/website: CTTIR/themakR, pkgdown
-URL: https://github.com/cttir/reflowR,
+URL: https://github.com/CTTIR/reflowR,
     https://cttir.github.io/reflowR/
-BugReports: https://github.com/cttir/reflowR/issues
+BugReports: https://github.com/CTTIR/reflowR/issues
 Config/roxygen2/version: 8.0.0
