@@ -72,7 +72,10 @@ exist in \code{directory}: \code{README.md}, \code{_workflowr.yml},
 \code{analysis/_site.yml}, \code{analysis/index.Rmd},
 \code{analysis/about.Rmd} and the theme, icon, script, pipeline and report
 files. Default \code{FALSE}: the function then stops before writing
-anything and lists the files. Other workflowr files are never replaced.}
+anything and lists the files. Other workflowr files are never replaced.
+Re-theming at a different \code{depth} leaves the pipeline files of the
+earlier depth that the new one does not write in \code{analysis/}; remove
+them yourself if they are no longer needed.}
 
 \item{git}{Logical. Initialize a git repository (or use the one in an
 existing folder) and commit the files that this call writes? Other files
