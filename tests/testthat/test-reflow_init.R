@@ -226,13 +226,15 @@ test_that("git = TRUE makes no commit on top of changes the user has staged", {
   expect_identical(unname(unlist(git2r::status(repo)$staged)), "old.R")
 })
 
-test_that("git = TRUE commits every file of a new project", {
+test_that("git = TRUE commits every file of a new project without a warning", {
   skip_if_not_installed("git2r")
   tmp <- withr::local_tempdir()
   proj <- file.path(tmp, "new_repo")
-  suppressMessages(reflow_init(directory = proj, author = "A", depth = "minimal",
-                               git = TRUE, change_wd = FALSE, open = FALSE,
-                               user.name = "T", user.email = "t@example.org"))
+  expect_no_warning(
+    suppressMessages(reflow_init(directory = proj, author = "A", depth = "minimal",
+                                 git = TRUE, change_wd = FALSE, open = FALSE,
+                                 user.name = "T", user.email = "t@example.org"))
+  )
   repo <- git2r::repository(proj)
   expect_length(git2r::commits(repo), 1L)
   status <- git2r::status(repo, all_untracked = TRUE)

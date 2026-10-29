@@ -350,8 +350,10 @@ reflow_init_start <- function(...) workflowr::wflow_start(...)
 reflow_init_workflowr_version <- function() utils::packageVersion("workflowr")
 
 # Files in a project folder, relative to it, leaving out the .git folder.
-# Linked folders are listed as links, not followed.
+# Linked folders are listed as links, not followed. A folder that does not
+# exist yet holds no files.
 reflow_init_files <- function(directory) {
+  if (!dir.exists(directory)) return(character())
   files <- fs::dir_ls(directory, recurse = TRUE, all = TRUE,
                       type = c("file", "symlink"), fail = FALSE)
   files <- as.character(fs::path_rel(files, directory))
