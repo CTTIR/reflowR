@@ -378,6 +378,27 @@ test_that("a missing file needs a writable folder above it", {
   expect_false(reflow_init_writable(tmp))
 })
 
+test_that("a leading tilde is expanded before any step uses the folder", {
+  seen <- NULL
+  local_mocked_bindings(reflow_init_writable = function(path) TRUE)
+  local_mocked_bindings(
+    wflow_start = function(directory, ...) {
+      seen <<- directory
+      stop("stopped before writing")
+    },
+    .package = "workflowr"
+  )
+  directory <- file.path("~", basename(tempfile("reflowR-tilde-")))
+  expect_error(
+    suppressMessages(reflow_init(directory = directory, author = "A",
+                                 depth = "minimal", git = FALSE,
+                                 change_wd = FALSE, open = FALSE)),
+    "stopped before writing"
+  )
+  expect_identical(seen, path.expand(directory))
+  expect_false(startsWith(seen, "~"))
+})
+
 test_that("the replaced file list matches what reflow_init changes in a workflowr project", {
   tmp <- withr::local_tempdir()
   base <- file.path(tmp, "base")

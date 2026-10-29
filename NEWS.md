@@ -16,6 +16,10 @@
   any. With `overwrite = TRUE`, a read-only file used to stop it halfway and
   leave a partly re-themed project.
 
+* `reflow_init()` expands a leading `~` in `directory` once, before any step
+  uses it. On Windows, base R and 'fs' expand it to different folders, so the
+  checks and the files written could refer to different places.
+
 * Every exported function now has a runnable example; the `reflow_init()`
   example writes to a temporary folder.
 

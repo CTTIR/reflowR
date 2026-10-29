@@ -124,6 +124,10 @@ reflow_init <- function(
   user.email  = NULL,
   open        = rlang::is_interactive()
 ) {
+  # On Windows, base R and fs expand "~" to different folders; expand it once
+  # so that the checks, workflowr and Phase 2 all use the same one.
+  directory <- path.expand(directory)
+
   # --- Phase 1: workflowr base scaffold ---
   scheme <- match.arg(scheme)
   depth  <- match.arg(depth)
