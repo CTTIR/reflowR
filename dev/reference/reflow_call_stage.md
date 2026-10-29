@@ -20,7 +20,8 @@ reflow_call_stage(id, fun, args = list(), seed = NULL, packages = character())
 
 - id:
 
-  Unique stage identifier.
+  Stage identifier, unique within a plan even when letter case is
+  ignored.
 
 - fun:
 

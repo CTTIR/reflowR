@@ -1,4 +1,4 @@
-# List Available Color Schemes
+# List Available Colour Schemes
 
 Prints the CTTIR v5 topic families with their labels and accents,
 followed by the earlier scheme names that remain accepted as aliases,

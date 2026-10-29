@@ -1,4 +1,4 @@
-# Generate Theme SCSS from a Color Scheme
+# Generate Theme SCSS from a Colour Scheme
 
 Creates a Quarto-compatible SCSS file on the CTTIR v5 surface. Bootstrap
 defaults take the light tokens (links use the link token, as in

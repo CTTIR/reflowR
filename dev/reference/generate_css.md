@@ -1,4 +1,4 @@
-# Generate Theme CSS from a Color Scheme
+# Generate Theme CSS from a Colour Scheme
 
 Creates the CTTIR v5 site stylesheet for a workflowr (Bootstrap 3) site:
 the themakR surface with page, text, heading, link, code and border

@@ -59,7 +59,7 @@ Declare package calls and execute or resume verified object workflows.
 Create and initialize themed workflowr projects.
 
 - [`reflow_init()`](https://cttir.github.io/reflowR/dev/reference/reflow_init.md)
-  : Initialize a Themed Workflowr Project
+  : Initialize a Themed workflowr Project
 
 ## Strict research workflows
 
@@ -80,15 +80,15 @@ declarations.
 Explore available color schemes and pipeline depth presets.
 
 - [`reflow_scheme()`](https://cttir.github.io/reflowR/dev/reference/reflow_scheme.md)
-  : Get a Color Scheme Definition
+  : Get a Colour Scheme Definition
 - [`reflow_schemes()`](https://cttir.github.io/reflowR/dev/reference/reflow_schemes.md)
-  : List Available Color Schemes
+  : List Available Colour Schemes
 - [`reflow_preset()`](https://cttir.github.io/reflowR/dev/reference/reflow_preset.md)
   : Get a Depth Preset Definition
 - [`reflow_presets()`](https://cttir.github.io/reflowR/dev/reference/reflow_presets.md)
   : List Available Depth Presets
 - [`reflow_preview()`](https://cttir.github.io/reflowR/dev/reference/reflow_preview.md)
-  : Preview a Color Scheme
+  : Preview a Colour Scheme
 
 ## Utilities
 

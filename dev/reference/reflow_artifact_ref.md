@@ -25,3 +25,16 @@ reflow_artifact_ref(stage, artifact, read = FALSE)
 ## Value
 
 A deferred artifact reference.
+
+## Examples
+
+``` r
+# The "values" artifact of stage "data", read back as an R object
+ref <- reflow_artifact_ref("data", "values", read = TRUE)
+str(ref)
+#> List of 3
+#>  $ stage   : chr "data"
+#>  $ artifact: chr "values"
+#>  $ read    : logi TRUE
+#>  - attr(*, "class")= chr "reflow_artifact_ref"
+```

@@ -26,3 +26,16 @@ reflow_imaging_plan(..., packages = character())
 ## Value
 
 A versioned plan; no stage is executed.
+
+## Examples
+
+``` r
+plan <- reflow_imaging_plan(
+  reflow_imaging_stage("values", "base", "identity",
+                       list(x = c(2, 4, 4, 5))),
+  reflow_imaging_stage("mean", "base", "mean",
+                       list(x = reflow_imaging_ref("values")))
+)
+vapply(plan$stages, `[[`, character(1), "id")
+#> [1] "values" "mean"  
+```

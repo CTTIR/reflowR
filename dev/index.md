@@ -1,14 +1,12 @@
 # reflowR ![reflowR logo](reference/figures/logo-with-name.png)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21889956.svg)](https://doi.org/10.5281/zenodo.21889956)
-
 > Themed extensions for workflowr research workflows
 
 ## Overview
 
 **reflowR** extends the
 [workflowr](https://workflowr.github.io/workflowr/) package with themed
-color schemes, structured analysis pipeline templates, and utility
+colour schemes, structured analysis pipeline templates, and utility
 scripts for reproducible research. It wraps
 [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
 to create a standard workflowr project, then layers on a complete
@@ -41,7 +39,7 @@ commands (`wflow_build()`, `wflow_publish()`, etc.).
 ``` r
 
 # install.packages("pak")
-pak::pak("cttir/reflowR")
+pak::pak("CTTIR/reflowR")
 # workflowr is installed automatically as a dependency
 ```
 
@@ -49,7 +47,7 @@ Or using remotes:
 
 ``` r
 
-remotes::install_github("cttir/reflowR")
+remotes::install_github("CTTIR/reflowR")
 ```
 
 ## Quick Start
@@ -72,7 +70,7 @@ workflowr::wflow_build()
 workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
 ```
 
-## Color Schemes
+## Colour Schemes
 
 | Scheme | Label | Accent | Use Case |
 |----|----|----|----|
@@ -127,7 +125,7 @@ commands work as expected.
 - Read the [Getting Started
   vignette](https://cttir.github.io/reflowR/articles/getting-started.html)
 - File issues at [GitHub
-  Issues](https://github.com/cttir/reflowR/issues)
+  Issues](https://github.com/CTTIR/reflowR/issues)
 
 ## Citation
 

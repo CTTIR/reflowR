@@ -2,6 +2,69 @@
 
 ## reflowR (development version)
 
+- [`reflow_artifact_run_bounded()`](https://cttir.github.io/reflowR/dev/reference/reflow_artifact_run_bounded.md)
+  and the graph version give the guardian as long as `timeout_seconds`,
+  at least 5 and at most 60 seconds, to report that it is ready; the
+  fixed 5 seconds were too short on a busy machine. A guardian that
+  misses this has started no worker and is now stopped instead of being
+  left running.
+
+- `reflow_init(git = TRUE)` commits only the files that it and
+  [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
+  write. With `existing = TRUE` it used to stage everything in the
+  folder, so the first commit took the user’s own data, notes and
+  uncommitted edits. If the repository already has staged changes, it
+  makes no commit and says so.
+
+- [`reflow_init()`](https://cttir.github.io/reflowR/dev/reference/reflow_init.md)
+  checks that it can write each of its files before writing any. With
+  `overwrite = TRUE`, a read-only file used to stop it halfway and leave
+  a partly re-themed project.
+
+- [`reflow_init()`](https://cttir.github.io/reflowR/dev/reference/reflow_init.md)
+  expands a leading `~` in `directory` once, before any step uses it. On
+  Windows, base R and ‘fs’ expand it to different folders, so the checks
+  and the files written could refer to different places.
+
+- Every exported function now has a runnable example; the
+  [`reflow_init()`](https://cttir.github.io/reflowR/dev/reference/reflow_init.md)
+  example writes to a temporary folder.
+
+- The generated `code/00_setup.R` no longer installs packages (it used
+  `install.packages("pacman")` and `pacman::p_load()`); it attaches the
+  packages that are installed and lists the missing ones in a message.
+
+- Artifact and imaging plans refuse stage ids that differ only in letter
+  case on every platform. They name folders and receipt files, which
+  collide on case-insensitive file systems; the check used to run on
+  Windows only for artifact plans and nowhere for imaging plans.
+
+- [`reflow_preview()`](https://cttir.github.io/reflowR/dev/reference/reflow_preview.md)
+  no longer requires htmltools, which it never used.
+
+- `_workflowr.yml` records the installed workflowr version instead of a
+  fixed 1.7.2.
+
+- [`reflow_init()`](https://cttir.github.io/reflowR/dev/reference/reflow_init.md)
+  checks all files it writes before writing anything and stops with a
+  message listing those that already exist. With `existing = TRUE` it
+  used to replace the `README.md`, `_workflowr.yml`, `_site.yml`,
+  `index.Rmd` and `about.Rmd` of an existing workflowr project without
+  asking, and a repeated call overwrote `_site.yml` and the theme and
+  then failed on the icon, leaving the project partly updated. The new
+  argument `overwrite = TRUE` replaces these files on request.
+
+- The generated README and about page link to the package repository
+  given in DESCRIPTION instead of a former personal repository.
+
+- [`reflow_init()`](https://cttir.github.io/reflowR/dev/reference/reflow_init.md)
+  escapes the project name and author in the YAML headers of the
+  generated pages and report, so quotes, colons or backslashes in them
+  no longer produce invalid front matter.
+
+- The Zenodo DOI is no longer listed in the README and `CITATION.cff`;
+  the record is not published yet, and the DOI will be added once it is.
+
 - Package closures (artifact definitions, imaging plans and bounded
   runs) follow Depends and Imports only. LinkingTo packages supply
   headers at build time and need not be installed; their effect is in
@@ -183,18 +246,18 @@ Initial release.
   – main function wrapping
   [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
   with theming.
-- Five color schemes: clinical (red), basic (steelblue), code (forest
+- Five colour schemes: clinical (red), basic (steelblue), code (forest
   green), special (purple), other (grey).
 - Three depth presets: minimal (3 steps), standard (8 steps), extended
   (12 steps).
 - Custom SVG icons per scheme embedded in navbar.
-- CSS/SCSS theme generation from color scheme definitions.
+- CSS/SCSS theme generation from colour scheme definitions.
 - [`reflow_preview()`](https://cttir.github.io/reflowR/dev/reference/reflow_preview.md)
-  for interactive color preview.
+  for interactive colour preview.
 - [`reflow_schemes()`](https://cttir.github.io/reflowR/dev/reference/reflow_schemes.md)
   and
   [`reflow_presets()`](https://cttir.github.io/reflowR/dev/reference/reflow_presets.md)
   convenience functions.
 - Full compatibility with workflowr commands (wflow_build,
   wflow_publish, etc.).
-- Two vignettes: Getting Started and Color Schemes Reference.
+- Two vignettes: Getting Started and Colour Schemes Reference.

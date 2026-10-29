@@ -48,3 +48,28 @@ reflow_artifact_resume(
 ## Value
 
 An authenticated descriptor with stable bundle path and file manifest.
+
+## Examples
+
+``` r
+spec <- reflow_artifact_spec(
+  "base", "writeLines",
+  args = list(text = c("alpha", "beta")),
+  outputs = list(con = list(path = "lines.txt", type = "file")),
+  inventory = c(lines = "lines.txt")
+)
+run <- tempfile("artifact-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+bundle <- reflow_artifact_run(spec, run)
+readLines(file.path(bundle$bundle, "lines.txt"))
+#> [1] "alpha" "beta" 
+bundle$inventory
+#>    name      path bytes
+#> 1 lines lines.txt    11
+#>                                                             sha256
+#> 1 e49c81e2d2f84e259d40e2fb8192f3bcd198b355184845d76d8f58807d0d78ee
+
+# Resume re-verifies the accepted bundle without calling the writer
+identical(reflow_artifact_resume(spec, run), bundle)
+#> [1] TRUE
+unlink(run, recursive = TRUE)
+```

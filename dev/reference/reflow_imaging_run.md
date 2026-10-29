@@ -63,3 +63,23 @@ A directory lock prevents concurrent execution. After an interrupted
 process, inspect the lock's owner receipt and verify that process has
 stopped before manually removing `.lock`; stale locks are never
 automatically stolen.
+
+## Examples
+
+``` r
+plan <- reflow_imaging_plan(
+  reflow_imaging_stage("values", "base", "identity",
+                       list(x = c(2, 4, 4, 5))),
+  reflow_imaging_stage("mean", "base", "mean",
+                       list(x = reflow_imaging_ref("values")))
+)
+run <- tempfile("imaging-")
+results <- reflow_imaging_run(plan, run)
+results$mean
+#> [1] 3.75
+
+# Resume verifies the recorded results instead of calling the stages again
+identical(reflow_imaging_resume(plan, run), results)
+#> [1] TRUE
+unlink(run, recursive = TRUE)
+```

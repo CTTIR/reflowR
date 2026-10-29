@@ -16,7 +16,8 @@ reflow_imaging_stage(id, package, fun, args = list(), seed = NULL)
 
 - id:
 
-  Unique stage identifier containing letters, digits, underscores.
+  Stage identifier containing letters, digits, underscores; unique
+  within a plan even when letter case is ignored.
 
 - package:
 
@@ -38,3 +39,16 @@ reflow_imaging_stage(id, package, fun, args = list(), seed = NULL)
 ## Value
 
 A stage specification.
+
+## Examples
+
+``` r
+stage <- reflow_imaging_stage("summary", "base", "summary",
+                              args = list(object = c(2, 4, 4, 5)))
+stage$id
+#> [1] "summary"
+# Stochastic calls need an explicit seed
+noisy <- reflow_imaging_stage("noise", "stats", "rnorm", list(n = 3), seed = 1L)
+noisy$seed
+#> [1] 1
+```

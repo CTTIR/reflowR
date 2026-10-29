@@ -74,3 +74,27 @@ reflow_artifact_spec(
 ## Value
 
 A versioned declaration; no writer is invoked.
+
+## Examples
+
+``` r
+spec <- reflow_artifact_spec(
+  "utils", "write.csv",
+  args = list(x = data.frame(id = 1:3, value = c(2.5, 3.1, 4.7)),
+              row.names = FALSE),
+  outputs = list(file = list(path = "table.csv", type = "file")),
+  inventory = c(table = "table.csv")
+)
+spec$outputs
+#> $file
+#> $file$path
+#> [1] "table.csv"
+#> 
+#> $file$type
+#> [1] "file"
+#> 
+#> 
+spec$inventory
+#>       table 
+#> "table.csv" 
+```

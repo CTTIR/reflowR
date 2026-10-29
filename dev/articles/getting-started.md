@@ -4,14 +4,8 @@
 
 [![R-CMD-check](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CTTIR/reflowR/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/CTTIR/reflowR/actions/workflows/pkgdown.yaml/badge.svg)](https://cttir.github.io/reflowR/)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/reflowR)](https://CRAN.R-project.org/package=reflowR)
 [![Codecov test
 coverage](https://codecov.io/gh/CTTIR/reflowR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/CTTIR/reflowR?branch=main)
-[![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/reflowR)](https://cran.r-project.org/package=reflowR)
-[![CRAN downloads
-total](https://cranlogs.r-pkg.org/badges/grand-total/reflowR)](https://cran.r-project.org/package=reflowR)
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Lifecycle:
@@ -21,7 +15,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 **reflowR** extends the
 [workflowr](https://workflowr.github.io/workflowr/) package with themed
-color schemes, structured analysis pipeline templates, and utility
+colour schemes, structured analysis pipeline templates, and utility
 scripts for reproducible research. It wraps
 [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
 and layers on additional structure and theming.
@@ -31,7 +25,7 @@ and layers on additional structure and theming.
 ``` r
 
 # Install from GitHub (workflowr is installed automatically)
-remotes::install_github("cttir/reflowR")
+remotes::install_github("CTTIR/reflowR")
 ```
 
 ## Quick Start
@@ -42,9 +36,9 @@ library(reflowR)
 
 # Create a clinical research project with the standard 8-step pipeline
 reflow_init(
-  directory = "~/projects/sepsis_trial",
-  author    = "Raban Heller",
-  email     = "raban.heller@outlook.com",
+  directory = "~/projects/my_project",
+  author    = "Your Name",
+  email     = "you@example.com",
   scheme    = "clinical",
   depth     = "standard"
 )
