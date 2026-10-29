@@ -1,7 +1,7 @@
 # Generate the 00_setup.R Script
 
-Creates the project setup script with package loading, paths, color
-definitions, ggplot2 theme, and table styling helpers.
+Creates the project setup script with package loading, paths, the CTTIR
+v5 scheme colours and fonts, ggplot2 theme, and table styling helpers.
 
 ## Usage
 
@@ -18,7 +18,7 @@ generate_setup_script(project_dir, scheme)
 - scheme:
 
   A scheme list from
-  [`reflow_scheme()`](https://r-heller.github.io/reflowR/reference/reflow_scheme.md).
+  [`reflow_scheme()`](https://cttir.github.io/reflowR/reference/reflow_scheme.md).
 
 ## Value
 

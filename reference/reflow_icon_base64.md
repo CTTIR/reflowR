@@ -1,8 +1,10 @@
 # Get Base64-Encoded SVG Icon for a Scheme
 
-Reads the scheme-specific SVG icon from the package's `inst/icons/`
+Reads the CTTIR v5 family icon from the package's `inst/icons/`
 directory and returns it as a base64-encoded data URI suitable for
-embedding in HTML.
+embedding in HTML. The icon is the v5 hex on a light surface: a tinted
+face, the family accent as rim and a small family glyph, with a
+transparent exterior.
 
 ## Usage
 
@@ -14,7 +16,8 @@ reflow_icon_base64(scheme_name)
 
 - scheme_name:
 
-  Character. The scheme name (e.g., `"clinical"`).
+  Character. A v5 family key (e.g., `"clinical"`) or one of the earlier
+  scheme names, which resolve to their v5 family icon.
 
 ## Value
 
@@ -24,9 +27,7 @@ A character string containing the base64 data URI (e.g.,
 ## Examples
 
 ``` r
-# \donttest{
 uri <- reflow_icon_base64("clinical")
 nchar(uri)
-#> [1] 438
-# }
+#> [1] 714
 ```

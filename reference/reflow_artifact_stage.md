@@ -28,7 +28,8 @@ reflow_artifact_stage(
 
 - id:
 
-  Unique stage identifier.
+  Stage identifier, unique within a plan even when letter case is
+  ignored.
 
 - package, fun, args, outputs, inventory, allow_empty, seed, packages,
   runtime_files:
@@ -39,3 +40,19 @@ reflow_artifact_stage(
 ## Value
 
 A deferred writer declaration.
+
+## Examples
+
+``` r
+stage <- reflow_artifact_stage(
+  "data", "base", "saveRDS",
+  args = list(object = c(alpha = 1.5, beta = 2.5)),
+  outputs = list(file = list(path = "values.rds", type = "file")),
+  inventory = c(values = "values.rds")
+)
+stage$id
+#> [1] "data"
+stage$declaration$inventory
+#>       values 
+#> "values.rds" 
+```

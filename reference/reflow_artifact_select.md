@@ -48,3 +48,26 @@ resource use or complete workflow orchestration.
 
 Compact reference with status REFERENCE_REQUIRES_VERIFICATION, or NULL
 for close_failed.
+
+## Examples
+
+``` r
+# The selector is qualified for local Linux file systems only
+if (identical(Sys.info()[["sysname"]], "Linux")) {
+  plan <- reflow_artifact_plan(reflow_artifact_stage(
+    "lines", "base", "writeLines",
+    args = list(text = c("alpha", "beta")),
+    outputs = list(con = list(path = "lines.txt", type = "file")),
+    inventory = c(lines = "lines.txt")
+  ))
+  root <- tempfile("selection-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
+  dir.create(root)
+  registry <- file.path(root, "registry")
+  pointer <- reflow_artifact_select(plan, registry, initialize = TRUE)
+  pointer$status
+
+  # An unchanged plan selects the same generation again
+  identical(reflow_artifact_select(plan, registry), pointer)
+  unlink(root, recursive = TRUE)
+}
+```

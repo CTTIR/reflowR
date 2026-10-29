@@ -10,7 +10,13 @@ and trailing dots/spaces. Unicode spelling is preserved, not normalized.
 Parents of output paths are created; declared output directories are
 writer-created. Installed package resources (including templates),
 tracked inputs and declared external runtime files are fingerprinted.
-Undeclared ambient state is not.
+Undeclared ambient state is not. With
+`options(reflowR.package_hash_cache = TRUE)` the hashes of installed
+package files are reused within one R process while a file keeps its
+device, inode, size, modification and change times; use it only with a
+library that nothing modifies during the run.
+`options(reflowR.input_hash_cache = TRUE)` does the same for tracked
+input files; otherwise inputs are re-read for every fingerprint.
 
 ## Usage
 
@@ -68,3 +74,27 @@ reflow_artifact_spec(
 ## Value
 
 A versioned declaration; no writer is invoked.
+
+## Examples
+
+``` r
+spec <- reflow_artifact_spec(
+  "utils", "write.csv",
+  args = list(x = data.frame(id = 1:3, value = c(2.5, 3.1, 4.7)),
+              row.names = FALSE),
+  outputs = list(file = list(path = "table.csv", type = "file")),
+  inventory = c(table = "table.csv")
+)
+spec$outputs
+#> $file
+#> $file$path
+#> [1] "table.csv"
+#> 
+#> $file$type
+#> [1] "file"
+#> 
+#> 
+spec$inventory
+#>       table 
+#> "table.csv" 
+```

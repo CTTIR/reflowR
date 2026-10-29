@@ -58,3 +58,28 @@ filtering, fitting, jitter or automatic offsets. Text nudges affect
 annotations only. Device-specific visible-label coverage, clipping and
 minimum exported font sizes require separate render and visual
 qualification. No files are written.
+
+## Examples
+
+``` r
+scores <- data.frame(
+  id = c("r1", "r2", "r3", "r4"),
+  sample = c("s1", "s2", "s1", "s2"),
+  marker = c("CD3", "CD3", "CD8", "CD8"),
+  score = c(-1.2, 0.4, 0.8, 1.5)
+)
+recipe <- reflow_figure_recipe(
+  "tile_heatmap",
+  mapping = c(x = "sample", y = "marker", value = "score"),
+  row_key = "id",
+  levels = list(x = c("s1", "s2"), y = c("CD3", "CD8")),
+  midpoint = 0,
+  labels = list(title = "Finalized scores", fill = "z-score")
+)
+figure <- reflow_figure_plot(scores, recipe)
+figure$rows
+#> [1] 4
+figure$payload_sha256
+#> [1] "6c4b9c949848d0b20ada7f1b9f5326fc27a2cc4edcb9516cd938a2ba37ba72ab"
+figure$plot
+```

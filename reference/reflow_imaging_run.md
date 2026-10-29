@@ -34,6 +34,19 @@ Invisibly, a named list of stage result objects.
 
 ## Details
 
+While a stage function is being called, an external calling handler can
+use `invokeRestart("reflow_abort_stage", condition)` to reject a
+condition. The restart raises a `simpleError` with that condition's
+message and call inside the executor's failure handlers, so the stage
+and run record `FAILED` before the error reaches the caller. No
+downstream stage runs. This also supports warnings delivered directly
+with
+[`base::signalCondition()`](https://rdrr.io/r/base/conditions.html). The
+restart is available only during the stage call, not argument resolution
+or result persistence. Warning classification and muffling remain the
+caller's policy; warning behaviour is unchanged when the restart is not
+invoked.
+
 The executor never initializes Git, publishes, installs packages or
 downloads data. Called functions are trusted and can have side effects;
 this API does not sandbox them. File-producing, distributed and
@@ -50,3 +63,23 @@ A directory lock prevents concurrent execution. After an interrupted
 process, inspect the lock's owner receipt and verify that process has
 stopped before manually removing `.lock`; stale locks are never
 automatically stolen.
+
+## Examples
+
+``` r
+plan <- reflow_imaging_plan(
+  reflow_imaging_stage("values", "base", "identity",
+                       list(x = c(2, 4, 4, 5))),
+  reflow_imaging_stage("mean", "base", "mean",
+                       list(x = reflow_imaging_ref("values")))
+)
+run <- tempfile("imaging-")
+results <- reflow_imaging_run(plan, run)
+results$mean
+#> [1] 3.75
+
+# Resume verifies the recorded results instead of calling the stages again
+identical(reflow_imaging_resume(plan, run), results)
+#> [1] TRUE
+unlink(run, recursive = TRUE)
+```
