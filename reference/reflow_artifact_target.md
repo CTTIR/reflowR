@@ -40,5 +40,5 @@ if (requireNamespace("targets", quietly = TRUE)) {
   target <- reflow_artifact_target("selection", quote(my_plan()), registry)
   target$command$expr
 }
-#> expression(reflowR::reflow_artifact_select(my_plan(), "/tmp/RtmpadCFi4/registry"))
+#> expression(reflowR::reflow_artifact_select(my_plan(), "/tmp/RtmppUg8bz/registry"))
 ```
