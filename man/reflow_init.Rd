@@ -64,7 +64,8 @@ Adds a GitHub link to the navbar.}
 folder? Passed to \code{workflowr::wflow_start(existing = ...)}, which adds
 the missing workflowr files and leaves present ones alone. Default
 \code{FALSE}. Files that reflowR writes are replaced only with
-\code{overwrite = TRUE}.}
+\code{overwrite = TRUE}. Files already in the folder are not committed
+(see \code{git}).}
 
 \item{overwrite}{Logical. Replace files that reflowR writes if they already
 exist in \code{directory}: \code{README.md}, \code{_workflowr.yml},
@@ -73,8 +74,11 @@ exist in \code{directory}: \code{README.md}, \code{_workflowr.yml},
 files. Default \code{FALSE}: the function then stops before writing
 anything and lists the files. Other workflowr files are never replaced.}
 
-\item{git}{Logical. Initialize git repository and make first commit?
-Default \code{TRUE}.}
+\item{git}{Logical. Initialize a git repository (or use the one in an
+existing folder) and commit the files that this call writes? Other files
+in \code{directory}, and changes to them, are not committed. If the
+repository already has staged changes, no commit is made and a warning
+says so. Default \code{TRUE}.}
 
 \item{change_wd}{Logical. Change working directory to the new project?
 Default \code{TRUE} in interactive sessions.}
@@ -108,7 +112,7 @@ committing yet.
 \code{README.md} with themed versions; adds the
 analysis pipeline Rmd files, CSS/SCSS, icon, setup script, utility script,
 Quarto report template, and additional subdirectories. If \code{git = TRUE},
-initializes git and commits all files.
+initializes git and commits the files written by both phases.
 
 If any of the files that Phase 2 writes already exists in \code{directory}
 before the call, for example the README or \code{_site.yml} of an existing

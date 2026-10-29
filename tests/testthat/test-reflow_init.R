@@ -172,6 +172,73 @@ test_that("reflow_init with git = TRUE creates a repository and initial commit",
   expect_match(commits[[1]]$message, "reflowR")
 })
 
+# A folder with the user's own repository, a committed script with an
+# unstaged edit, and untracked data and notes.
+user_repo <- function(proj) {
+  dir.create(file.path(proj, "data", "raw"), recursive = TRUE)
+  writeLines("id,value\n1,2", file.path(proj, "data", "raw", "private.csv"))
+  writeLines("draft", file.path(proj, "notes.md"))
+  repo <- git2r::init(proj)
+  git2r::config(repo, user.name = "T", user.email = "t@example.org")
+  writeLines("x <- 1", file.path(proj, "old.R"))
+  git2r::add(repo, file.path(proj, "old.R"))
+  git2r::commit(repo, "User commit")
+  writeLines("x <- 2", file.path(proj, "old.R"))
+  repo
+}
+
+test_that("git = TRUE in an existing folder commits only the files reflow_init writes", {
+  skip_if_not_installed("git2r")
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "own_repo")
+  repo <- user_repo(proj)
+  suppressMessages(reflow_init(directory = proj, author = "A", depth = "minimal",
+                               existing = TRUE, git = TRUE, change_wd = FALSE,
+                               open = FALSE, user.name = "T",
+                               user.email = "t@example.org"))
+  expect_identical(vapply(git2r::commits(repo), `[[`, "", "message"),
+                   c("Initial reflowR project", "User commit"))
+  tree <- git2r::ls_tree(repo = repo, recursive = TRUE)
+  committed <- paste0(tree$path, tree$name)
+  expect_false(any(c("data/raw/private.csv", "notes.md") %in% committed))
+  expect_true(all(c("README.md", "analysis/_site.yml", "analysis/theme.css",
+                    "code/00_setup.R", ".gitignore", "own_repo.Rproj") %in% committed))
+  status <- git2r::status(repo, all_untracked = TRUE)
+  expect_length(status$staged, 0L)
+  expect_identical(unname(unlist(status$unstaged)), "old.R")
+  expect_setequal(unname(unlist(status$untracked)), c("data/raw/private.csv", "notes.md"))
+})
+
+test_that("git = TRUE makes no commit on top of changes the user has staged", {
+  skip_if_not_installed("git2r")
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "staged_repo")
+  repo <- user_repo(proj)
+  git2r::add(repo, file.path(proj, "old.R"))
+  expect_warning(
+    suppressMessages(reflow_init(directory = proj, author = "A", depth = "minimal",
+                                 existing = TRUE, git = TRUE, change_wd = FALSE,
+                                 open = FALSE, user.name = "T",
+                                 user.email = "t@example.org")),
+    "staged changes"
+  )
+  expect_length(git2r::commits(repo), 1L)
+  expect_identical(unname(unlist(git2r::status(repo)$staged)), "old.R")
+})
+
+test_that("git = TRUE commits every file of a new project", {
+  skip_if_not_installed("git2r")
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "new_repo")
+  suppressMessages(reflow_init(directory = proj, author = "A", depth = "minimal",
+                               git = TRUE, change_wd = FALSE, open = FALSE,
+                               user.name = "T", user.email = "t@example.org"))
+  repo <- git2r::repository(proj)
+  expect_length(git2r::commits(repo), 1L)
+  status <- git2r::status(repo, all_untracked = TRUE)
+  expect_length(unlist(status), 0L)
+})
+
 test_that("reflow_init writes _workflowr.yml with the requested seed", {
   tmp <- withr::local_tempdir()
   proj <- file.path(tmp, "seed_proj")

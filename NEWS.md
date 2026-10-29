@@ -6,6 +6,12 @@
   guardian that misses this has started no worker and is now stopped instead
   of being left running.
 
+* `reflow_init(git = TRUE)` commits only the files that it and
+  `workflowr::wflow_start()` write. With `existing = TRUE` it used to stage
+  everything in the folder, so the first commit took the user's own data,
+  notes and uncommitted edits. If the repository already has staged changes,
+  it makes no commit and says so.
+
 * Every exported function now has a runnable example; the `reflow_init()`
   example writes to a temporary folder.
 

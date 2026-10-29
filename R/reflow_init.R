@@ -30,15 +30,19 @@
 #'   folder? Passed to \code{workflowr::wflow_start(existing = ...)}, which adds
 #'   the missing workflowr files and leaves present ones alone. Default
 #'   \code{FALSE}. Files that reflowR writes are replaced only with
-#'   \code{overwrite = TRUE}.
+#'   \code{overwrite = TRUE}. Files already in the folder are not committed
+#'   (see \code{git}).
 #' @param overwrite Logical. Replace files that reflowR writes if they already
 #'   exist in \code{directory}: \code{README.md}, \code{_workflowr.yml},
 #'   \code{analysis/_site.yml}, \code{analysis/index.Rmd},
 #'   \code{analysis/about.Rmd} and the theme, icon, script, pipeline and report
 #'   files. Default \code{FALSE}: the function then stops before writing
 #'   anything and lists the files. Other workflowr files are never replaced.
-#' @param git Logical. Initialize git repository and make first commit?
-#'   Default \code{TRUE}.
+#' @param git Logical. Initialize a git repository (or use the one in an
+#'   existing folder) and commit the files that this call writes? Other files
+#'   in \code{directory}, and changes to them, are not committed. If the
+#'   repository already has staged changes, no commit is made and a warning
+#'   says so. Default \code{TRUE}.
 #' @param change_wd Logical. Change working directory to the new project?
 #'   Default \code{TRUE} in interactive sessions.
 #' @param user.name Character. Git user name (optional).
@@ -62,7 +66,7 @@
 #' \code{README.md} with themed versions; adds the
 #' analysis pipeline Rmd files, CSS/SCSS, icon, setup script, utility script,
 #' Quarto report template, and additional subdirectories. If \code{git = TRUE},
-#' initializes git and commits all files.
+#' initializes git and commits the files written by both phases.
 #'
 #' If any of the files that Phase 2 writes already exists in \code{directory}
 #' before the call, for example the README or \code{_site.yml} of an existing
@@ -143,6 +147,10 @@ reflow_init <- function(
   cli::cli_h1("Creating reflowR project: {.val {name}}")
   cli::cli_alert_info("Scheme: {.val {scheme}} | Depth: {.val {depth}}")
   if (length(present)) cli::cli_alert_warning("Replacing {.file {present}}.")
+
+  # Files that are there before the call belong to the user; the first
+  # commit takes only what wflow_start() and Phase 2 write.
+  before <- if (git) reflow_init_files(directory) else character()
 
   # Call workflowr -- git=FALSE so we commit after adding our files
   cli::cli_h2("Phase 1: workflowr scaffold")
@@ -242,19 +250,33 @@ reflow_init <- function(
     cli::cli_h2("Phase 3: Git initialization")
     cli::cli_alert("Initializing git and making first commit...")
     repo <- git2r::init(project_dir)
-    git2r::add(repo, path = ".")
-    tryCatch({
-      if (!is.null(user.name) && !is.null(user.email)) {
-        git2r::config(repo, user.name = user.name, user.email = user.email)
-        sig <- git2r::default_signature(repo)
-        git2r::commit(repo, message = "Initial reflowR project", author = sig)
-      } else {
-        git2r::commit(repo, message = "Initial reflowR project")
-      }
-      cli::cli_alert_success("Initial commit created.")
-    }, error = function(e) {
-      cli::cli_warn("Git commit failed: {e$message}. You can commit manually.")
-    })
+    ours <- union(setdiff(reflow_init_files(project_dir), before), written)
+    # A commit takes the whole index, so changes the user has already staged
+    # would end up in it.
+    staged <- git2r::status(repo, unstaged = FALSE, untracked = FALSE)$staged
+    if (length(staged)) {
+      cli::cli_warn(c(
+        "The repository in {.path {project_dir}} has staged changes; no commit was made.",
+        "i" = "Commit the project files yourself."
+      ))
+    } else {
+      # The paths are relative to the project root, which is the working
+      # directory while git2r resolves them.
+      owd <- setwd(project_dir)
+      tryCatch(git2r::add(repo, path = ours), finally = setwd(owd))
+      tryCatch({
+        if (!is.null(user.name) && !is.null(user.email)) {
+          git2r::config(repo, user.name = user.name, user.email = user.email)
+          sig <- git2r::default_signature(repo)
+          git2r::commit(repo, message = "Initial reflowR project", author = sig)
+        } else {
+          git2r::commit(repo, message = "Initial reflowR project")
+        }
+        cli::cli_alert_success("Initial commit created.")
+      }, error = function(e) {
+        cli::cli_warn("Git commit failed: {e$message}. You can commit manually.")
+      })
+    }
   }
 
   # --- Done ---
@@ -285,6 +307,20 @@ reflow_init_replaced <- c(
   "README.md", "_workflowr.yml",
   file.path("analysis", c("_site.yml", "index.Rmd", "about.Rmd"))
 )
+
+# Files in a project folder, relative to it, leaving out the .git folder.
+reflow_init_files <- function(directory) {
+  top <- setdiff(list.files(directory, all.files = TRUE, no.. = TRUE), ".git")
+  files <- lapply(top, function(x) {
+    path <- file.path(directory, x)
+    if (dir.exists(path)) {
+      file.path(x, list.files(path, recursive = TRUE, all.files = TRUE))
+    } else {
+      x
+    }
+  })
+  as.character(unlist(files))
+}
 
 # Files that Phase 2 of reflow_init() adds on top of the workflowr scaffold,
 # relative to the project directory.
