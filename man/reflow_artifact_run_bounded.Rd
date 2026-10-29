@@ -44,9 +44,11 @@ reflow_artifact_resume_bounded(spec, directory, supervisor_directory,
 \value{A verified artifact descriptor after successful guardian cleanup.}
 \examples{
 # Needs Linux with processx, ps, prlimit and nice, and a package library
-# without symbolic links (R CMD check --as-cran links its packages). A run
-# starts a guardian and a worker process and pins every installed file they
-# load, which takes a while.
+# without symbolic links. R CMD check links the packages into a temporary
+# library when it limits them to the declared dependencies
+# (_R_CHECK_SUGGESTS_ONLY_, which --as-cran turns on, or
+# _R_CHECK_DEPENDS_ONLY_). A run starts a guardian and a worker process and
+# pins every installed file they load, which takes a while.
 \donttest{
 roots <- c("reflowR", "processx", "ps", "digest", "base")
 usable <- identical(Sys.info()[["sysname"]], "Linux") &&
