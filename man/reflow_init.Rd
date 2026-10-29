@@ -123,7 +123,7 @@ workflowr project or the files of an earlier call, the function stops before
 writing anything and lists them, so a project is never changed silently or
 left partly updated. Set \code{overwrite = TRUE} to replace them with the
 reflowR versions. It also stops before writing anything if one of these
-files, or the folder it goes in, is not writable.
+files, or the folder it goes in, is read-only.
 }
 \examples{
 # A clinical project with the three-step pipeline, in a temporary folder
