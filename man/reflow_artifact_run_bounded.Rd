@@ -73,7 +73,7 @@ if (usable) {
   usable <- !any(nzchar(Sys.readlink(find.package(packages))))
 }
 if (usable) {
-  root <- tempfile("bounded-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+  root <- tempfile("bounded-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
   work <- file.path(root, c("tmp", "cache"))
   for (path in c(root, work)) dir.create(path)
   spec <- reflow_artifact_spec(

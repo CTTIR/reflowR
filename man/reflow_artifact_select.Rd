@@ -19,7 +19,7 @@ if (identical(Sys.info()[["sysname"]], "Linux")) {
     outputs = list(con = list(path = "lines.txt", type = "file")),
     inventory = c(lines = "lines.txt")
   ))
-  root <- tempfile("selection-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+  root <- tempfile("selection-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
   dir.create(root)
   registry <- file.path(root, "registry")
   pointer <- reflow_artifact_select(plan, registry, initialize = TRUE)

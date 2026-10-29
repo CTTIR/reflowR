@@ -88,7 +88,7 @@ strict_rmd_envelope <- function(text, canonical) {
 #'   })
 #' )
 #' profile <- reflow_profile("clinical", "secondary", "observational")
-#' project <- tempfile("strict-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+#' project <- tempfile("strict-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
 #' scaffold <- reflow_init_strict(project, profile, "Example study", "Your Name", lock)
 #'
 #' # Keep the declaration outside the project and validate against it

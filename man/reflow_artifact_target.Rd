@@ -7,7 +7,7 @@
 \value{A targets target object.}
 \examples{
 if (requireNamespace("targets", quietly = TRUE)) {
-  registry <- file.path(normalizePath(tempdir(), mustWork = TRUE), "registry")
+  registry <- file.path(normalizePath(tempdir(), winslash = "/", mustWork = TRUE), "registry")
   # The plan expression is stored unevaluated and runs at every make
   target <- reflow_artifact_target("selection", quote(my_plan()), registry)
   target$command$expr

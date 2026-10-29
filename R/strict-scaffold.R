@@ -152,7 +152,7 @@ reflow_scaffold <- function(profile, name, author, dependency_lock, composition 
 #'   })
 #' )
 #' profile <- reflow_profile("clinical", "secondary", "observational")
-#' project <- tempfile("strict-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+#' project <- tempfile("strict-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
 #' scaffold <- reflow_init_strict(project, profile, "Example study", "Your Name", lock)
 #' list.files(project)
 #'

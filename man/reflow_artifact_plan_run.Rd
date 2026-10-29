@@ -52,7 +52,7 @@ plan <- reflow_artifact_plan(
     inventory = c(report = "report.txt")
   )
 )
-root <- tempfile("graph-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+root <- tempfile("graph-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
 dir.create(root)
 graph <- reflow_artifact_plan_run(plan, file.path(root, "first"))
 readLines(file.path(graph$nodes$report$descriptor$bundle, "report.txt"))

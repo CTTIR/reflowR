@@ -389,7 +389,7 @@ rfa_inventory <- function(spec, bundle) {
 #'   outputs = list(con = list(path = "lines.txt", type = "file")),
 #'   inventory = c(lines = "lines.txt")
 #' )
-#' run <- tempfile("artifact-", tmpdir = normalizePath(tempdir(), mustWork = TRUE))
+#' run <- tempfile("artifact-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
 #' bundle <- reflow_artifact_run(spec, run)
 #' readLines(file.path(bundle$bundle, "lines.txt"))
 #' bundle$inventory
