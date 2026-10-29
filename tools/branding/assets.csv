@@ -1,13 +1,4 @@
 identity,rendered,destination
-reflowR,icon-180.png,docs/apple-touch-icon.png
-reflowR,icon-96.png,docs/favicon-96x96.png
-reflowR,favicon.ico,docs/favicon.ico
-reflowR,hex-dark.svg,docs/favicon.svg
-reflowR,lockup.svg,docs/logo.svg
-reflowR,lockup-dark.svg,docs/reference/figures/logo-dark.svg
-reflowR,lockup.svg,docs/reference/figures/logo.svg
-reflowR,icon-192.png,docs/web-app-manifest-192x192.png
-reflowR,icon-512.png,docs/web-app-manifest-512x512.png
 reflowR,icon-128.png,man/figures/icon-128.png
 reflowR,icon-256.png,man/figures/icon-256.png
 reflowR,icon-32.png,man/figures/icon-32.png
