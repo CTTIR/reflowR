@@ -91,6 +91,9 @@ if (usable) {
                                               file.path(root, "supervisor"),
                                               list(lines = resources), pins)
     print(readLines(file.path(graph$nodes$lines$descriptor$bundle, "lines.txt")))
+  }, error = function(e) {
+    # A loaded machine can leave the guardian too little time; report it.
+    message("The bounded run did not complete here: ", conditionMessage(e))
   }, finally = {
     for (name in threads) {
       if (is.na(saved[[name]])) Sys.unsetenv(name)

@@ -110,6 +110,9 @@ if (usable) {
                                           file.path(root, "supervisor"),
                                           resources, pins)
     print(readLines(file.path(bundle$bundle, "lines.txt")))
+  }, error = function(e) {
+    # A loaded machine can leave the guardian too little time; report it.
+    message("The bounded run did not complete here: ", conditionMessage(e))
   }, finally = {
     for (name in threads) {
       if (is.na(saved[[name]])) Sys.unsetenv(name)
