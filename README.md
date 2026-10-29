@@ -30,16 +30,11 @@ All generated projects remain fully compatible with standard workflowr commands 
 
 ## Installation
 
+reflowR is not on CRAN yet. Install it from GitHub:
+
 ```r
 # install.packages("pak")
 pak::pak("CTTIR/reflowR")
-# workflowr is installed automatically as a dependency
-```
-
-Or using remotes:
-
-```r
-remotes::install_github("CTTIR/reflowR")
 ```
 
 ## Quick Start
