@@ -107,6 +107,12 @@ rfb_ready_only <- function(spec, directory, expected_definition) {
   result
 }
 
+# Closes one end of a guardian channel. Errors are ignored: the guardian may
+# have closed its end already.
+rfb_close_channel <- function(con) {
+  try(processx::processx_conn_close(con), silent = TRUE)
+}
+
 rfb_run <- function(spec, directory, supervisor_directory, resources,
                     runtime_files, cancel, resume, reconciled_attempt,
                     reconciliation, expected_definition = NULL) {
@@ -205,8 +211,8 @@ rfb_run <- function(spec, directory, supervisor_directory, resources,
     {
       # Closing the control channel requests guardian-owned cleanup. Never kill
       # the guardian here: client death and interrupts must leave it time to act.
-      try(processx::processx_conn_close(client$channel$write), silent = TRUE)
-      try(processx::processx_conn_close(client$channel$read), silent = TRUE)
+      rfb_close_channel(client$channel$write)
+      rfb_close_channel(client$channel$read)
     },
     add = TRUE
   )
@@ -236,7 +242,7 @@ rfb_run <- function(spec, directory, supervisor_directory, resources,
     interrupt = function(x) error <<- "Client interrupted"
   )
   if (!is.null(error) || !finished) {
-    try(processx::processx_conn_close(client$channel$write), silent = TRUE)
+    rfb_close_channel(client$channel$write)
     cleanup_end <- proc.time()[["elapsed"]] + 12
     while (client$process$is_alive() && proc.time()[["elapsed"]] < cleanup_end) {
       Sys.sleep(0.05)

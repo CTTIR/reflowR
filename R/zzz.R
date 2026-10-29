@@ -8,3 +8,9 @@
     cli::style_bold("reflow_presets()"), " for options."
   )
 }
+
+# Bindings for testthat::local_mocked_bindings(): base functions can only be
+# mocked through a binding in this namespace. Calls skip these NULL values and
+# reach base R as usual.
+dir.create <- NULL
+requireNamespace <- NULL

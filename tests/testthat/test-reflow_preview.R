@@ -62,8 +62,7 @@ test_that("reflow_preview does not need htmltools", {
   testthat::local_mocked_bindings(
     requireNamespace = function(package, ...) {
       if (identical(package, "htmltools")) FALSE else available(package, ...)
-    },
-    .package = "base"
+    }
   )
   expect_match(capture_preview("brand")$html, reflow_scheme("brand")$label, fixed = TRUE)
 })

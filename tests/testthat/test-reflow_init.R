@@ -396,8 +396,7 @@ test_that("a project folder that does not exist yet needs no write check", {
     FALSE
   })
   local_mocked_bindings(
-    wflow_start = function(directory, ...) stop("wflow_start reached"),
-    .package = "workflowr"
+    reflow_init_start = function(directory, ...) stop("wflow_start reached")
   )
   target <- file.path(withr::local_tempdir(), "new-project")
   expect_error(
@@ -413,11 +412,10 @@ test_that("a leading tilde is expanded before any step uses the folder", {
   seen <- NULL
   local_mocked_bindings(reflow_init_writable = function(path) TRUE)
   local_mocked_bindings(
-    wflow_start = function(directory, ...) {
+    reflow_init_start = function(directory, ...) {
       seen <<- directory
       stop("stopped before writing")
-    },
-    .package = "workflowr"
+    }
   )
   directory <- file.path("~", basename(tempfile("reflowR-tilde-")))
   expect_error(
@@ -457,12 +455,8 @@ test_that("the checked file list matches what reflow_init adds", {
 })
 
 test_that("_workflowr.yml records the installed workflowr version", {
-  installed <- utils::packageVersion
   local_mocked_bindings(
-    packageVersion = function(pkg, ...) {
-      if (identical(pkg, "workflowr")) package_version("99.1.2") else installed(pkg, ...)
-    },
-    .package = "utils"
+    reflow_init_workflowr_version = function() package_version("99.1.2")
   )
   tmp <- withr::local_tempdir()
   proj <- file.path(tmp, "version_proj")

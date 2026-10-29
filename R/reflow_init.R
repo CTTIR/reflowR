@@ -176,7 +176,7 @@ reflow_init <- function(
 
   # Call workflowr -- git=FALSE so we commit after adding our files
   cli::cli_h2("Phase 1: workflowr scaffold")
-  workflowr::wflow_start(
+  reflow_init_start(
     directory  = directory,
     name       = name,
     git        = FALSE,
@@ -230,7 +230,7 @@ reflow_init <- function(
   writeLines(c(
     paste0("seed: ", seed),
     'knit_root_dir: "."',
-    paste0("workflowr_version: ", utils::packageVersion("workflowr"))
+    paste0("workflowr_version: ", reflow_init_workflowr_version())
   ), wf_yml)
 
   # 2f. Generate R scripts
@@ -343,6 +343,11 @@ reflow_init_writable <- function(path) {
   }
   dir.exists(parent) && file.access(parent, 2) == 0
 }
+
+# The workflowr scaffold and the workflowr version written to _workflowr.yml,
+# as package functions so that tests can replace them.
+reflow_init_start <- function(...) workflowr::wflow_start(...)
+reflow_init_workflowr_version <- function() utils::packageVersion("workflowr")
 
 # Files in a project folder, relative to it, leaving out the .git folder.
 # Linked folders are listed as links, not followed.

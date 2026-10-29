@@ -759,7 +759,7 @@ test_that("filesystem creation failures never accept a partial attempt", {
           parent = identical(basename(path), "nested"))
         if (refused) return(FALSE)
         original_create(path, ...)
-      }, .package = "base")
+      })
       run <- file.path(root, "run")
       expect_error(reflow_artifact_run(spec, run), "Cannot create")
       expect_false(file.exists(file.path(run, "READY.rds")))

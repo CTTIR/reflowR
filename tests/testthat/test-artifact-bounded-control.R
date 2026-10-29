@@ -111,10 +111,7 @@ bounded_control_fixture <- function(frame = parent.frame(), launch = FALSE) {
       }
     })
   list2env(bindings, envir = control)
-  if (!launch) {
-    testthat::local_mocked_bindings(processx_conn_close = function(...) NULL,
-      .package = "processx", .env = frame)
-  }
+  if (!launch) control$rfb_close_channel <- function(con) invisible(NULL)
   list(root = root, resources = resources, spec = spec, pins = pins, state = state,
     control = control,
     directory = file.path(root, "artifact"), supervisor = file.path(root, "supervisor"))
