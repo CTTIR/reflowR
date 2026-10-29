@@ -215,7 +215,7 @@ reflow_init(
 #> 
 #> ── Done! ──
 #> 
-#> ✔ Project created at /tmp/Rtmp1OxfDf/my_project
+#> ✔ Project created at /tmp/RtmpesQ9b9/my_project
 #> ℹ Scheme: "Clinical science" | Pipeline: "Minimal (3 steps)"
 #> 
 #> ℹ Next steps:

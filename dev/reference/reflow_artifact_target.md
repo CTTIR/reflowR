@@ -35,10 +35,10 @@ A targets target object.
 
 ``` r
 if (requireNamespace("targets", quietly = TRUE)) {
-  registry <- file.path(normalizePath(tempdir(), mustWork = TRUE), "registry")
+  registry <- file.path(normalizePath(tempdir(), winslash = "/", mustWork = TRUE), "registry")
   # The plan expression is stored unevaluated and runs at every make
   target <- reflow_artifact_target("selection", quote(my_plan()), registry)
   target$command$expr
 }
-#> expression(reflowR::reflow_artifact_select(my_plan(), "/tmp/Rtmp1OxfDf/registry"))
+#> expression(reflowR::reflow_artifact_select(my_plan(), "/tmp/RtmpesQ9b9/registry"))
 ```
