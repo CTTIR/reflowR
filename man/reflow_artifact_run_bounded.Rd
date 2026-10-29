@@ -31,7 +31,10 @@ reflow_artifact_resume_bounded(spec, directory, supervisor_directory,
  descendants must retain ownership tokens. Guardian death remains unresolved
  and requires external cleanup. Unknown cleanup retains locks; no stale lock
  is stolen. A successful worker is revalidated through a locked READY-only
- path which cannot invoke a writer. Deadlines exclude up to two additional
+ path which cannot invoke a writer. The guardian must report readiness
+ within \code{timeout_seconds}, but no less than 5 and no more than 60
+ seconds; a guardian that misses this has started no worker and is stopped.
+ Deadlines exclude up to two additional
  five-second cleanup intervals. No graph or targets scheduling is performed.
  Parent OPENBLAS_NUM_THREADS, OMP_NUM_THREADS and MKL_NUM_THREADS must
  already equal the requested thread count. Child locale, RNG kind and full

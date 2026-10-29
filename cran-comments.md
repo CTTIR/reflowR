@@ -39,8 +39,11 @@
   and `nice` available, a package library without symbolic links (which the
   guardian requires), and a process priority of at most 10 and an
   address-space limit of at least 8 GiB (which the examples request);
-  otherwise they do nothing. They restore the thread environment variables
-  they set, also when a run fails.
+  otherwise they only check these conditions and skip the run. When they
+  run, the guardian process has up to 60 seconds (the examples' deadline) to
+  start, also on a busy machine, and a guardian that misses this is stopped,
+  so a failed start leaves no process behind. They restore the thread
+  environment variables they set, also when a run fails.
 * Tests that install fixture packages with `R CMD INSTALL` and the long
   recovery scenarios of the artifact selector are skipped on CRAN; the test
   suite takes about 40 seconds there.

@@ -1,5 +1,11 @@
 # reflowR (development version)
 
+* `reflow_artifact_run_bounded()` and the graph version give the guardian as
+  long as `timeout_seconds`, at least 5 and at most 60 seconds, to report that
+  it is ready; the fixed 5 seconds were too short on a busy machine. A
+  guardian that misses this has started no worker and is now stopped instead
+  of being left running.
+
 * Every exported function now has a runnable example; the `reflow_init()`
   example writes to a temporary folder.
 

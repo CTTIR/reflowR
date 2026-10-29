@@ -9,7 +9,9 @@
 #' Address space is limited per process, not across the tree. Thread variables
 #' are requests, not CPU quotas. Priority is absolute and cannot be elevated.
 #' The first backend supports explicit finite deadlines of 1 to 86400 seconds.
-#' Cleanup can take
+#' The guardian must report readiness within the deadline, but no less than 5
+#' and no more than 60 seconds; a guardian that misses this has started no
+#' worker and is stopped. Cleanup can take
 #' up to two additional five-second intervals. Unknown ownership retains locks.
 #' Runtime pins cover declared files, not an inferred complete ELF closure.
 #' Parent OPENBLAS_NUM_THREADS, OMP_NUM_THREADS and MKL_NUM_THREADS must
@@ -209,9 +211,14 @@ rfb_run <- function(spec, directory, supervisor_directory, resources,
     add = TRUE
   )
   error <- NULL
+  start_sent <- FALSE
   tryCatch(
     {
-      e$rg_client_wait(client, "READY", seconds = 5)
+      e$rg_client_wait(client, "READY",
+        seconds = rfb_handshake_seconds(resources$timeout_seconds)
+      )
+      # From here on the guardian may own a worker and must clean up itself.
+      start_sent <- TRUE
       e$rg_send(client$channel, "START", proc.time()[["elapsed"]] + 2)
       end <- proc.time()[["elapsed"]] + resources$timeout_seconds + 12
       sent <- FALSE
@@ -233,6 +240,12 @@ rfb_run <- function(spec, directory, supervisor_directory, resources,
     cleanup_end <- proc.time()[["elapsed"]] + 12
     while (client$process$is_alive() && proc.time()[["elapsed"]] < cleanup_end) {
       Sys.sleep(0.05)
+    }
+    # Before START the guardian has no worker, so one that missed the
+    # handshake and is still running is stopped instead of left behind.
+    if (!start_sent && client$process$is_alive()) {
+      try(client$process$kill_tree(), silent = TRUE)
+      try(client$process$kill(), silent = TRUE)
     }
     diagnostic <- list(
       status = "CLIENT_FAILED", error = error,
@@ -258,6 +271,12 @@ rfb_run <- function(spec, directory, supervisor_directory, resources,
     file.path(supervisor_directory, "artifact-verified.rds")
   )
   answer
+}
+
+# Seconds the guardian has to report READY. Hashing the pinned closure takes
+# longer on a busy machine, so the wait grows with the declared budget.
+rfb_handshake_seconds <- function(timeout_seconds) {
+  max(5, min(timeout_seconds, 60))
 }
 
 rfb_packages <- function(roots) {

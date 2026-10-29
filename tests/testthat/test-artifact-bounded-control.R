@@ -1,6 +1,7 @@
-# These tests exercise parent control flow without launching a process.
-# Installed lifecycle tests separately establish real channel/tree behavior.
-bounded_control_fixture <- function(frame = parent.frame()) {
+# These tests exercise parent control flow without launching a process, except
+# the fixture with `launch = TRUE`. Installed lifecycle tests separately
+# establish real channel/tree behavior.
+bounded_control_fixture <- function(frame = parent.frame(), launch = FALSE) {
   skip_if_not(identical(Sys.info()[["sysname"]], "Linux"))
   skip_if_not_installed("processx")
   skip_if_not_installed("ps")
@@ -36,6 +37,7 @@ bounded_control_fixture <- function(frame = parent.frame()) {
   state$answer <- list(independently_expected_descriptor = TRUE)
   state$verify_error <- FALSE
   state$plain <- TRUE
+  state$killed <- character()
   original_source <- base::sys.source
   control <- new.env(parent = asNamespace("reflowR"))
   for (name in c("rfb_preflight", "rfb_run", "reflow_artifact_run_bounded",
@@ -61,6 +63,19 @@ bounded_control_fixture <- function(frame = parent.frame()) {
         state$request <- x
         TRUE
       }
+      if (launch) {
+        # Real guardian launch and handshake; keep the process tree that a
+        # failed handshake leaves so that a test can look for survivors.
+        wait <- envir$rg_client_wait
+        envir$rg_client_wait <- function(client, ...) {
+          tryCatch(wait(client, ...), error = function(e) {
+            handle <- ps::ps_handle(client$process$get_pid())
+            state$tree <- c(list(handle), ps::ps_children(handle, recursive = TRUE))
+            stop(e)
+          })
+        }
+        return(invisible(NULL))
+      }
       envir$rg_client_start <- function(declaration, directory, ...) {
         state$started <- state$started + 1L
         state$declaration <- declaration
@@ -69,9 +84,16 @@ bounded_control_fixture <- function(frame = parent.frame()) {
         list(channel = list(write = 1L, read = 2L), process = list(is_alive = function() {
           state$alive_calls <- state$alive_calls + 1L
           state$alive_calls <= state$alive_until
+        }, kill_tree = function() {
+          state$killed <- c(state$killed, "kill_tree")
+          state$alive_until <- 0L
+        }, kill = function() {
+          state$killed <- c(state$killed, "kill")
+          state$alive_until <- 0L
         }))
       }
-      envir$rg_client_wait <- function(...) {
+      envir$rg_client_wait <- function(client, verb, seconds) {
+        state$wait_seconds <- seconds
         if (!is.null(state$wait_error)) stop(state$wait_error)
         invisible(NULL)
       }
@@ -89,8 +111,10 @@ bounded_control_fixture <- function(frame = parent.frame()) {
       }
     })
   list2env(bindings, envir = control)
-  testthat::local_mocked_bindings(processx_conn_close = function(...) NULL,
-    .package = "processx", .env = frame)
+  if (!launch) {
+    testthat::local_mocked_bindings(processx_conn_close = function(...) NULL,
+      .package = "processx", .env = frame)
+  }
   list(root = root, resources = resources, spec = spec, pins = pins, state = state,
     control = control,
     directory = file.path(root, "artifact"), supervisor = file.path(root, "supervisor"))
@@ -399,11 +423,82 @@ test_that("client cleanup waits for controlled guardian exit and keeps failure",
   f$control$Sys.sleep <- function(seconds) sleeps <<- c(sleeps, seconds)
   expect_error(bounded_control_run(f), "literal READY failure")
   expect_identical(sleeps, c(0.05, 0.05))
+  expect_identical(f$state$killed, character())
   failure <- readRDS(file.path(f$supervisor, "client-failure.rds"))
   expect_identical(failure$status, "CLIENT_FAILED")
   expect_identical(failure$error, "literal READY failure")
   expect_false(failure$guardian_alive)
   expect_false(file.exists(file.path(f$supervisor, "artifact-verified.rds")))
+})
+
+test_that("the READY wait follows the declared deadline within 5 to 60 seconds", {
+  expect_identical(rfb_handshake_seconds(1), 5)
+  expect_identical(rfb_handshake_seconds(30), 30)
+  expect_identical(rfb_handshake_seconds(86400), 60)
+  f <- bounded_control_fixture()
+  for (seconds in c(1, 30, 600)) {
+    unlink(f$supervisor, recursive = TRUE)
+    f$resources$timeout_seconds <- seconds
+    expect_identical(bounded_control_run(f), f$state$answer)
+    expect_identical(f$state$wait_seconds, rfb_handshake_seconds(seconds))
+  }
+})
+
+test_that("a guardian that missed READY and outlives the grace period is stopped", {
+  f <- bounded_control_fixture()
+  f$state$wait_error <- "literal READY failure"
+  f$state$alive_until <- .Machine$integer.max
+  clock <- 0
+  f$control$proc.time <- function() {
+    clock <<- clock + 100
+    c(user.self = 0, sys.self = 0, elapsed = clock)
+  }
+  expect_error(bounded_control_run(f), "literal READY failure")
+  expect_identical(f$state$messages, character())
+  expect_identical(f$state$killed, c("kill_tree", "kill"))
+  failure <- readRDS(file.path(f$supervisor, "client-failure.rds"))
+  expect_identical(failure$error, "literal READY failure")
+  expect_false(failure$guardian_alive)
+})
+
+test_that("a guardian that received START is left to its own cleanup", {
+  f <- bounded_control_fixture()
+  f$state$alive_until <- .Machine$integer.max
+  clock <- 0
+  f$control$proc.time <- function() {
+    clock <<- clock + 100
+    c(user.self = 0, sys.self = 0, elapsed = clock)
+  }
+  expect_error(bounded_control_run(f), "Guardian cleanup unresolved")
+  expect_identical(f$state$messages, "START")
+  expect_identical(f$state$killed, character())
+  expect_true(readRDS(file.path(f$supervisor, "client-failure.rds"))$guardian_alive)
+})
+
+test_that("a guardian too slow to report READY leaves no process behind", {
+  skip_on_cran()
+  f <- bounded_control_fixture(launch = TRUE)
+  # The stand-in for prlimit holds the guardian back as a heavily loaded
+  # machine would: it waits in a child process and never reaches R.
+  slow <- file.path(f$root, "slow-start")
+  writeLines(c("#!/bin/sh", "sleep 600"), slow)
+  Sys.chmod(slow, "0700")
+  f$resources$prlimit <- slow
+  f$pins[[slow]] <- digest::digest(file = slow, algo = "sha256", serialize = FALSE)
+  withr::defer(for (handle in f$state$tree) try(ps::ps_kill(handle), silent = TRUE))
+  # Skip the grace period in which a guardian could still exit by itself.
+  clock <- 0
+  f$control$proc.time <- function() {
+    clock <<- clock + 100
+    c(user.self = 0, sys.self = 0, elapsed = clock)
+  }
+  expect_error(bounded_control_run(f), "Guardian unavailable or deadline")
+  expect_length(f$state$tree, 2L)
+  running <- function() any(vapply(f$state$tree, ps::ps_is_running, logical(1)))
+  until <- Sys.time() + 5
+  while (running() && Sys.time() < until) Sys.sleep(0.05)
+  expect_false(running())
+  expect_false(readRDS(file.path(f$supervisor, "client-failure.rds"))$guardian_alive)
 })
 
 test_that("interpreter losing executability after preflight never launches", {
