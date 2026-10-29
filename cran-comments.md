@@ -3,8 +3,6 @@
 0 errors | 0 warnings | 1 note
 
 * This is a new submission.
-* "Version contains large components (0.1.0.9000)": the development version
-  number will be replaced by a release version before submission.
 
 ## Test environments
 

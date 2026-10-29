@@ -1,4 +1,4 @@
-# reflowR (development version)
+# reflowR 0.2.0
 
 * `reflow_artifact_run_bounded()` and the graph version give the guardian as
   long as `timeout_seconds`, at least 5 and at most 60 seconds, to report that
