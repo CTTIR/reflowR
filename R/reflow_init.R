@@ -152,9 +152,13 @@ reflow_init <- function(
     ))
   }
   # A file that cannot be written would stop the call halfway and leave the
-  # project partly re-themed.
-  blocked <- written[!vapply(file.path(directory, written), reflow_init_writable,
-                             logical(1))]
+  # project partly re-themed. A folder that does not exist yet holds no files;
+  # workflowr creates it, or stops before anything is written.
+  blocked <- if (dir.exists(directory)) {
+    written[!vapply(file.path(directory, written), reflow_init_writable, logical(1))]
+  } else {
+    character()
+  }
   if (length(blocked)) {
     cli::cli_abort(c(
       "reflowR cannot write all of its files in {.path {directory}}; nothing was changed.",
@@ -341,17 +345,12 @@ reflow_init_writable <- function(path) {
 }
 
 # Files in a project folder, relative to it, leaving out the .git folder.
+# Linked folders are listed as links, not followed.
 reflow_init_files <- function(directory) {
-  top <- setdiff(list.files(directory, all.files = TRUE, no.. = TRUE), ".git")
-  files <- lapply(top, function(x) {
-    path <- file.path(directory, x)
-    if (dir.exists(path)) {
-      file.path(x, list.files(path, recursive = TRUE, all.files = TRUE))
-    } else {
-      x
-    }
-  })
-  as.character(unlist(files))
+  files <- fs::dir_ls(directory, recurse = TRUE, all = TRUE,
+                      type = c("file", "symlink"), fail = FALSE)
+  files <- as.character(fs::path_rel(files, directory))
+  files[files != ".git" & !startsWith(files, ".git/")]
 }
 
 # Files that Phase 2 of reflow_init() adds on top of the workflowr scaffold,

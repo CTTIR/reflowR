@@ -378,6 +378,37 @@ test_that("a missing file needs a writable folder above it", {
   expect_false(reflow_init_writable(tmp))
 })
 
+test_that("the file listing does not follow linked folders", {
+  skip_on_os("windows")
+  tmp <- withr::local_tempdir()
+  dir.create(file.path(tmp, "data"))
+  dir.create(file.path(tmp, ".git"))
+  writeLines("x", file.path(tmp, "data", "a.csv"))
+  writeLines("ref", file.path(tmp, ".git", "HEAD"))
+  file.symlink(tmp, file.path(tmp, "data", "loop"))
+  expect_setequal(reflow_init_files(tmp), c("data/a.csv", "data/loop"))
+})
+
+test_that("a project folder that does not exist yet needs no write check", {
+  checked <- 0L
+  local_mocked_bindings(reflow_init_writable = function(path) {
+    checked <<- checked + 1L
+    FALSE
+  })
+  local_mocked_bindings(
+    wflow_start = function(directory, ...) stop("wflow_start reached"),
+    .package = "workflowr"
+  )
+  target <- file.path(withr::local_tempdir(), "new-project")
+  expect_error(
+    suppressMessages(reflow_init(directory = target, author = "A",
+                                 depth = "minimal", git = FALSE,
+                                 change_wd = FALSE, open = FALSE)),
+    "wflow_start reached"
+  )
+  expect_identical(checked, 0L)
+})
+
 test_that("a leading tilde is expanded before any step uses the folder", {
   seen <- NULL
   local_mocked_bindings(reflow_init_writable = function(path) TRUE)
