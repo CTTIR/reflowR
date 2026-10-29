@@ -32,14 +32,14 @@ All generated projects remain fully compatible with standard workflowr commands 
 
 ```r
 # install.packages("pak")
-pak::pak("cttir/reflowR")
+pak::pak("CTTIR/reflowR")
 # workflowr is installed automatically as a dependency
 ```
 
 Or using remotes:
 
 ```r
-remotes::install_github("cttir/reflowR")
+remotes::install_github("CTTIR/reflowR")
 ```
 
 ## Quick Start

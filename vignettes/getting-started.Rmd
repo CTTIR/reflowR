@@ -58,7 +58,7 @@ and utility scripts for reproducible research. It wraps
 
 ```r
 # Install from GitHub (workflowr is installed automatically)
-remotes::install_github("cttir/reflowR")
+remotes::install_github("CTTIR/reflowR")
 ```
 
 ## Quick Start
