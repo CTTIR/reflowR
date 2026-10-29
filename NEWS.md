@@ -12,6 +12,10 @@
   notes and uncommitted edits. If the repository already has staged changes,
   it makes no commit and says so.
 
+* `reflow_init()` checks that it can write each of its files before writing
+  any. With `overwrite = TRUE`, a read-only file used to stop it halfway and
+  leave a partly re-themed project.
+
 * Every exported function now has a runnable example; the `reflow_init()`
   example writes to a temporary folder.
 

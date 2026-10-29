@@ -73,7 +73,8 @@
 #' workflowr project or the files of an earlier call, the function stops before
 #' writing anything and lists them, so a project is never changed silently or
 #' left partly updated. Set \code{overwrite = TRUE} to replace them with the
-#' reflowR versions.
+#' reflowR versions. It also stops before writing anything if one of these
+#' files, or the folder it goes in, is not writable.
 #'
 #' @examples
 #' # A clinical project with the three-step pipeline, in a temporary folder
@@ -141,6 +142,16 @@ reflow_init <- function(
     cli::cli_abort(c(
       "Files that reflowR writes already exist in {.path {directory}}; nothing was changed.",
       "i" = "Move or remove {.file {present}}, or set {.code overwrite = TRUE} to replace them."
+    ))
+  }
+  # A file that cannot be written would stop the call halfway and leave the
+  # project partly re-themed.
+  blocked <- written[!vapply(file.path(directory, written), reflow_init_writable,
+                             logical(1))]
+  if (length(blocked)) {
+    cli::cli_abort(c(
+      "reflowR cannot write all of its files in {.path {directory}}; nothing was changed.",
+      "i" = "Make {.file {blocked}} or the folders they go in writable."
     ))
   }
 
@@ -307,6 +318,20 @@ reflow_init_replaced <- c(
   "README.md", "_workflowr.yml",
   file.path("analysis", c("_site.yml", "index.Rmd", "about.Rmd"))
 )
+
+# Whether a file can be written: an existing one must be writable, a new one
+# needs a writable folder as its nearest existing ancestor.
+reflow_init_writable <- function(path) {
+  if (file.exists(path)) {
+    return(!dir.exists(path) && file.access(path, 2) == 0)
+  }
+  repeat {
+    parent <- dirname(path)
+    if (identical(parent, path) || file.exists(parent)) break
+    path <- parent
+  }
+  dir.exists(parent) && file.access(parent, 2) == 0
+}
 
 # Files in a project folder, relative to it, leaving out the .git folder.
 reflow_init_files <- function(directory) {

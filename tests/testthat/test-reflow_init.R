@@ -337,6 +337,47 @@ test_that("overwrite = TRUE re-themes a project made by an earlier call", {
   )
 })
 
+test_that("overwrite = TRUE changes nothing when a file cannot be replaced", {
+  skip_on_os("windows")
+  tmp <- withr::local_tempdir()
+  proj <- file.path(tmp, "locked_proj")
+  suppressMessages(reflow_init(directory = proj, author = "A", scheme = "brand",
+                               depth = "minimal", git = FALSE,
+                               change_wd = FALSE, open = FALSE))
+  # The README is written last, so without the check everything else would
+  # already be re-themed when writing it fails.
+  locked <- file.path(proj, "README.md")
+  Sys.chmod(locked, "0444")
+  withr::defer(Sys.chmod(locked, "0644"))
+  skip_if(file.access(locked, 2) == 0, "File modes are not enforced for this user")
+  listing <- function() {
+    tools::md5sum(list.files(proj, recursive = TRUE, all.files = TRUE,
+                             full.names = TRUE))
+  }
+  before <- listing()
+  err <- expect_error(
+    reflow_init(directory = proj, author = "A", scheme = "clinical",
+                depth = "minimal", existing = TRUE, overwrite = TRUE,
+                git = FALSE, change_wd = FALSE, open = FALSE),
+    "nothing was changed"
+  )
+  expect_match(conditionMessage(err), "README.md", fixed = TRUE)
+  expect_identical(listing(), before)
+})
+
+test_that("a missing file needs a writable folder above it", {
+  skip_on_os("windows")
+  tmp <- withr::local_tempdir()
+  expect_true(reflow_init_writable(file.path(tmp, "new", "deeper", "file.txt")))
+  locked <- file.path(tmp, "locked")
+  dir.create(locked)
+  Sys.chmod(locked, "0555")
+  withr::defer(Sys.chmod(locked, "0755"))
+  skip_if(file.access(locked, 2) == 0, "File modes are not enforced for this user")
+  expect_false(reflow_init_writable(file.path(locked, "new", "file.txt")))
+  expect_false(reflow_init_writable(tmp))
+})
+
 test_that("the replaced file list matches what reflow_init changes in a workflowr project", {
   tmp <- withr::local_tempdir()
   base <- file.path(tmp, "base")
