@@ -116,6 +116,13 @@ numeric_summary <- function(df, vars = NULL) {{
   if (is.null(vars)) vars <- names(df)[sapply(df, is.numeric)]
   purrr::map_dfr(vars, function(v) {{
     x <- df[[v]]
+    if (!any(!is.na(x))) {{
+      return(tibble::tibble(
+        variable = v, n = 0L, mean = NA_real_, sd = NA_real_,
+        median = NA_real_, q25 = NA_real_, q75 = NA_real_,
+        min = NA_real_, max = NA_real_
+      ))
+    }}
     tibble::tibble(
       variable = v,
       n        = sum(!is.na(x)),

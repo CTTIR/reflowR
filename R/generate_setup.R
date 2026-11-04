@@ -163,12 +163,16 @@ theme_wf <- function(base_size = 12, base_family = "sans") {{
 ggplot2::theme_set(theme_wf())
 
 # ── gtsummary theme ──
-wf_gtsummary_theme <- list(
-  "tbl_summary-str:default_con" = "{{median}} ({{p25}}, {{p75}})",
-  "tbl_summary-str:default_cat" = "{{n}} ({{p}}%)",
-  "style_number-arg:big.mark"   = ","
-)
-gtsummary::set_gtsummary_theme(wf_gtsummary_theme)
+if (requireNamespace("gtsummary", quietly = TRUE)) {{
+  wf_gtsummary_theme <- list(
+    "tbl_summary-arg:statistic" = list(
+      gtsummary::all_continuous() ~ "{{median}} ({{p25}}, {{p75}})",
+      gtsummary::all_categorical() ~ "{{n}} ({{p}}%)"
+    ),
+    "style_number-arg:big.mark" = ","
+  )
+  gtsummary::set_gtsummary_theme(wf_gtsummary_theme)
+}}
 
 # ── gt styling helper ──
 # Text stays on neutral surfaces (gt picks dark or light text by contrast);
@@ -211,7 +215,16 @@ knitr::opts_chunk$set(
 save_versioned <- function(obj, name, dir = paths$processed) {{
   ts  <- format(Sys.time(), "%Y%m%d_%H%M%S")
   out <- file.path(dir, paste0(name, "_", ts, ".rds"))
-  saveRDS(obj, out)
+  exists <- function() file.exists(out) || isTRUE(unname(fs::is_link(out)))
+  if (exists()) {{
+    cli::cli_abort("Checkpoint already exists: {{.path {{out}}}}. Use another name or retry after this timestamp.")
+  }}
+  staged <- tempfile(".reflow-checkpoint-", tmpdir = dir)
+  on.exit(unlink(staged), add = TRUE)
+  saveRDS(obj, staged)
+  if (exists() || !file.rename(staged, out)) {{
+    cli::cli_abort("Cannot publish checkpoint without replacing an existing file: {{.path {{out}}}}.")
+  }}
   cli::cli_alert_success("Saved checkpoint: {{.path {{out}}}}")
   invisible(out)
 }}
