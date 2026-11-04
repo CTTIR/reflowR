@@ -228,6 +228,15 @@ Local software setup: vLLM with Python/PyTorch, plus R and RStudio.
 Editable R artwork and regeneration instructions are in
 [tools/branding](https://github.com/CTTIR/reflowR/blob/main/tools/branding/README.md).
 
+## TODO after removing the local container setup
+
+Recreate a Linux test environment and rerun the provenance comparison;
+its shared container was stopped on 4 November 2026 to remove the local
+Docker setup.
+
+Check the saved audit files for completed results and confirm the final
+package checks before release.
+
 # Package index
 
 ## Finalized-value figures
