@@ -65,12 +65,23 @@ if (usable) {
   ))
 }
 if (usable) {
-  # reflowR, processx, ps, digest, the writer package (base) and their imports
-  packages <- unique(c(roots, unlist(tools::package_dependencies(
-    roots, db = utils::installed.packages(), which = c("Depends", "Imports"),
-    recursive = TRUE
-  ))))
-  usable <- !any(nzchar(Sys.readlink(find.package(packages))))
+  # Follow the selected package version, including already loaded namespaces.
+  package_paths <- character()
+  pending <- roots
+  while (length(pending)) {
+    package <- pending[[1]]
+    pending <- pending[-1]
+    if (package \%in\% names(package_paths)) next
+    path <- find.package(package)
+    package_paths[[package]] <- path
+    description <- read.dcf(file.path(path, "DESCRIPTION"))
+    fields <- intersect(c("Depends", "Imports"), colnames(description))
+    text <- paste(description[1, fields], collapse = ",")
+    dependencies <- trimws(sub("[[:space:]]*[(].*", "",
+                              strsplit(text, ",", fixed = TRUE)[[1]]))
+    pending <- unique(c(pending, setdiff(dependencies[nzchar(dependencies)], "R")))
+  }
+  usable <- !any(fs::is_link(package_paths))
 }
 if (usable) {
   root <- tempfile("bounded-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
@@ -93,7 +104,7 @@ if (usable) {
   # three executables.
   files <- c(
     list.files(system.file("bounded", package = "reflowR"), full.names = TRUE),
-    unlist(lapply(find.package(packages), list.files, recursive = TRUE,
+    unlist(lapply(package_paths, list.files, recursive = TRUE,
                   full.names = TRUE, all.files = TRUE)),
     resources$rscript, resources$prlimit, resources$nice_command
   )
@@ -105,20 +116,23 @@ if (usable) {
   threads <- c("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS")
   saved <- Sys.getenv(threads, unset = NA)
   Sys.setenv(OPENBLAS_NUM_THREADS = 1, OMP_NUM_THREADS = 1, MKL_NUM_THREADS = 1)
+  verified <- FALSE
   tryCatch({
     bundle <- reflow_artifact_run_bounded(spec, file.path(root, "run"),
                                           file.path(root, "supervisor"),
                                           resources, pins)
     print(readLines(file.path(bundle$bundle, "lines.txt")))
+    verified <- TRUE
   }, error = function(e) {
-    # A loaded machine can leave the guardian too little time; report it.
+    # Failure can leave unresolved ownership. Preserve diagnostics and locks.
     message("The bounded run did not complete here: ", conditionMessage(e))
+    message("Retained run and supervisor evidence: ", root)
   }, finally = {
     for (name in threads) {
       if (is.na(saved[[name]])) Sys.unsetenv(name)
       else do.call(Sys.setenv, as.list(saved[name]))
     }
-    unlink(root, recursive = TRUE)
+    if (verified) unlink(root, recursive = TRUE)
   })
 }
 }

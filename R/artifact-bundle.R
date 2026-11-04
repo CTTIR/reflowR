@@ -195,9 +195,7 @@ rfa_no_links <- function(path) {
   if (!grepl("^(/|[A-Za-z]:[/\\\\])", path))
     path <- file.path(getwd(), path)
   repeat {
-    link <- Sys.readlink(path)
-    if (!is.na(link) &&
-          nzchar(link))
+    if (isTRUE(fs::is_link(path)))
       stop("Symbolic links are not allowed: ", path)
     parent <- dirname(path)
     if (identical(parent, path))
@@ -255,9 +253,9 @@ rfa_tree <- function(path) {
                            full.names = TRUE, no.. = TRUE)
     # The directory and its ancestors are already checked; only the entries
     # themselves can still be links.
-    links <- Sys.readlink(children)
-    if (any(!is.na(links) & nzchar(links))) {
-      stop("Symbolic links are not allowed: ", children[!is.na(links) & nzchar(links)][1L])
+    links <- fs::is_link(children)
+    if (any(links, na.rm = TRUE)) {
+      stop("Symbolic links are not allowed: ", children[which(links)[1L]])
     }
     # No entry is a link (checked above), so stat-based dir.exists() equals
     # rfa_directory() here.
@@ -301,10 +299,11 @@ rfa_signature <- function(spec) {
   )
   stage <- reflow_imaging_stage("bundle", spec$package, spec$fun,
                                 spec$args, spec$seed)
-  database <- utils::installed.packages()
   direct <- unique(c(spec$package, spec$packages))
-  if (!all(direct %in% rownames(database))) stop("Missing declared package.")
-  packages <- rf_closure(direct, database)
+  available <- vapply(direct, function(p) length(find.package(p, quiet = TRUE)) > 0L,
+                      logical(1))
+  if (!all(available)) stop("Missing declared package.")
+  packages <- rf_closure(direct)
   # Each package is bound by one digest of its folder layout and file hashes;
   # keeping the full listing in every definition made graph journals grow by
   # megabytes per node.

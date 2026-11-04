@@ -14,7 +14,9 @@ reflow_imaging_input(path, read = FALSE)
 
 \item{select}{Character vector of nested list components to extract.}
 
-\item{path}{Existing input file or directory. All contents are hashed.}
+\item{path}{Existing input file or directory. File contents and directory
+layout, including empty directories, are fingerprinted. Imaging inputs may
+follow symbolic links; cached file hashes use the final target's metadata.}
 
 \item{read}{Read an RDS input as an object; otherwise pass its absolute path.}
 }

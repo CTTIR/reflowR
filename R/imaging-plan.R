@@ -70,7 +70,9 @@ reflow_imaging_ref <- function(stage, select = character()) {
 }
 
 #' @rdname reflow_imaging_ref
-#' @param path Existing input file or directory. All contents are hashed.
+#' @param path Existing input file or directory. File contents and directory
+#'   layout, including empty directories, are fingerprinted. Imaging inputs may
+#'   follow symbolic links; cached file hashes use the final target's metadata.
 #' @param read Read an RDS input as an object; otherwise pass its absolute path.
 #' @export
 reflow_imaging_input <- function(path, read = FALSE) {
@@ -174,7 +176,8 @@ rf_package_cache <- new.env(parent = emptyenv())
 # Hashes of installed package files. With
 # options(reflowR.package_hash_cache = TRUE) a hash is reused within the R
 # process while the file keeps its device, inode, size, modification and
-# change times; otherwise every call reads every file.
+# change times; linked files use the target's metadata, matching the bytes
+# that hashing reads. Otherwise every call reads every file.
 rf_package_hashes <- function(paths) rf_stamped_hashes(paths, "reflowR.package_hash_cache")
 
 # Hashes of tracked input files, reused in the same way with
@@ -187,7 +190,7 @@ rf_stamped_hashes <- function(paths, option) {
   if (!length(paths) || !isTRUE(getOption(option, FALSE))) {
     return(rf_file_hashes(paths))
   }
-  info <- fs::file_info(paths, follow = FALSE, fail = FALSE)
+  info <- fs::file_info(paths, follow = TRUE, fail = FALSE)
   stamp <- function(x) sprintf("%.9f", as.numeric(x))
   keys <- paste(paths, info$device_id, info$inode, info$size,
     stamp(info$modification_time), stamp(info$change_time),
@@ -208,38 +211,73 @@ rf_stamped_hashes <- function(paths, option) {
 
 rf_tree <- function(path) {
   if (!file.exists(path)) stop("Missing tracked input: ", path)
-  files <- if (dir.exists(path)) {
-    sort(list.files(path,
-      recursive = TRUE,
-      full.names = TRUE, all.files = TRUE
-    ))
-  } else {
-    path
+  type <- fs::file_info(path, follow = TRUE, fail = FALSE)$type
+  if (identical(as.character(type), "file")) {
+    return(stats::setNames(rf_input_hashes(path), basename(path)))
   }
-  files <- files[!dir.exists(files)]
-  stats::setNames(
-    rf_input_hashes(files),
-    if (dir.exists(path)) substring(files, nchar(path) + 2L) else basename(path)
+  if (!identical(as.character(type), "directory")) {
+    stop("Tracked inputs must be regular files or directories: ", path)
+  }
+  visit <- function(directory, ancestors = character()) {
+    target <- as.character(fs::path_real(directory))
+    if (target %in% ancestors) stop("Tracked directory link cycle: ", directory)
+    entries <- as.character(fs::dir_ls(directory, all = TRUE, recurse = FALSE))
+    types <- as.character(fs::file_info(entries, follow = TRUE, fail = FALSE)$type)
+    invalid <- is.na(types) | !types %in% c("file", "directory")
+    if (any(invalid)) {
+      stop("Tracked inputs must be regular files or directories: ", entries[invalid][1])
+    }
+    directories <- entries[types == "directory"]
+    nested <- lapply(directories, visit, ancestors = c(ancestors, target))
+    list(
+      directories = c(directories, unlist(lapply(nested, `[[`, "directories"),
+                                          use.names = FALSE)),
+      files = c(entries[types == "file"], unlist(lapply(nested, `[[`, "files"),
+                                                use.names = FALSE))
+    )
+  }
+  tree <- visit(path)
+  files <- sort(tree$files)
+  list(
+    directories = substring(sort(tree$directories), nchar(path) + 2L),
+    files = stats::setNames(rf_input_hashes(files),
+                           substring(files, nchar(path) + 2L))
   )
 }
 
 # Runtime closure of packages: Depends and Imports, recursively, plus reflowR
 # and digest. LinkingTo packages only supply headers at build time; what they
 # contribute is in the compiled libs/ of the linking package, which is hashed.
-rf_closure <- function(packages, db = utils::installed.packages()) {
-  deps <- tools::package_dependencies(packages, db = db, which = c("Depends", "Imports"),
-                                      recursive = TRUE)
-  sort(unique(c("reflowR", "digest", packages, unlist(deps, use.names = FALSE))))
+rf_closure <- function(packages) {
+  visited <- character()
+  pending <- unique(c("reflowR", "digest", packages))
+  while (length(pending)) {
+    package <- pending[[1]]
+    pending <- pending[-1]
+    if (package %in% visited) next
+    # find.package honours an already loaded namespace, unlike the first
+    # installed.packages row when another library contains a newer version.
+    path <- find.package(package, quiet = TRUE)
+    if (!length(path)) stop("Missing packages: ", package)
+    description <- read.dcf(file.path(path, "DESCRIPTION"))
+    fields <- intersect(c("Depends", "Imports"), colnames(description))
+    text <- paste(description[1, fields], collapse = ",")
+    dependencies <- trimws(sub("[[:space:]]*\\(.*", "",
+                              strsplit(text, ",", fixed = TRUE)[[1]]))
+    visited <- c(visited, package)
+    pending <- unique(c(pending, setdiff(dependencies[nzchar(dependencies)], "R")))
+  }
+  sort(visited)
 }
 
 rf_packages <- function(stages, extra = character()) {
   pkgs <- unique(c(extra, vapply(stages, `[[`, character(1), "package")))
-  db <- utils::installed.packages()
-  missing <- setdiff(pkgs, rownames(db))
+  missing <- pkgs[!vapply(pkgs, function(p) length(find.package(p, quiet = TRUE)) > 0L,
+                         logical(1))]
   if (length(missing)) {
     stop("Missing packages: ", paste(missing, collapse = ", "))
   }
-  pkgs <- rf_closure(pkgs, db)
+  pkgs <- rf_closure(pkgs)
   stats::setNames(lapply(pkgs, function(p) {
     root <- find.package(p)
     files <- c(
