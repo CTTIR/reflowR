@@ -91,19 +91,25 @@ test_that("managed links are refused before any existing data changes", {
   expect_identical(readLines(outside), "external sentinel")
   expect_true(unname(fs::is_link(readme)))
   expect_identical(.scaffold_snapshot(path), before)
-  unlink(readme)
-  expect_true(file.symlink(file.path(root, "missing"), readme))
+  fs::link_delete(readme)
+  # Windows needs a real target when creating a file symlink. Remove the
+  # target afterwards so the same dangling-link guard is exercised there.
+  missing <- file.path(root, "missing")
+  writeLines("temporary link target", missing)
+  expect_true(file.symlink(missing, readme))
+  unlink(missing)
   expect_error(.scaffold_retheme(path), "symbolic link")
   expect_false(file.exists(file.path(root, "missing")))
-  unlink(readme)
+  fs::link_delete(readme)
   alias <- file.path(root, "project-alias")
   expect_true(file.symlink(path, alias))
   expect_error(.scaffold_retheme(alias), "symbolic link")
-  unlink(alias)
+  fs::link_delete(alias)
   analysis <- file.path(path, "analysis")
   moved <- file.path(root, "outside-analysis")
   expect_true(file.rename(analysis, moved))
   expect_true(file.symlink(moved, analysis))
+  withr::defer(fs::link_delete(analysis))
   outside_before <- .scaffold_snapshot(moved)
   expect_error(.scaffold_retheme(path), "symbolic link")
   expect_identical(.scaffold_snapshot(moved), outside_before)
@@ -207,6 +213,7 @@ test_that("a root replaced by a link during generation is not published into", {
   root <- withr::local_tempdir()
   path <- .scaffold_project(root)
   moved <- file.path(root, "moved-project")
+  withr::defer(if (isTRUE(unname(fs::is_link(path)))) fs::link_delete(path))
   before <- .scaffold_snapshot(path)
   original_generator <- generate_project_readme
   local_mocked_bindings(generate_project_readme = function(...) {
@@ -225,6 +232,7 @@ test_that("a replaced existing parent prevents new-root publication", {
   dir.create(parent)
   writeLines("existing parent payload", file.path(parent, "sentinel"))
   moved <- file.path(root, "moved-parent")
+  withr::defer(if (isTRUE(unname(fs::is_link(parent)))) fs::link_delete(parent))
   target <- file.path(parent, "new-project")
   original_generator <- generate_project_readme
   local_mocked_bindings(generate_project_readme = function(...) {
@@ -248,10 +256,14 @@ test_that("replacement staging aliases are neither traversed nor cleaned", {
   dir.create(foreign)
   writeLines("foreign sentinel", file.path(foreign, "sentinel"))
   moved <- file.path(root, "moved-staging")
+  stage_alias <- NULL
+  withr::defer(if (!is.null(stage_alias) &&
+    isTRUE(unname(fs::is_link(stage_alias)))) fs::link_delete(stage_alias))
   original_generator <- generate_project_readme
   local_mocked_bindings(generate_project_readme = function(project_dir, ...) {
     original_generator(project_dir, ...)
     stage <- dirname(project_dir)
+    stage_alias <<- stage
     expect_true(file.rename(stage, moved))
     expect_true(file.symlink(foreign, stage))
   })
