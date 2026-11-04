@@ -426,8 +426,15 @@ test_that("a leading tilde is expanded before any step uses the folder", {
                                  change_wd = FALSE, open = FALSE)),
     "stopped before writing"
   )
-  expect_identical(seen, path.expand(directory))
+  # workflowr now generates in a temporary sibling before publication. The
+  # staging parent must still be the expanded intended destination parent.
+  expanded <- path.expand(directory)
+  expect_identical(basename(seen), basename(expanded))
+  expect_identical(normalizePath(dirname(dirname(seen))),
+                   normalizePath(dirname(expanded)))
   expect_false(startsWith(seen, "~"))
+  expect_false(dir.exists(expanded))
+  expect_false(dir.exists(dirname(seen)))
 })
 
 test_that("the replaced file list matches what reflow_init changes in a workflowr project", {

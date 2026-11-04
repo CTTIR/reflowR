@@ -28,7 +28,7 @@ reflow_init(
 }
 \arguments{
 \item{directory}{Character. Path where the project will be created.
-Passed directly to \code{workflowr::wflow_start()}.}
+The existing parent is canonicalized; a linked project root is refused.}
 
 \item{name}{Character. Project name (used in titles and navbar).
 If \code{NULL}, derived from the directory basename.}
@@ -61,8 +61,8 @@ Defaults to \code{as.integer(format(Sys.Date(), "\%Y\%m\%d"))}.}
 Adds a GitHub link to the navbar.}
 
 \item{existing}{Logical. Is the \code{directory} an existing project or
-folder? Passed to \code{workflowr::wflow_start(existing = ...)}, which adds
-the missing workflowr files and leaves present ones alone. Default
+folder? Missing workflowr files are added and present ones left alone.
+Default
 \code{FALSE}. Files that reflowR writes are replaced only with
 \code{overwrite = TRUE}. Files already in the folder are not committed
 (see \code{git}).}
@@ -104,7 +104,8 @@ project, then extends it with a themed colour scheme, structured Rmd analysis
 pipeline, utility scripts, and a Quarto report template.
 }
 \details{
-The function proceeds in two phases:
+The function generates both phases in a private staging directory on the
+destination filesystem before publishing any project files:
 
 \strong{Phase 1 -- workflowr base:} Calls \code{workflowr::wflow_start()}
 with \code{git = FALSE} to create the standard workflowr scaffold without
@@ -120,10 +121,25 @@ initializes git and commits the files written by both phases.
 If any of the files that Phase 2 writes already exists in \code{directory}
 before the call, for example the README or \code{_site.yml} of an existing
 workflowr project or the files of an earlier call, the function stops before
-writing anything and lists them, so a project is never changed silently or
-left partly updated. Set \code{overwrite = TRUE} to replace them with the
+writing anything and lists them. These preflight refusals leave the project
+unchanged. Set \code{overwrite = TRUE} to replace them with the
 reflowR versions. It also stops before writing anything if one of these
-files, or the folder it goes in, is read-only.
+files, or the folder it goes in, is read-only. Managed file and directory
+links are refused. Unrelated data and existing workflowr files outside the
+themed replacement set are not copied or replaced.
+
+A generation error leaves the project unchanged. Publication backs up old
+files, preserves their observed permission modes, and restores them if a
+rename fails. If recovery itself fails, a \code{reflow_init_recovery_error} names
+the retained backup directory in \code{recovery_path}; inspect it before retrying.
+This is synchronous recovery, not a crash-atomic transaction or protection
+against concurrent writers. ACLs and ownership are not copied.
+
+Git operations occur only after successful file publication. Existing staged
+changes prevent a commit. A failed add/commit restores the previous index
+and leaves the generated project available for manual commit. Linked Git
+metadata requires \code{git = FALSE}. The operation needs a writable existing
+ancestor for its temporary staging directory.
 }
 \examples{
 # A clinical project with the three-step pipeline, in a temporary folder
@@ -141,7 +157,9 @@ reflow_init(
 list.files(file.path(project, "analysis"))
 
 # In a real project, continue with the standard workflowr commands, e.g.
-# workflowr::wflow_build() and workflowr::wflow_publish().
+# workflowr::wflow_build(project = project)
+# workflowr::wflow_publish(file.path(project, "analysis", "*.Rmd"),
+#                         project = project)
 unlink(project, recursive = TRUE)
 
 }
