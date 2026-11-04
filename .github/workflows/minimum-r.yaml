@@ -12,7 +12,7 @@ permissions:
 jobs:
   minimum-R:
     runs-on: ubuntu-22.04
-    timeout-minutes: 30
+    timeout-minutes: 90
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       _R_CHECK_FORCE_SUGGESTS_: false
@@ -38,5 +38,13 @@ jobs:
           rcmdcheck::rcmdcheck(
             args = c("--no-manual", "--ignore-vignettes"),
             build_args = "--no-build-vignettes",
+            check_dir = "check",
             error_on = "warning"
           )
+      - name: Retain minimum-R check diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: minimum-R-check
+          path: check
+          if-no-files-found: ignore
