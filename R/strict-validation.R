@@ -1,8 +1,7 @@
 strict_path_ancestors <- function(path) {
   path <- as.character(fs::path_abs(path))
   repeat {
-    link <- Sys.readlink(path)
-    if (!is.na(link) && nzchar(link)) stop("Symbolic links are not allowed: ", path, call. = FALSE)
+    if (isTRUE(fs::is_link(path))) stop("Symbolic links are not allowed: ", path, call. = FALSE)
     parent <- dirname(path)
     if (identical(parent, path)) break
     path <- parent
@@ -12,8 +11,7 @@ strict_path_ancestors <- function(path) {
 
 strict_tree_files <- function(root) {
   visit <- function(path) {
-    link <- Sys.readlink(path)
-    if (!is.na(link) && nzchar(link)) stop("Symbolic links are not allowed: ", path, call. = FALSE)
+    if (isTRUE(fs::is_link(path))) stop("Symbolic links are not allowed: ", path, call. = FALSE)
     if (!dir.exists(path)) return(path)
     children <- list.files(path, all.files = TRUE, no.. = TRUE, full.names = TRUE)
     unlist(lapply(children, visit), use.names = FALSE)

@@ -202,11 +202,23 @@ test_that("missing initialization and special metadata never dispatch a writer",
   p <- reflow_artifact_select(g$make(), g$registry, TRUE)
   current <- file.path(g$registry, "current.rds")
   unlink(current)
-  expect_true(file.symlink(file.path(g$root, "absent"), current))
+  if (!isTRUE(suppressWarnings(file.symlink(file.path(g$root, "absent"), current)))) {
+    skip("This account/filesystem cannot create file symbolic links.")
+  }
   expect_error(reflow_artifact_select(g$make(), g$registry), "links")
-  expect_true(nzchar(Sys.readlink(current)))
-  unlink(current)
+  expect_true(fs::is_link(current))
+  expect_error(normalizePath(file.path(g$root, "absent"), mustWork = TRUE))
+})
+
+test_that("POSIX FIFO metadata is refused without dispatching a writer", {
+  skip_on_cran()
+  # Native Windows R cannot observe an MSYS mkfifo artifact as a POSIX FIFO.
+  skip_on_os("windows")
   skip_if(!nzchar(Sys.which("mkfifo")))
+  g <- selector_fixture()
+  reflow_artifact_select(g$make(), g$registry, TRUE)
+  current <- file.path(g$registry, "current.rds")
+  unlink(current)
   status <- system2(Sys.which("mkfifo"), shQuote(current))
   expect_identical(status, 0L)
   expect_error(reflow_artifact_select(g$make(), g$registry), "regular")

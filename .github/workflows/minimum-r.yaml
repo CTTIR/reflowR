@@ -1,0 +1,42 @@
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+name: minimum-R
+
+permissions:
+  contents: read
+
+jobs:
+  minimum-R:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      _R_CHECK_FORCE_SUGGESTS_: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
+        with:
+          r-version: '4.1'
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: |
+            any::testthat
+            any::rcmdcheck
+          install-quarto: false
+      - name: Check the declared minimum with required dependencies
+        shell: Rscript {0}
+        run: |
+          stopifnot(getRversion() >= "4.1", getRversion() < "4.2")
+          rcmdcheck::rcmdcheck(
+            args = c("--no-manual", "--ignore-vignettes"),
+            build_args = "--no-build-vignettes",
+            error_on = "warning"
+          )

@@ -23,3 +23,5 @@
 ^\.gitattributes$
 ^tools/branding$
 ^man/figures/(?!(logo\.svg|logo-with-name\.png|logo-with-name-dark\.png)$)
+
+^planning$

@@ -58,8 +58,7 @@ strict_cttir_runtime_status <- function(runtime, package_path = NULL) {
     root <- as.character(fs::path_abs(package_path))
     parent <- root
     repeat {
-      link <- Sys.readlink(parent)
-      if (!is.na(link) && nzchar(link)) stop("cttiR runtime ancestors must not be symbolic links")
+      if (isTRUE(fs::is_link(parent))) stop("cttiR runtime ancestors must not be symbolic links")
       next_parent <- dirname(parent)
       if (identical(next_parent, parent)) break
       parent <- next_parent

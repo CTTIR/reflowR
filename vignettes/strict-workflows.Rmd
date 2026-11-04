@@ -93,7 +93,8 @@ current code, input and output hashes. Rendering an empty scaffold does not
 complete an analysis. Receipts record the seed, session and stage outputs;
 unchanged unrelated artifacts do not count as this stage's outputs.
 
-Render reviewed pages explicitly with `workflowr::wflow_build()`. Each build
+Render reviewed pages explicitly with
+`workflowr::wflow_build(project = "example-study")` from its parent directory. Each build
 uses workflowr's fresh R session. Display computed objects explicitly in an Rmd
 chunk, for example with `knitr::kable(summary)`, after sourcing the calculation
 helper. Keep raw inputs read-only. Child publications share the root Git

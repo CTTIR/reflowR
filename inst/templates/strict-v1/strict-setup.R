@@ -1,8 +1,7 @@
 # Versioned runtime helper. Dependencies must already be installed.
 .strict_runtime_files <- function(root) {
   visit <- function(path) {
-    link <- Sys.readlink(path)
-    if (!is.na(link) && nzchar(link)) stop("Symbolic links are not allowed: ", path)
+    if (isTRUE(fs::is_link(path))) stop("Symbolic links are not allowed: ", path)
     if (!dir.exists(path)) return(path)
     children <- list.files(path, all.files = TRUE, no.. = TRUE, full.names = TRUE)
     unlist(lapply(children, visit), use.names = FALSE)

@@ -69,10 +69,72 @@ wf_normality_battery <- function(df, vars = NULL, alpha = 0.05) {{
 }}
 
 # ── Group Comparison Selector ──
-wf_compare_groups <- function(df, outcome, group, paired = FALSE) {{
+# Paired comparisons require one complete observation per pair and group.
+# The normality selector assesses within-pair differences for paired tests;
+# it is a convenience rule, not a validation of the study design or inference.
+wf_compare_groups <- function(df, outcome, group, paired = FALSE,
+                               pair_id = NULL) {{
 
   g <- df[[group]]
   y <- df[[outcome]]
+  if (paired) {{
+    if (!is.character(pair_id) || length(pair_id) != 1L || is.na(pair_id) ||
+        !nzchar(pair_id) || !pair_id %in% names(df)) {{
+      cli::cli_abort("Paired comparisons require {{.arg pair_id}} naming a pair-ID column.")
+    }}
+    if (length(g) != nrow(df) || anyNA(g) ||
+        (!is.factor(g) && !is.character(g) && !is.numeric(g))) {{
+      cli::cli_abort("Paired comparisons require nonmissing group labels.")
+    }}
+    groups <- if (is.factor(g)) levels(droplevels(g)) else
+      sort(unique(g), method = "radix")
+    if (length(groups) != 2L) {{
+      cli::cli_abort("Paired comparisons require exactly two observed groups.")
+    }}
+    if (!is.numeric(y) || is.complex(y) || is.object(y) ||
+        !is.null(dim(y)) || length(y) != nrow(df) || any(!is.finite(y))) {{
+      cli::cli_abort("Paired outcomes must be complete finite real numbers.")
+    }}
+    ids <- df[[pair_id]]
+    if (is.factor(ids)) ids <- as.character(ids)
+    if ((!is.character(ids) && !is.numeric(ids)) || is.complex(ids) ||
+        is.object(ids) || !is.null(dim(ids)) || anyNA(ids) ||
+        (is.character(ids) && any(!nzchar(trimws(ids)))) ||
+        (is.numeric(ids) && any(!is.finite(ids)))) {{
+      cli::cli_abort("Pair IDs must be nonmissing text or finite real numbers.")
+    }}
+    first <- which(g == groups[[1L]])
+    second <- which(g == groups[[2L]])
+    if (anyDuplicated(ids[first]) || anyDuplicated(ids[second])) {{
+      cli::cli_abort("Each group must have exactly one observation per pair ID.")
+    }}
+    if (!setequal(ids[first], ids[second])) {{
+      cli::cli_abort("Both groups must contain the same complete pair IDs.")
+    }}
+    first <- first[order(ids[first], method = "radix")]
+    second <- second[match(ids[first], ids[second])]
+    first_values <- y[first]
+    second_values <- y[second]
+    differences <- first_values - second_values
+    if (length(differences) < 2L || any(!is.finite(differences)) ||
+        length(unique(differences)) < 2L) {{
+      cli::cli_abort("Paired differences must contain at least two finite, nonconstant values.")
+    }}
+    norm_ok <- if (length(differences) < 3L || length(differences) > 5000L) TRUE else
+      stats::shapiro.test(differences)$p.value >= 0.05
+    test <- if (norm_ok) {{
+      stats::t.test(first_values, second_values, paired = TRUE)
+    }} else {{
+      stats::wilcox.test(first_values, second_values, paired = TRUE)
+    }}
+    test_name <- if (norm_ok) "Paired t-test" else "Wilcoxon signed-rank"
+    es <- if (norm_ok) {{
+      effectsize::cohens_d(first_values, second_values, paired = TRUE)
+    }} else {{
+      effectsize::rank_biserial(first_values, second_values, paired = TRUE)
+    }}
+    return(list(test_name = test_name, test = test, effect_size = es))
+  }}
   n_groups <- length(unique(g[!is.na(g)]))
 
   # Test normality per group
@@ -231,8 +293,16 @@ wf_compare_models <- function(..., metrics = c("accuracy", "roc_auc")) {{
 
 # ── Checkpoint Loader ──
 wf_load_checkpoint <- function(step_name, dir = paths$processed) {{
-  pattern <- paste0("^", step_name, "_\\\\d{{8}}_\\\\d{{6}}\\\\.rds$")
-  files <- list.files(dir, pattern = pattern, full.names = TRUE)
+  if (!is.character(step_name) || length(step_name) != 1L ||
+      is.na(step_name) || !is.null(dim(step_name)) || !nzchar(step_name)) {{
+    cli::cli_abort("{{.arg step_name}} must be one nonempty character string.")
+  }}
+  prefix <- paste0(step_name, "_")
+  files <- list.files(dir, full.names = TRUE)
+  filenames <- basename(files)
+  suffix <- substring(filenames, nchar(prefix) + 1L)
+  files <- files[startsWith(filenames, prefix) &
+                   grepl("^[0-9]{{8}}_[0-9]{{6}}[.]rds$", suffix)]
   if (length(files) == 0) {{
     cli::cli_abort("No checkpoint found for {{.val {{step_name}}}} in {{.path {{dir}}}}")
   }}
@@ -346,9 +416,9 @@ wf_data_dict <- function(df, output_file = NULL) {{
       type           = class(x)[1],
       n_unique       = length(unique(x[!is.na(x)])),
       n_missing      = sum(is.na(x)),
-      pct_missing    = round(mean(is.na(x)) * 100, 1),
-      min            = if (is.numeric(x)) as.character(round(min(x, na.rm = TRUE), 4)) else NA_character_,
-      max            = if (is.numeric(x)) as.character(round(max(x, na.rm = TRUE), 4)) else NA_character_,
+      pct_missing    = if (length(x)) round(mean(is.na(x)) * 100, 1) else NA_real_,
+      min            = if (is.numeric(x) && any(!is.na(x))) as.character(round(min(x, na.rm = TRUE), 4)) else NA_character_,
+      max            = if (is.numeric(x) && any(!is.na(x))) as.character(round(max(x, na.rm = TRUE), 4)) else NA_character_,
       example_values = paste(utils::head(unique(x[!is.na(x)]), 3), collapse = ", ")
     )
   }})

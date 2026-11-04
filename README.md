@@ -33,7 +33,7 @@ All generated projects remain fully compatible with standard workflowr commands 
 reflowR is not on CRAN yet. Install it from GitHub:
 
 ```r
-# install.packages("pak")
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
 pak::pak("CTTIR/reflowR")
 ```
 
@@ -42,19 +42,45 @@ pak::pak("CTTIR/reflowR")
 ```r
 library(reflowR)
 
-# Create a clinical research project with the standard 8-step pipeline
-reflow_init(
+# The generated setup requires here in addition to reflowR.
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+
+# Choose a new project directory.
+dir.create("~/projects", recursive = TRUE, showWarnings = FALSE)
+project <- reflow_init(
   directory = "~/projects/my_analysis",
   author    = "Your Name",
   email     = "you@example.com",
   scheme    = "clinical",
-  depth     = "standard"
+  depth     = "standard",
+  change_wd = FALSE,
+  open      = FALSE
 )
 
 # Then use standard workflowr commands:
-workflowr::wflow_build()
-workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
+workflowr::wflow_build(project = project)
+workflowr::wflow_publish(file.path(project, "analysis", "*.Rmd"),
+                        message = "Initial build",
+                        project = project)
 ```
+
+The explicit `project` argument and project-qualified analysis paths work from
+your current directory; initialization does not need to change it. Choose a new destination for this example. Generated
+`code/00_setup.R` reports any additional packages needed by individual analysis
+helpers. Install those packages before using the corresponding helpers; the
+scaffold does not install them automatically. Publishing with workflowr commits
+the reviewed analysis and rendered files locally; remote hosting is a separate
+setup step. The optional table helpers use `gtsummary >= 2.0.0`, which
+requires R >= 4.2; core reflowR remains available on R >= 4.1.
+
+Generated `save_versioned()` checkpoints retain their second-resolution names.
+A same-name, same-second collision is refused and the earlier checkpoint is
+preserved. Loading matches the exact step name, including punctuation, then
+selects the latest modification time among matching timestamped files.
+Serialization completes in a temporary file before publication, so a failed
+write does not leave a partial named checkpoint. This is not a guarantee
+for concurrent writers or power-loss recovery. `numeric_summary()` reports
+`n = 0` with `NA` estimates for empty or entirely missing numeric columns.
 
 ## Colour Schemes
 
