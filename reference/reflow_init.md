@@ -36,8 +36,8 @@ reflow_init(
 
 - directory:
 
-  Character. Path where the project will be created. Passed directly to
-  [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html).
+  Character. Path where the project will be created. The existing parent
+  is canonicalized; a linked project root is refused.
 
 - name:
 
@@ -92,11 +92,11 @@ reflow_init(
 
 - existing:
 
-  Logical. Is the `directory` an existing project or folder? Passed to
-  `workflowr::wflow_start(existing = ...)`, which adds the missing
-  workflowr files and leaves present ones alone. Default `FALSE`. Files
-  that reflowR writes are replaced only with `overwrite = TRUE`. Files
-  already in the folder are not committed (see `git`).
+  Logical. Is the `directory` an existing project or folder? Missing
+  workflowr files are added and present ones left alone. Default
+  `FALSE`. Files that reflowR writes are replaced only with
+  `overwrite = TRUE`. Files already in the folder are not committed (see
+  `git`).
 
 - overwrite:
 
@@ -143,7 +143,8 @@ Invisibly returns the path to the created project directory.
 
 ## Details
 
-The function proceeds in two phases:
+The function generates both phases in a private staging directory on the
+destination filesystem before publishing any project files:
 
 **Phase 1 – workflowr base:** Calls
 [`workflowr::wflow_start()`](https://workflowr.github.io/workflowr/reference/wflow_start.html)
@@ -160,10 +161,26 @@ phases.
 If any of the files that Phase 2 writes already exists in `directory`
 before the call, for example the README or `_site.yml` of an existing
 workflowr project or the files of an earlier call, the function stops
-before writing anything and lists them, so a project is never changed
-silently or left partly updated. Set `overwrite = TRUE` to replace them
-with the reflowR versions. It also stops before writing anything if one
-of these files, or the folder it goes in, is read-only.
+before writing anything and lists them. These preflight refusals leave
+the project unchanged. Set `overwrite = TRUE` to replace them with the
+reflowR versions. It also stops before writing anything if one of these
+files, or the folder it goes in, is read-only. Managed file and
+directory links are refused. Unrelated data and existing workflowr files
+outside the themed replacement set are not copied or replaced.
+
+A generation error leaves the project unchanged. Publication backs up
+old files, preserves their observed permission modes, and restores them
+if a rename fails. If recovery itself fails, a
+`reflow_init_recovery_error` names the retained backup directory in
+`recovery_path`; inspect it before retrying. This is synchronous
+recovery, not a crash-atomic transaction or protection against
+concurrent writers. ACLs and ownership are not copied.
+
+Git operations occur only after successful file publication. Existing
+staged changes prevent a commit. A failed add/commit restores the
+previous index and leaves the generated project available for manual
+commit. Linked Git metadata requires `git = FALSE`. The operation needs
+a writable existing ancestor for its temporary staging directory.
 
 ## See also
 
@@ -215,19 +232,22 @@ reflow_init(
 #> 
 #> ── Done! ──
 #> 
-#> ✔ Project created at /tmp/RtmppUg8bz/my_project
+#> ✔ Project created at /tmp/RtmpKGvNhf/my_project
 #> ℹ Scheme: "Clinical science" | Pipeline: "Minimal (3 steps)"
 #> 
 #> ℹ Next steps:
 #> 1. Open my_project.Rproj in RStudio
 #> 2. Place your data in data/raw/
-#> 3. Run `workflowr::wflow_build()` to render
-#> 4. Run `workflowr::wflow_publish()` to commit + build
+#> 3. Render and publish with the commands below
+#> workflowr::wflow_build(project = "/tmp/RtmpKGvNhf/my_project")
+#> workflowr::wflow_publish("/tmp/RtmpKGvNhf/my_project/analysis/*.Rmd", message = "Build", project = "/tmp/RtmpKGvNhf/my_project")
 list.files(file.path(project, "analysis"))
 #> [1] "01_read_data.Rmd" "02_eda.Rmd"       "03_report.Rmd"    "_site.yml"       
 #> [5] "about.Rmd"        "index.Rmd"        "license.Rmd"      "theme.css"       
 
 # In a real project, continue with the standard workflowr commands, e.g.
-# workflowr::wflow_build() and workflowr::wflow_publish().
+# workflowr::wflow_build(project = project)
+# workflowr::wflow_publish(file.path(project, "analysis", "*.Rmd"),
+#                         project = project)
 unlink(project, recursive = TRUE)
 ```

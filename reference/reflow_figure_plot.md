@@ -80,6 +80,6 @@ figure <- reflow_figure_plot(scores, recipe)
 figure$rows
 #> [1] 4
 figure$payload_sha256
-#> [1] "6c4b9c949848d0b20ada7f1b9f5326fc27a2cc4edcb9516cd938a2ba37ba72ab"
+#> [1] "b4cca2a6ff30de9229338f3c2b9a59ee68f51e9a97a108e9987e6b758f70c01f"
 figure$plot
 ```

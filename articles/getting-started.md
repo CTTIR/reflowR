@@ -25,7 +25,11 @@ and layers on additional structure and theming.
 ``` r
 
 # Install from GitHub (workflowr is installed automatically)
-remotes::install_github("CTTIR/reflowR")
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+pak::pak("CTTIR/reflowR")
+
+# Required by the generated project setup
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 ```
 
 ## Quick Start
@@ -34,13 +38,16 @@ remotes::install_github("CTTIR/reflowR")
 
 library(reflowR)
 
-# Create a clinical research project with the standard 8-step pipeline
-reflow_init(
+# Choose a new directory for the clinical 8-step project
+dir.create("~/projects", recursive = TRUE, showWarnings = FALSE)
+project <- reflow_init(
   directory = "~/projects/my_project",
   author    = "Your Name",
   email     = "you@example.com",
   scheme    = "clinical",
-  depth     = "standard"
+  depth     = "standard",
+  change_wd = FALSE,
+  open      = FALSE
 )
 ```
 
@@ -107,25 +114,67 @@ your project contains:
 
 ## Working with Your Project
 
-After creation, use standard workflowr commands:
+The returned `project` path makes the following commands work from the
+calling directory. Generated `code/00_setup.R` reports additional
+packages required by individual analysis helpers. Install them before
+using those helpers; they are not installed automatically. The optional
+table helpers use `gtsummary >= 2.0.0` and require R \>= 4.2, while core
+reflowR supports R \>= 4.1. The initial scaffold supplies templates, not
+completed analyses.
+
+After reviewing your analysis, use standard workflowr commands:
 
 ``` r
 
 # Render all Rmd files
-workflowr::wflow_build()
+workflowr::wflow_build(project = project)
 
 # Commit and publish
-workflowr::wflow_publish("analysis/*.Rmd", message = "Initial build")
+workflowr::wflow_publish(file.path(project, "analysis", "*.Rmd"),
+                        message = "Initial build",
+                        project = project)
 
 # Check status
-workflowr::wflow_status()
+workflowr::wflow_status(project = project)
 
 # View the site
-workflowr::wflow_view()
+workflowr::wflow_view(project = project)
 
 # Set up GitHub Pages
-workflowr::wflow_use_github("username", "repo")
+workflowr::wflow_use_github("username", "repo", project = project)
 ```
+
+## Paired comparisons in the generated formulary
+
+After sourcing `code/formulary.R`, `wf_compare_groups()` can compare two
+paired groups using an explicit participant or specimen identifier:
+
+``` r
+
+comparison <- wf_compare_groups(
+  measurements, outcome = "value", group = "visit",
+  paired = TRUE, pair_id = "participant_id"
+)
+```
+
+Every ID must occur exactly once in each of the two groups, with a
+finite numeric outcome. Missing, duplicate or unmatched IDs are refused;
+row order never defines pairing. Factor levels define the first and
+second groups; otherwise group labels are sorted. Reported differences
+follow first minus second. IDs such as `"001"` and `"1"` remain
+distinct.
+
+The existing automatic selector uses a Shapiro–Wilk check of the
+within-pair differences for 3–5,000 pairs. Otherwise it retains its
+t-test convention. The paired t test reports Cohen’s *d* standardized by
+the standard deviation of the differences; the Wilcoxon signed-rank test
+reports matched-pairs rank-biserial correlation. Both use the same
+ID-aligned observations. Constant or nonfinite differences are refused.
+This convenience selector does not validate study design, test
+assumptions or scientific inference; choose and justify the analysis
+before using its results. Unpaired calls retain their existing behavior.
+Existing generated projects must update `code/formulary.R` deliberately
+to receive this repair.
 
 ## Customization
 

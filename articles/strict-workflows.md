@@ -15,7 +15,7 @@ a reason. A stage name does not prescribe a statistical method.
 library(reflowR)
 ```
 
-    ## reflowR v0.2.0 — Themed Workflowr Extensions (CTTIR v5)
+    ## reflowR v0.2.1 — Themed Workflowr Extensions (CTTIR v5)
     ## Use reflow_init() to get started.
     ## See reflow_schemes() and reflow_presets() for options.
 
@@ -98,12 +98,13 @@ record the seed, session and stage outputs; unchanged unrelated
 artifacts do not count as this stage’s outputs.
 
 Render reviewed pages explicitly with
-[`workflowr::wflow_build()`](https://workflowr.github.io/workflowr/reference/wflow_build.html).
-Each build uses workflowr’s fresh R session. Display computed objects
-explicitly in an Rmd chunk, for example with `knitr::kable(summary)`,
-after sourcing the calculation helper. Keep raw inputs read-only. Child
-publications share the root Git repository, dependency lock and site;
-nested execution roots and unknown code entrypoints fail validation.
+`workflowr::wflow_build(project = "example-study")` from its parent
+directory. Each build uses workflowr’s fresh R session. Display computed
+objects explicitly in an Rmd chunk, for example with
+`knitr::kable(summary)`, after sourcing the calculation helper. Keep raw
+inputs read-only. Child publications share the root Git repository,
+dependency lock and site; nested execution roots and unknown code
+entrypoints fail validation.
 
 Static validation is not a security sandbox, a scientific review or
 legal approval. Execute reviewed code only within the group’s separately

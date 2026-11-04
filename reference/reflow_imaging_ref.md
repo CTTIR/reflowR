@@ -22,7 +22,10 @@ reflow_imaging_input(path, read = FALSE)
 
 - path:
 
-  Existing input file or directory. All contents are hashed.
+  Existing input file or directory. File contents and directory layout,
+  including empty directories, are fingerprinted. Imaging inputs may
+  follow symbolic links; cached file hashes use the final target's
+  metadata.
 
 - read:
 
