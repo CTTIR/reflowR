@@ -1,3 +1,30 @@
+# reflowR 0.2.1
+
+* Stage project generation before publication. Validate metadata and managed
+  paths first, preserve existing file permissions, restore files on synchronous
+  publication failure, and retain recovery backups if restoration cannot finish.
+  Existing unrelated files and pre-staged Git work remain separate.
+* Fingerprint tracked directory entries and the actual targets of cached linked
+  inputs, reject nonregular streams before hashing, and detect directory-link
+  cycles explicitly. Refuse links consistently in strict and artifact paths using portable
+  filesystem classification. Resolve recursive runtime dependency metadata
+  from the package libraries actually selected, including the complete
+  reflowR/digest dependency closure.
+* Generated setup uses the supported optional gtsummary theme API. Paired
+  comparisons require explicit pair IDs, validate complete unique pairs and
+  align observations before testing. All-missing numerical summaries retain
+  missing estimates instead of producing infinities.
+* Generated versioned checkpoint saves stage serialization and refuse timestamp
+  collisions rather than overwrite prior data. Existing checkpoint names remain
+  compatible, and checkpoint loading matches step names literally. This is not
+  a concurrent-writer or crash-atomic protocol.
+* Document explicit project paths for noninteractive workflowr use and separate
+  generated-project dependencies from the package's core requirements. Improve
+  code contrast on the package documentation site.
+* Enable an 85% coverage floor after measuring the baseline. Keep the existing
+  house-style scan report-only: its naming and condition migrations require
+  separate compatibility work, not suppression of current findings.
+
 # reflowR 0.2.0
 
 * `reflow_artifact_run_bounded()` and the graph version give the guardian as

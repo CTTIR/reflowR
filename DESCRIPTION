@@ -1,6 +1,6 @@
 Package: reflowR
 Title: Themed Extensions for 'workflowr' Research Workflows
-Version: 0.2.0
+Version: 0.2.1
 Authors@R:
     person("R.", "Heller", email = "raban.heller@uni-ulm.de",
            role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-8006-9742"))
@@ -36,10 +36,15 @@ Imports:
     jsonlite
 Suggests:
     codetools,
+    effectsize,
+    gtsummary (>= 2.0.0),
+    here,
+    purrr,
+    tibble,
     processx (>= 3.9.0),
     ps (>= 1.9.3),
     rstudioapi,
-    testthat (>= 3.0.0),
+    testthat (>= 3.2.0),
     knitr,
     rmarkdown,
     withr,

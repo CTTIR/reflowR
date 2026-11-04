@@ -1,0 +1,21 @@
+/* Keep code comments, output and linked tokens readable in both themes. */
+html[data-bs-theme="light"] pre code span.co,
+html[data-bs-theme="light"] pre .r-pr {
+  color: #505b66;
+}
+html[data-bs-theme="dark"] pre code span.co,
+html[data-bs-theme="dark"] pre .r-pr {
+  color: #adb5bd;
+}
+html[data-bs-theme="light"] pre code span.va,
+html[data-bs-theme="light"] pre code span.dt,
+html[data-bs-theme="light"] pre code span.kw,
+html[data-bs-theme="light"] pre code span.va a,
+html[data-bs-theme="light"] pre code span.dt a,
+html[data-bs-theme="light"] pre code span.kw a {
+  color: #8f3400;
+}
+/* Terminal colours are not adapted by the HTML syntax theme. */
+html[data-bs-theme] pre code span[style*="color:"] {
+  color: var(--cttir-text) !important;
+}
