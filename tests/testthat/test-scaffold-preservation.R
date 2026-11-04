@@ -279,9 +279,36 @@ test_that("next steps use the actual project basename and explicit project path"
   expect_match(output, "directory-name.Rproj", fixed = TRUE)
   expect_false(grepl("Different title.Rproj", output, fixed = TRUE))
   expect_match(output, "workflowr::wflow_build(project =", fixed = TRUE)
-  expect_match(output, normalizePath(path), fixed = TRUE)
+  expected_project <- normalizePath(path, winslash = "/")
+  expect_match(output, encodeString(expected_project, quote = '"'), fixed = TRUE)
   expect_match(output, "workflowr::wflow_publish", fixed = TRUE)
-  expect_match(output, file.path(normalizePath(path), "analysis", "*.Rmd"),
-               fixed = TRUE)
+  expected_analysis <- file.path(expected_project, "analysis", "*.Rmd")
+  expect_match(output, encodeString(expected_analysis, quote = '"'), fixed = TRUE)
   expect_true(file.exists(file.path(path, "directory-name.Rproj")))
+})
+
+test_that("console commands retain literal paths at ordinary and narrow widths", {
+  root <- withr::local_tempdir()
+  for (width in c(80L, 40L)) {
+    path <- file.path(root, paste0("project {1 + 1} café 'data' ", width))
+    withr::local_options(list(cli.width = width, cli.num_colors = 1))
+    messages <- character()
+    withCallingHandlers(reflow_init(path, depth = "minimal", git = FALSE,
+      change_wd = FALSE, open = FALSE), message = function(condition) {
+        messages <<- c(messages, conditionMessage(condition))
+        invokeRestart("muffleMessage")
+      })
+    commands <- messages[grepl("workflowr::wflow_", messages, fixed = TRUE)]
+    expressions <- parse(text = commands)
+    expect_length(expressions, 2L)
+    build <- as.list(expressions[[1L]])
+    publish <- as.list(expressions[[2L]])
+    expect_identical(build[[1L]], quote(workflowr::wflow_build))
+    expect_identical(publish[[1L]], quote(workflowr::wflow_publish))
+    expected <- normalizePath(path, winslash = "/")
+    expect_identical(build$project, expected)
+    expect_identical(publish$project, expected)
+    expect_identical(publish[[2L]], file.path(expected, "analysis", "*.Rmd"))
+    expect_identical(publish$message, "Build")
+  }
 })

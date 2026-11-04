@@ -347,9 +347,10 @@ reflow_init <- function(
   cli::cli_ol(c(
     "Open {.file {project_file}} in RStudio",
     "Place your data in {.file data/raw/}",
-    "Run {.code {build_command}} to render",
-    "Run {.code {publish_command}} to commit + build"
+    "Render and publish with the commands below"
   ))
+  # Verbatim code keeps long quoted paths intact at narrow console widths.
+  cli::cli_code(c(build_command, publish_command))
 
   if (change_wd) setwd(project_dir)
   if (open && requireNamespace("rstudioapi", quietly = TRUE) &&
