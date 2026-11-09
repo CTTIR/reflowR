@@ -232,15 +232,15 @@ reflow_init(
 #> 
 #> ── Done! ──
 #> 
-#> ✔ Project created at /tmp/Rtmpx307E6/my_project
+#> ✔ Project created at /tmp/Rtmpiadtpv/my_project
 #> ℹ Scheme: "Clinical science" | Pipeline: "Minimal (3 steps)"
 #> 
 #> ℹ Next steps:
 #> 1. Open my_project.Rproj in RStudio
 #> 2. Place your data in data/raw/
 #> 3. Render and publish with the commands below
-#> workflowr::wflow_build(project = "/tmp/Rtmpx307E6/my_project")
-#> workflowr::wflow_publish("/tmp/Rtmpx307E6/my_project/analysis/*.Rmd", message = "Build", project = "/tmp/Rtmpx307E6/my_project")
+#> workflowr::wflow_build(project = "/tmp/Rtmpiadtpv/my_project")
+#> workflowr::wflow_publish("/tmp/Rtmpiadtpv/my_project/analysis/*.Rmd", message = "Build", project = "/tmp/Rtmpiadtpv/my_project")
 list.files(file.path(project, "analysis"))
 #> [1] "01_read_data.Rmd" "02_eda.Rmd"       "03_report.Rmd"    "_site.yml"       
 #> [5] "about.Rmd"        "index.Rmd"        "license.Rmd"      "theme.css"       
