@@ -1,3 +1,4 @@
+ACLs
 Artifact
 BLIS
 CMD
@@ -25,6 +26,7 @@ RcppParallel
 Rmd
 SCSS
 UID
+Wilk
 Zenodo
 artifact
 artifacts
@@ -38,6 +40,7 @@ dropdown
 entrypoints
 etc
 ggplot
+gtsummary
 hexmakR
 hjust
 htmltools
@@ -51,8 +54,11 @@ navbar
 ncol
 nonblank
 nonempty
+nonfinite
+noninteractive
 nonmissing
 nonrandom
+nonregular
 omics
 pkgdown
 prlimit
@@ -76,4 +82,5 @@ vjust
 wflow
 workflowr
 workflowr's
+writable
 yml
