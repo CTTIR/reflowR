@@ -18,15 +18,17 @@ This is a new submission: reflowR 0.3.0.
 
 - New submission.
 
-The tests take about five minutes locally; they generate and build
-complete 'workflowr' projects in temporary directories.
+With `NOT_CRAN` unset the tests take about two minutes on Linux; they
+generate and build complete 'workflowr' projects in temporary directories.
 
 ## Examples and run time
 
-- The examples of `reflow_artifact_run()` and `reflow_artifact_plan_run()`
+- The examples of `reflow_artifact_run()`, `reflow_artifact_plan_run()`,
+  `reflow_artifact_select()` and `reflow_artifact_selection_verify()`
   execute a pipeline, which fingerprints every installed package the stages
-  use (tens of seconds of CPU time). Their running and resuming parts are in
-  `\donttest{}`; constructing the specifications still runs.
+  use (tens of seconds of CPU time). Their running, selecting and resuming
+  parts are in `\donttest{}`; for the first two, constructing the
+  specifications still runs.
 - The bounded-execution examples need Linux process limits and are in
   `\donttest{}` as well.
 
@@ -39,8 +41,9 @@ complete 'workflowr' projects in temporary directories.
 - Generated project files install nothing automatically.
 - Stochastic stages require an explicit seed and restore the caller's RNG
   kind and `.Random.seed`.
-- Tests that install fixture packages, run long recovery scenarios or need
-  Linux process supervision are skipped on CRAN.
+- Tests that install fixture packages, run long recovery scenarios, run the
+  slowest complete artifact graphs or need Linux process supervision are
+  skipped on CRAN.
 
 ## Downstream dependencies
 
