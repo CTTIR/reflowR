@@ -27,6 +27,9 @@ The verified graph descriptor for immediate consumption.
 ## Examples
 
 ``` r
+# Selecting runs the graph, which fingerprints the installed packages of
+# every stage; this reads many files and can take a minute.
+# \donttest{
 # The selector is qualified for local Linux file systems only
 if (identical(Sys.info()[["sysname"]], "Linux")) {
   plan <- reflow_artifact_plan(reflow_artifact_stage(
@@ -44,4 +47,5 @@ if (identical(Sys.info()[["sysname"]], "Linux")) {
   readLines(file.path(graph$nodes$lines$descriptor$bundle, "lines.txt"))
   unlink(root, recursive = TRUE)
 }
+# }
 ```

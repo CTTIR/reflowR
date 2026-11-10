@@ -52,6 +52,9 @@ for close_failed.
 ## Examples
 
 ``` r
+# Selecting runs the graph, which fingerprints the installed packages of
+# every stage; this reads many files and can take a minute.
+# \donttest{
 # The selector is qualified for local Linux file systems only
 if (identical(Sys.info()[["sysname"]], "Linux")) {
   plan <- reflow_artifact_plan(reflow_artifact_stage(
@@ -70,4 +73,5 @@ if (identical(Sys.info()[["sysname"]], "Linux")) {
   identical(reflow_artifact_select(plan, registry), pointer)
   unlink(root, recursive = TRUE)
 }
+# }
 ```
