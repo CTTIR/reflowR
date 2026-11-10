@@ -2,6 +2,9 @@
 # the fixture with `launch = TRUE`. Installed lifecycle tests separately
 # establish real channel/tree behavior.
 bounded_control_fixture <- function(frame = parent.frame(), launch = FALSE) {
+  # Each fixture fingerprints the installed package closure, which takes
+  # several seconds; these tests run off CRAN only.
+  skip_on_cran()
   skip_if_not(identical(Sys.info()[["sysname"]], "Linux"))
   skip_if_not_installed("processx")
   skip_if_not_installed("ps")

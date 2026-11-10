@@ -1,3 +1,6 @@
+# Complete runs fingerprint the installed package closure and take several
+# seconds each; the slowest of them run off CRAN only.
+
 # Resolve system temporary-root aliases without relaxing artifact link guards.
 artifact_tempfile <- function(...) {
   tempfile(..., tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
@@ -15,6 +18,7 @@ artifact_example <- function(text = "literal", ...) {
 test_that(
   "declared exported writer produces authenticated bytes and immutable reuse",
   {
+    skip_on_cran()
     root <- artifact_tempfile("bundle space ")
     dir.create(root)
     on.exit(
@@ -138,6 +142,7 @@ test_that(
 
 test_that(
   "empty files and runtime mutation are explicit", {
+    skip_on_cran()
     root <- artifact_tempfile()
     dir.create(root)
     on.exit(
@@ -193,6 +198,7 @@ test_that(
 test_that(
   "strict inventories and receipt links fail without altering accepted state",
   {
+    skip_on_cran()
     root <- artifact_tempfile()
     dir.create(root)
     on.exit(
@@ -359,6 +365,7 @@ test_that(
 
 test_that(
   "input destinations, links and named Unicode paths are guarded", {
+    skip_on_cran()
     root <- artifact_tempfile()
     dir.create(root)
     on.exit(
@@ -408,6 +415,7 @@ test_that(
 test_that(
   "intermediate directory spelling and tracked empty directories are bound",
   {
+    skip_on_cran()
     expect_error(
       reflow_artifact_spec(
         "base", "writeLines", outputs = list(con = list(path = "files",
@@ -549,6 +557,7 @@ test_that("incomplete and conflicting declarations are refused", {
 })
 
 test_that("tracked RDS values and relative destinations preserve literal output", {
+  skip_on_cran()
   root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
@@ -579,6 +588,7 @@ test_that("altered declarations fail before writing a definition", {
 })
 
 test_that("failed-state corruption cannot authorize another attempt", {
+  skip_on_cran()
   root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
@@ -604,6 +614,7 @@ test_that("failed-state corruption cannot authorize another attempt", {
 })
 
 test_that("accepted attempt disagreement cannot mutate accepted bytes", {
+  skip_on_cran()
   root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
@@ -640,6 +651,7 @@ test_that("definition changes across initialization are rejected", {
 })
 
 test_that("a resource change during reuse leaves accepted evidence untouched", {
+  skip_on_cran()
   root <- artifact_tempfile()
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
@@ -740,6 +752,7 @@ test_that("package closure changes stop initialization before any attempt", {
 })
 
 test_that("filesystem creation failures never accept a partial attempt", {
+  skip_on_cran()
   for (failure in c("attempt", "bundle", "parent")) {
     local({
       root <- artifact_tempfile()

@@ -20,6 +20,7 @@ test_that("bounded resource declaration is exact and scalar", {
 })
 
 test_that("READY-only revalidation cannot launch a writer on missing READY", {
+  skip_on_cran()
   root <- tempfile(tmpdir = normalizePath(tempdir(), mustWork = TRUE))
   dir.create(root)
   withr::defer(unlink(root, recursive = TRUE))
@@ -68,6 +69,7 @@ test_that("the base writer is a concrete namespace path, not namespace metadata"
 })
 
 test_that("READY-only validation refuses a newer internally consistent baseline", {
+  skip_on_cran()
   root <- tempfile(tmpdir = normalizePath(tempdir(), mustWork = TRUE))
   dir.create(root)
   withr::defer(unlink(root, recursive = TRUE))

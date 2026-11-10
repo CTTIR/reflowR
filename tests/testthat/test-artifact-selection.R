@@ -3,6 +3,7 @@
 withr::local_options(reflowR.package_hash_cache = TRUE)
 
 test_that("installed writers consume data and unchanged selections do not copy", {
+  skip_on_cran()
   f <- selector_fixture()
   expect_error(reflow_artifact_select(f$make(), f$registry), "initialization")
   p <- reflow_artifact_select(f$make(), f$registry, initialize = TRUE)
@@ -366,6 +367,7 @@ test_that("journal semantic corruption refuses without changing any surviving by
 })
 
 test_that("missing directories and occupied generation files are retained on refusal", {
+  skip_on_cran()
   for (kind in c("events", "generations", "generation-file")) {
     f <- selector_fixture()
     fault <- TRUE
@@ -388,6 +390,7 @@ test_that("missing directories and occupied generation files are retained on ref
 })
 
 test_that("reconciliation action guards cannot dispatch or replace a pointer", {
+  skip_on_cran()
   f <- selector_fixture()
   fault <- TRUE
   local_mocked_bindings(rfs_checkpoint = function(point) {
