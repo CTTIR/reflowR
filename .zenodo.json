@@ -1,7 +1,7 @@
 {
   "upload_type": "software",
   "title": "reflowR: Themed Extensions for 'workflowr' Research Workflows",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "<p>reflowR extends the workflowr reproducible research framework with themed colour schemes, structured analysis pipeline templates and supporting utilities. It wraps project creation and adds five colour schemes oriented towards clinical work, basic research, code and statistics, special cases and neutral presentation, together with three depth presets for the analysis pipeline. Custom stylesheets, SVG icons, plotting theme functions and a report template are included so that a project looks consistent from the first commit. Projects generated with reflowR remain fully compatible with the standard workflowr commands. It is aimed at researchers who want a house style for reproducible analysis websites.</p>",
   "creators": [
     {
