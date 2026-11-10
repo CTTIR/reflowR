@@ -1,5 +1,18 @@
 # Changelog
 
+## reflowR 0.3.0
+
+- Prepared for a first CRAN submission.
+- The examples of
+  [`reflow_artifact_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
+  and
+  [`reflow_artifact_plan_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_plan_run.md)
+  ran their pipelines on every check, which fingerprints the installed
+  packages involved and took up to a minute of CPU time; the running and
+  resuming parts are now in `\donttest{}`.
+- `CITATION.cff` and `.zenodo.json` carry the package version, and the
+  spelling word list covers the technical terms in the documentation.
+
 ## reflowR 0.2.1
 
 - Stage project generation before publication. Validate metadata and

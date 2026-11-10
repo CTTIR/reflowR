@@ -15,7 +15,7 @@ a reason. A stage name does not prescribe a statistical method.
 library(reflowR)
 ```
 
-    ## reflowR v0.2.1 — Themed Workflowr Extensions (CTTIR v5)
+    ## reflowR v0.3.0 — Themed Workflowr Extensions (CTTIR v5)
     ## Use reflow_init() to get started.
     ## See reflow_schemes() and reflow_presets() for options.
 

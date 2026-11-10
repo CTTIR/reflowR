@@ -15,7 +15,7 @@
     <!-- Standard logo aliases contain the named v5 light and dark hexes. -->
     <a class="navbar-brand me-2" href="../index.html"><img src="../logo.svg" alt="" class="themakr-navbar-logo" data-cttir-dark-src="../reference/figures/logo-dark.svg">reflowR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,13 @@
       <small>Source: <a href="https://github.com/CTTIR/reflowR/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="reflowr-030">reflowR 0.3.0<a class="anchor" aria-label="anchor" href="#reflowr-030"></a></h2>
+<ul><li>Prepared for a first CRAN submission.</li>
+<li>The examples of <code><a href="../reference/reflow_artifact_run.html">reflow_artifact_run()</a></code> and <code><a href="../reference/reflow_artifact_plan_run.html">reflow_artifact_plan_run()</a></code> ran their pipelines on every check, which fingerprints the installed packages involved and took up to a minute of CPU time; the running and resuming parts are now in <code>\donttest{}</code>.</li>
+<li>
+<code>CITATION.cff</code> and <code>.zenodo.json</code> carry the package version, and the spelling word list covers the technical terms in the documentation.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="reflowr-021">reflowR 0.2.1<a class="anchor" aria-label="anchor" href="#reflowr-021"></a></h2>
 <ul><li>Stage project generation before publication. Validate metadata and managed paths first, preserve existing file permissions, restore files on synchronous publication failure, and retain recovery backups if restoration cannot finish. Existing unrelated files and pre-staged Git work remain separate.</li>
