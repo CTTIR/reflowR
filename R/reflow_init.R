@@ -660,6 +660,15 @@ reflow_init_git_guard <- function(directory) {
   }
 }
 
+# git2r resolves relative paths against the working directory, so stage the
+# project files from inside the project and always restore the caller's
+# working directory.
+reflow_init_git_add <- function(repo, directory, files) {
+  owd <- setwd(directory)
+  on.exit(setwd(owd), add = TRUE)
+  git2r::add(repo, path = files)
+}
+
 reflow_init_commit <- function(directory, files, staging, user_name, user_email,
                                transaction) {
   reflow_init_git_guard(directory)
@@ -681,8 +690,7 @@ reflow_init_commit <- function(directory, files, staging, user_name, user_email,
     if (!is.null(user_name)) {
       git2r::config(repo, user.name = user_name, user.email = user_email)
     }
-    owd <- setwd(directory)
-    tryCatch(git2r::add(repo, path = files), finally = setwd(owd))
+    reflow_init_git_add(repo, directory, files)
     git2r::commit(repo, message = "Initial reflowR project")
     committed <- TRUE
   }, error = function(e) {
