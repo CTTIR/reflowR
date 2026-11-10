@@ -52,6 +52,9 @@ plan <- reflow_artifact_plan(
     inventory = c(report = "report.txt")
   )
 )
+# Running fingerprints the installed packages of every stage, which
+# reads many files and can take a minute.
+\donttest{
 root <- tempfile("graph-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
 dir.create(root)
 graph <- reflow_artifact_plan_run(plan, file.path(root, "first"))
@@ -60,4 +63,5 @@ readLines(file.path(graph$nodes$report$descriptor$bundle, "report.txt"))
 # Resume checks the accepted files again without calling any writer
 identical(reflow_artifact_plan_resume(plan, file.path(root, "first")), graph)
 unlink(root, recursive = TRUE)
+}
 }

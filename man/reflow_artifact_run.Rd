@@ -47,6 +47,9 @@ spec <- reflow_artifact_spec(
   outputs = list(con = list(path = "lines.txt", type = "file")),
   inventory = c(lines = "lines.txt")
 )
+# Running fingerprints the installed packages involved, which reads
+# many files and can take several seconds.
+\donttest{
 run <- tempfile("artifact-", tmpdir = normalizePath(tempdir(), winslash = "/", mustWork = TRUE))
 bundle <- reflow_artifact_run(spec, run)
 readLines(file.path(bundle$bundle, "lines.txt"))
@@ -55,4 +58,5 @@ bundle$inventory
 # Resume re-verifies the accepted bundle without calling the writer
 identical(reflow_artifact_resume(spec, run), bundle)
 unlink(run, recursive = TRUE)
+}
 }
