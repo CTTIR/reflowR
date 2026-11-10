@@ -11,6 +11,9 @@
 \details{Registry locking precedes inspection. Every completed generation remains an integrity obligation, including failed unpublished siblings; verification releases all historical locks before graph operations. A pending transaction blocks ordinary selection. Explicit reconciliation never silently retries an absent or malformed graph. Event staging residues require external forensic recovery. Current-pointer replacement prevents closing that generation failed. Same-directory rename provides visibility, not power-loss durability. This API does not supervise resource use or complete workflow orchestration.}
 \value{Compact reference with status REFERENCE_REQUIRES_VERIFICATION, or NULL for close_failed.}
 \examples{
+# Selecting runs the graph, which fingerprints the installed packages of
+# every stage; this reads many files and can take a minute.
+\donttest{
 # The selector is qualified for local Linux file systems only
 if (identical(Sys.info()[["sysname"]], "Linux")) {
   plan <- reflow_artifact_plan(reflow_artifact_stage(
@@ -28,5 +31,6 @@ if (identical(Sys.info()[["sysname"]], "Linux")) {
   # An unchanged plan selects the same generation again
   identical(reflow_artifact_select(plan, registry), pointer)
   unlink(root, recursive = TRUE)
+}
 }
 }

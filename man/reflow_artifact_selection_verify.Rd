@@ -6,6 +6,9 @@
 \description{Refuses incomplete or stale selections before using the existing graph resume verification. Verification acquires and releases locks but does not dispatch writers or mutate completed payloads or journals.}
 \value{The verified graph descriptor for immediate consumption.}
 \examples{
+# Selecting runs the graph, which fingerprints the installed packages of
+# every stage; this reads many files and can take a minute.
+\donttest{
 # The selector is qualified for local Linux file systems only
 if (identical(Sys.info()[["sysname"]], "Linux")) {
   plan <- reflow_artifact_plan(reflow_artifact_stage(
@@ -22,5 +25,6 @@ if (identical(Sys.info()[["sysname"]], "Linux")) {
   graph <- reflow_artifact_selection_verify(pointer, plan)
   readLines(file.path(graph$nodes$lines$descriptor$bundle, "lines.txt"))
   unlink(root, recursive = TRUE)
+}
 }
 }
