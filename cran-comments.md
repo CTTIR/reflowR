@@ -4,19 +4,23 @@ This is a new submission: reflowR 0.3.0.
 
 ## Test environments
 
-- Local: macOS 27 on Apple silicon, R 4.6.1 (aarch64-apple-darwin),
-  `R CMD check --as-cran --no-manual` on the built tarball with `NOT_CRAN`
-  unset. The PDF manual was built locally with TinyTeX (TeX Live 2026) via
-  `R CMD Rd2pdf` without errors; the check run itself used `--no-manual`.
+- Local: macOS (aarch64-apple-darwin), R 4.6.1, 14 November 2026:
+  full `R CMD check --as-cran` on the built source tarball, including
+  PDF manual compilation with TinyTeX (TeX Live 2026) and HTML manual
+  validation. This supersedes the earlier local check environment.
 - GitHub Actions (r-lib/actions v2, `--as-cran`): macOS-latest (R release),
   windows-latest (R release), ubuntu-latest (R devel, R release, R oldrel-1),
   plus a separate minimum-R 4.1 workflow.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 2 notes (latest local full check)
 
 - New submission.
+- The local example timing check reported `reflow_imaging_run` at 5.378
+  seconds elapsed (2.607 seconds user CPU and 0.357 seconds system CPU),
+  above the five-second reporting threshold. The example completed; the
+  remaining examples, tests and manuals passed. Timing depends on the host.
 
 With `NOT_CRAN` unset the tests take about two minutes on Linux; they
 generate and build complete 'workflowr' projects in temporary directories.
