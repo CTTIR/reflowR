@@ -3,6 +3,7 @@ message: If you use this software, please cite it as below.
 type: software
 title: "reflowR: Themed Extensions for 'workflowr' Research Workflows"
 version: 0.3.0
+doi: 10.5281/zenodo.21889956
 authors:
 - family-names: Heller
   given-names: R.
@@ -10,3 +11,7 @@ authors:
 repository-code: https://github.com/CTTIR/reflowR
 url: https://cttir.github.io/reflowR/
 license: MIT
+identifiers:
+- type: doi
+  value: 10.5281/zenodo.21889956
+  description: Zenodo DOI (reserved; resolves once the record is published)
