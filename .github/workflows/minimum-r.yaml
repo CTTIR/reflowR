@@ -27,9 +27,11 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2
         with:
           dependencies: '"hard"'
+          # S7 1.0.0 needs R >= 4.2, so ggplot2 >= 4.0 cannot be installed on R 4.1.
           extra-packages: |
             any::testthat
             any::rcmdcheck
+            ggplot2@3.5.2
           install-quarto: false
       - name: Check the declared minimum with required dependencies
         shell: Rscript {0}
