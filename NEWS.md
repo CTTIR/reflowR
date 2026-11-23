@@ -14,6 +14,9 @@
   without saying so (a bug); unique abbreviations such as `"clin"` still
   resolve. `reflow_icon_base64()` reports unusable input the same way instead
   of failing with "the condition has length > 1".
+* `reflow_preview()` writes a complete HTML document (doctype, language and
+  UTF-8 declaration) and escapes the family label, so "Learning & inference"
+  is valid markup.
 
 # reflowR 0.2.1
 

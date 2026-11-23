@@ -17,7 +17,9 @@
 #'
 #' @export
 reflow_preview <- function(scheme = "brand") {
-  s <- reflow_scheme(scheme)
+  s <- .cttir_schemes()[[scheme_family(scheme, "scheme")]]
+  # Labels such as "Learning & inference" are text, not markup.
+  label <- gsub("<", "&lt;", gsub("&", "&amp;", s$label, fixed = TRUE), fixed = TRUE)
   ink <- function(colour) {
     if (.cttir_contrast(colour, s$heading_light) >= .cttir_contrast(colour, s$page_light)) {
       s$heading_light
@@ -43,16 +45,16 @@ reflow_preview <- function(scheme = "brand") {
     swatch(i, s$palette[i])
   }, character(1)), collapse = "")
 
-  html <- glue::glue('
-<html>
-<head><title>reflowR Preview: {s$label}</title></head>
+  html <- glue::glue('<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>reflowR Preview: {label}</title></head>
 <body style="background:{s$page_light};color:{s$text_light};margin:0;
   font-family:\'{s$font_body}\',system-ui,sans-serif;">
 <div style="display:flex;align-items:center;gap:10px;padding:10px 20px;
   background:{s$page_light};box-shadow:inset 0 -3px 0 {s$accent};">
   <img src="{reflow_icon_base64(s$family)}" alt="" height="30">
   <span style="font-family:\'{s$font_brand}\',ui-monospace,monospace;
-    font-weight:{s$brand_weight};color:{s$heading_light};">{s$label}</span>
+    font-weight:{s$brand_weight};color:{s$heading_light};">{label}</span>
   <span style="color:{s$muted_light};">CTTIR v5 family <code>{s$family}</code></span>
 </div>
 <div style="max-width:780px;margin:24px auto;padding:0 20px;">
@@ -69,7 +71,7 @@ reflow_preview <- function(scheme = "brand") {
 </html>')
 
   tmpf <- tempfile(fileext = ".html")
-  writeLines(html, tmpf)
+  writeLines(enc2utf8(html), tmpf, useBytes = TRUE)
   viewer <- getOption("viewer", utils::browseURL)
   viewer(tmpf)
 

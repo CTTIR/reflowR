@@ -66,3 +66,18 @@ test_that("reflow_preview does not need htmltools", {
   )
   expect_match(capture_preview("brand")$html, reflow_scheme("brand")$label, fixed = TRUE)
 })
+
+test_that("reflow_preview writes a complete HTML document with escaped labels", {
+  p <- capture_preview("methods")
+  expect_match(p$html, "^<!DOCTYPE html>\n<html lang=\"en\">")
+  expect_match(p$html, "<meta charset=\"utf-8\">", fixed = TRUE)
+  expect_match(p$html, "Learning &amp; inference", fixed = TRUE)
+  expect_false(grepl("Learning & inference", p$html, fixed = TRUE))
+})
+
+test_that("reflow_preview names its own argument for unusable input", {
+  viewer <- list(viewer = function(url) invisible(url))
+  expect_error(withr::with_options(viewer, reflow_preview(NULL)), "`scheme` must be one of")
+  expect_error(withr::with_options(viewer, reflow_preview(c("brand", "clinical"))),
+               "`scheme` must be one of")
+})
