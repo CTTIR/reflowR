@@ -29,12 +29,13 @@ test_that("generated summary table runs with its default column selection", {
   env <- generated_table_helpers()
   d <- data.frame(age = c(31, 45, 52, 38, 60, 47), sex = rep(c("f", "m"), 3),
                   arm = rep(c("a", "b"), each = 3))
-  # The default include = dplyr::everything() was evaluated outside a selection.
+  # The default selection helper, everything(), was evaluated outside a selection.
   all_columns <- env$wf_tbl_summary(d)
   expect_s3_class(all_columns, "tbl_summary")
   expect_setequal(unique(all_columns$table_body$variable), c("age", "sex", "arm"))
   chosen <- env$wf_tbl_summary(d, include = c("age", "sex"))
   expect_setequal(unique(chosen$table_body$variable), c("age", "sex"))
-  helper <- env$wf_tbl_summary(d, include = dplyr::starts_with("a"))
-  expect_setequal(unique(helper$table_body$variable), c("age", "arm"))
+  # Bare column names are a selection too and must reach tbl_summary() unevaluated.
+  bare <- env$wf_tbl_summary(d, include = c(age, arm))
+  expect_setequal(unique(bare$table_body$variable), c("age", "arm"))
 })
