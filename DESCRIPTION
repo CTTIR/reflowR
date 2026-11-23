@@ -25,7 +25,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     workflowr (>= 1.7.0),
-    cli,
+    cli (>= 3.4.0),
     digest,
     fs,
     glue,
