@@ -636,7 +636,7 @@ wf_roc_plot <- function(..., title = "ROC Curve") {{
     inherits(rd, "data.frame") && all(c("specificity", "sensitivity") %in% names(rd))
   }}, logical(1))
   if (!all(usable)) {{
-    cli::cli_warn("Ignoring {{sum(!usable)}} input{{?s}} without specificity and sensitivity columns.")
+    cli::cli_warn("Ignoring {{sum(!usable)}} input{{?s}} lacking specificity or sensitivity.")
   }}
   roc_data <- roc_data[usable]
   curve_names <- names(roc_data)
