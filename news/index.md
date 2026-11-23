@@ -67,6 +67,12 @@
   template; its own list repeated the reference, articles and news
   links. The reference index lists the artifact functions in a group of
   their own.
+- The tests that put a link in place of a project folder, its parent or
+  the staging folder failed on Windows accounts that may not create
+  symbolic links, such as the Windows machines of the CRAN checks. They
+  now use a directory junction there, and the test that needs file links
+  is skipped with a reason when symbolic links cannot be created. Both
+  capabilities are probed once per test run.
 
 ## reflowR 0.2.1
 
