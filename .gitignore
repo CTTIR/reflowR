@@ -17,3 +17,6 @@ docs/
 *.orig
 *.Rcheck/
 _coverage/
+
+# Local maintenance records
+/planning/
