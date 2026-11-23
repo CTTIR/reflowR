@@ -44,6 +44,13 @@ Numeric points draw the supplied coordinates without aggregation,
 filtering, fitting, jitter or automatic offsets. Text nudges affect annotations
 only. Device-specific visible-label coverage, clipping and minimum exported
 font sizes require separate render and visual qualification. No files are written.
+
+Axis titles default to the internal role names \code{x} and \code{y}; supply
+\code{labels$x} and \code{labels$y} in the recipe. Effect-point plots colour the points
+with the 'ggplot2' default palette and hide the colour legend, which keeps
+earlier recipes drawing as before. The returned \code{plot} is an ordinary
+'ggplot2' object, so a legend and a colour-blind-safe palette can be added
+to it, as in the last example.
 }
 \examples{
 scores <- data.frame(
@@ -58,10 +65,32 @@ recipe <- reflow_figure_recipe(
   row_key = "id",
   levels = list(x = c("s1", "s2"), y = c("CD3", "CD8")),
   midpoint = 0,
-  labels = list(title = "Finalized scores", fill = "z-score")
+  labels = list(title = "Finalized scores", x = "Sample", y = "Marker",
+                fill = "z-score")
 )
 figure <- reflow_figure_plot(scores, recipe)
 figure$rows
 figure$payload_sha256
 figure$plot
+
+# Effect points: add the colour legend and an Okabe-Ito palette to the plot
+effects <- data.frame(
+  id = c("e1", "e2", "e3", "e4"),
+  estimate = c(-0.4, 0.2, 0.7, 0.5),
+  term = c("Age", "Sex", "Age", "Sex"),
+  model = c("crude", "crude", "adjusted", "adjusted")
+)
+effect_recipe <- reflow_figure_recipe(
+  "effect_points",
+  mapping = c(x = "estimate", y = "term", colour = "model"),
+  row_key = "id",
+  levels = list(y = c("Sex", "Age"), colour = c("crude", "adjusted")),
+  reference = 0,
+  labels = list(x = "Estimate", y = NULL, colour = "Model")
+)
+reflow_figure_plot(effects, effect_recipe)$plot +
+  ggplot2::scale_colour_manual(
+    values = c(crude = "#0072B2", adjusted = "#D55E00")
+  ) +
+  ggplot2::theme(legend.position = "bottom")
 }

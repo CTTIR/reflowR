@@ -27,6 +27,10 @@
   raw column name from its legend; `wf_boxjitter()` hides a legend that only
   repeats the x axis; `wf_cor_heatmap()` uses a longer colour bar so its tick
   labels do not touch. Projects created earlier keep their generated files.
+* The `reflow_figure_recipe()` and `reflow_figure_plot()` examples label their
+  axes, and the help of `reflow_figure_plot()` shows how to add the colour
+  legend and a colour-blind-safe palette to an effect-point plot, which hides
+  the legend by default.
 
 # reflowR 0.2.1
 
