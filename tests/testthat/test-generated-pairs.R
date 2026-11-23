@@ -113,3 +113,42 @@ test_that("pair IDs preserve literal identity and unpaired calls remain valid", 
   expect_identical(a$effect_size, b$effect_size)
   expect_identical(names(a), c("test_name", "test", "effect_size"))
 })
+
+test_that("generated two-group comparisons compute effect sizes from the samples", {
+  skip_if_not_installed("effectsize")
+  compare <- generated_comparison()
+  # Near-normal samples take the Welch branch, skewed ones the rank-sum branch.
+  normal <- data.frame(
+    value = c(-1.2, -0.7, -0.25, 0.15, 0.55, 1.1, 0.1, 0.7, 1.2, 1.6, 2.1, 2.9, NA),
+    group = c(rep(c("b", "a"), each = 6), "a")
+  )
+  skewed <- data.frame(
+    value = c(0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 20, 100, 1, 2, 4, 8, 16, 32, 200, 1000),
+    group = rep(c("x", "y"), each = 8)
+  )
+  for (d in list(normal, skewed)) {
+    labels <- sort(unique(d$group))
+    first <- d$value[d$group == labels[[1]] & !is.na(d$value)]
+    second <- d$value[d$group == labels[[2]] & !is.na(d$value)]
+    before <- serialize(d, NULL)
+    # The formula test inside a function used to fail here ("Unable to
+    # retrieve data from htest object") or to return an approximation.
+    expect_no_warning(actual <- compare(d, "value", "group"))
+    expect_identical(serialize(d, NULL), before)
+    if (identical(actual$test_name, "Welch t-test")) {
+      oracle <- stats::t.test(first, second)
+      pooled <- sqrt((stats::var(first) + stats::var(second)) / 2)
+      expect_equal(actual$effect_size$Cohens_d, (mean(first) - mean(second)) / pooled,
+                   tolerance = 1e-12)
+    } else {
+      expect_identical(actual$test_name, "Wilcoxon rank-sum")
+      oracle <- stats::wilcox.test(first, second)
+      wins <- outer(first, second, ">") - outer(first, second, "<")
+      expect_equal(actual$effect_size$r_rank_biserial, mean(wins), tolerance = 1e-12)
+    }
+    expect_equal(unname(actual$test$statistic), unname(oracle$statistic), tolerance = 1e-12)
+    expect_equal(actual$test$p.value, oracle$p.value, tolerance = 1e-12)
+  }
+  expect_identical(compare(normal, "value", "group")$test_name, "Welch t-test")
+  expect_identical(compare(skewed, "value", "group")$test_name, "Wilcoxon rank-sum")
+})

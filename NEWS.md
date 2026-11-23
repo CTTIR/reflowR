@@ -34,6 +34,16 @@
 * The generated `analysis/index.Rmd` no longer repeats the project name as a
   numbered level-one heading under the page title, and author, contact and
   scheme are separate paragraphs instead of one run-together line.
+* Generated analysis helpers (`code/formulary.R`, `code/table_helpers.R`):
+  unpaired two-group `wf_compare_groups()` computes Cohen's d (Welch branch,
+  unpooled standard deviation) or the rank-biserial correlation (rank-sum
+  branch) from the two samples; it used to stop with "Unable to retrieve data
+  from htest object" in the rank-sum branch and to return an approximation
+  with a warning in the Welch branch. `wf_inline(type = "ci")` prints estimate,
+  lower and upper bound; it used to repeat the estimate as the lower bound
+  and show the lower bound as the upper one. `wf_tbl_summary()` works with its
+  default column selection, which failed with "`everything()` must be used
+  within a selecting function".
 
 # reflowR 0.2.1
 

@@ -154,7 +154,18 @@ wf_compare_groups <- function(df, outcome, group, paired = FALSE,
       test <- if (paired) stats::wilcox.test(y ~ g, paired = TRUE) else stats::wilcox.test(y ~ g)
       test_name <- ifelse(paired, "Wilcoxon signed-rank", "Wilcoxon rank-sum")
     }}
-    es <- effectsize::effectsize(test)
+    # Effect sizes from the two samples themselves: effectsize::effectsize()
+    # cannot recover the data of a formula test that was run inside a function.
+    labels <- levels(droplevels(factor(g)))
+    first_values <- y[which(g == labels[[1L]])]
+    second_values <- y[which(g == labels[[2L]])]
+    first_values <- first_values[!is.na(first_values)]
+    second_values <- second_values[!is.na(second_values)]
+    es <- if (norm_ok) {{
+      effectsize::cohens_d(first_values, second_values, pooled_sd = FALSE)
+    }} else {{
+      effectsize::rank_biserial(first_values, second_values)
+    }}
   }} else {{
     if (norm_ok) {{
       test <- stats::aov(as.formula(paste(outcome, "~", group)), data = df)
@@ -462,13 +473,17 @@ wf_tbl_summary <- function(df, by = NULL, include = dplyr::everything(),
                            type = NULL, statistic = NULL,
                            label = NULL, missing = "ifany") {{
 
-  args <- list(data = df, include = include, missing = missing)
+  args <- list(data = df, missing = missing)
   if (!is.null(by)) args$by <- by
   if (!is.null(type)) args$type <- type
   if (!is.null(statistic)) args$statistic <- statistic
   if (!is.null(label)) args$label <- label
 
-  tbl <- do.call(gtsummary::tbl_summary, args) |>
+  # The selection is passed on unevaluated: a helper such as everything()
+  # only works inside the selecting function.
+  tbl <- rlang::inject(
+    gtsummary::tbl_summary(include = !!rlang::enquo(include), !!!args)
+  ) |>
     gtsummary::bold_labels()
 
   if (!is.null(by)) {{
@@ -524,10 +539,13 @@ wf_inline <- function(x, digits = 2, type = c("number", "p", "ci"),
       else if (x[1] < 0.01) sprintf("%.3f", x[1])
       else sprintf(paste0("%.", digits, "f"), x[1])
     }},
+    # c(estimate, lower, upper), or c(lower, upper) for the interval alone
     ci = {{
-      if (length(x) >= 2) {{
+      if (length(x) >= 3) {{
         sprintf(paste0("%.", digits, "f (95%% CI: %.", digits, "f, %.", digits, "f)"),
-                x[1], x[1], x[2])
+                x[1], x[2], x[3])
+      }} else if (length(x) == 2) {{
+        sprintf(paste0("95%% CI: %.", digits, "f, %.", digits, "f"), x[1], x[2])
       }} else sprintf(paste0("%.", digits, "f"), x[1])
     }}
   )
