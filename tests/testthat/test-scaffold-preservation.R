@@ -77,15 +77,15 @@ test_that("failed generation preserves the complete existing project and Git ind
   expect_false(dir.exists(file.path(root, "new-parent")))
 })
 
-test_that("managed links are refused before any existing data changes", {
+test_that("managed file links are refused before any existing data changes", {
+  skip_if_no_symlinks()
   root <- withr::local_tempdir()
   path <- .scaffold_project(root)
   outside <- file.path(root, "outside.txt")
   writeLines("external sentinel", outside)
   readme <- file.path(path, "README.md")
   unlink(readme)
-  linked <- file.symlink(outside, readme)
-  skip_if_not(linked, "File symlinks unavailable on this host")
+  expect_true(file.symlink(outside, readme))
   before <- .scaffold_snapshot(path)
   expect_error(.scaffold_retheme(path), "symbolic link")
   expect_identical(readLines(outside), "external sentinel")
@@ -101,14 +101,22 @@ test_that("managed links are refused before any existing data changes", {
   expect_error(.scaffold_retheme(path), "symbolic link")
   expect_false(file.exists(file.path(root, "missing")))
   fs::link_delete(readme)
+})
+
+test_that("a linked root or managed folder is refused before data changes", {
+  skip_if_no_folder_links()
+  root <- withr::local_tempdir()
+  path <- .scaffold_project(root)
   alias <- file.path(root, "project-alias")
-  expect_true(file.symlink(path, alias))
+  expect_true(link_folder(path, alias))
+  withr::defer(fs::link_delete(alias))
+  before <- .scaffold_snapshot(path)
   expect_error(.scaffold_retheme(alias), "symbolic link")
-  fs::link_delete(alias)
+  expect_identical(.scaffold_snapshot(path), before)
   analysis <- file.path(path, "analysis")
   moved <- file.path(root, "outside-analysis")
   expect_true(file.rename(analysis, moved))
-  expect_true(file.symlink(moved, analysis))
+  expect_true(link_folder(moved, analysis))
   withr::defer(fs::link_delete(analysis))
   outside_before <- .scaffold_snapshot(moved)
   expect_error(.scaffold_retheme(path), "symbolic link")
@@ -210,6 +218,7 @@ test_that("a managed file changed during staging is preserved without publishing
 })
 
 test_that("a root replaced by a link during generation is not published into", {
+  skip_if_no_folder_links()
   root <- withr::local_tempdir()
   path <- .scaffold_project(root)
   moved <- file.path(root, "moved-project")
@@ -219,7 +228,7 @@ test_that("a root replaced by a link during generation is not published into", {
   local_mocked_bindings(generate_project_readme = function(...) {
     original_generator(...)
     expect_true(file.rename(path, moved))
-    expect_true(file.symlink(moved, path))
+    expect_true(link_folder(moved, path))
   })
   expect_error(.scaffold_retheme(path), "symbolic link")
   expect_true(unname(fs::is_link(path)))
@@ -227,6 +236,7 @@ test_that("a root replaced by a link during generation is not published into", {
 })
 
 test_that("a replaced existing parent prevents new-root publication", {
+  skip_if_no_folder_links()
   root <- withr::local_tempdir()
   parent <- file.path(root, "parent")
   dir.create(parent)
@@ -238,7 +248,7 @@ test_that("a replaced existing parent prevents new-root publication", {
   local_mocked_bindings(generate_project_readme = function(...) {
     original_generator(...)
     expect_true(file.rename(parent, moved))
-    expect_true(file.symlink(moved, parent))
+    expect_true(link_folder(moved, parent))
   })
   expect_error(suppressMessages(reflow_init(target, git = FALSE,
     change_wd = FALSE, open = FALSE)), "parent or staging directory changed")
@@ -249,6 +259,7 @@ test_that("a replaced existing parent prevents new-root publication", {
 })
 
 test_that("replacement staging aliases are neither traversed nor cleaned", {
+  skip_if_no_folder_links()
   root <- withr::local_tempdir()
   path <- .scaffold_project(root)
   before <- .scaffold_snapshot(path)
@@ -265,7 +276,7 @@ test_that("replacement staging aliases are neither traversed nor cleaned", {
     stage <- dirname(project_dir)
     stage_alias <<- stage
     expect_true(file.rename(stage, moved))
-    expect_true(file.symlink(foreign, stage))
+    expect_true(link_folder(foreign, stage))
   })
   error <- NULL
   expect_warning(error <- tryCatch(.scaffold_retheme(path), error = identity),
