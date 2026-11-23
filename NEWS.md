@@ -44,6 +44,9 @@
   and show the lower bound as the upper one. `wf_tbl_summary()` works with its
   default column selection, which failed with "`everything()` must be used
   within a selecting function".
+* The documentation site inherits the navigation bar of the 'themakR'
+  template; its own list repeated the reference, articles and news links. The
+  reference index lists the artifact functions in a group of their own.
 
 # reflowR 0.2.1
 

@@ -9,18 +9,6 @@ template:
 
 development:
   mode: auto
-navbar:
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "Getting started"
-      href: articles/getting-started.html
-    - text: "Vignettes"
-      href: articles/index.html
-    - text: "Functions"
-      href: reference/index.html
-    - text: "News"
-      href: news/index.html
 
 articles:
   - title: "Vignettes"
@@ -45,6 +33,10 @@ reference:
       - reflow_imaging_ref
       - reflow_imaging_plan
       - reflow_imaging_run
+
+  - title: "Artifact pipelines"
+    desc: "Run file-producing steps as fingerprinted, resumable pipelines with verified receipts."
+    contents:
       - reflow_artifact_spec
       - reflow_artifact_run
       - reflow_artifact_run_bounded
