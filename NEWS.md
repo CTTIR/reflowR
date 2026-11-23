@@ -41,7 +41,8 @@
   the data of the test could not be retrieved, and to return an approximation
   with a warning in the Welch branch. `wf_inline(type = "ci")` prints estimate,
   lower and upper bound; it used to repeat the estimate as the lower bound
-  and show the lower bound as the upper one. `wf_tbl_summary()` works with its
+  and show the lower bound as the upper one. Two values are read as the
+  bounds and printed as the interval alone. `wf_tbl_summary()` works with its
   default column selection, which failed with "`everything()` must be used
   within a selecting function".
 * The documentation site inherits the navigation bar of the 'themakR'
