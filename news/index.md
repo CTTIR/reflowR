@@ -12,6 +12,61 @@
   resuming parts are now in `\donttest{}`.
 - `CITATION.cff` and `.zenodo.json` carry the package version, and the
   spelling word list covers the technical terms in the documentation.
+- [`reflow_scheme()`](https://cttir.github.io/reflowR/reference/reflow_scheme.md),
+  [`reflow_preset()`](https://cttir.github.io/reflowR/reference/reflow_preset.md)
+  and
+  [`reflow_preview()`](https://cttir.github.io/reflowR/reference/reflow_preview.md)
+  refuse a missing, `NULL`, `NA`, non-character or vector name with an
+  error that names the argument and lists the accepted values.
+  `reflow_scheme(NULL)` and `reflow_preset(NULL)` used to return the
+  first family and the minimal preset without saying so (a bug); unique
+  abbreviations such as `"clin"` still resolve.
+  [`reflow_icon_base64()`](https://cttir.github.io/reflowR/reference/reflow_icon_base64.md)
+  reports unusable input the same way instead of failing with “the
+  condition has length \> 1”.
+- [`reflow_preview()`](https://cttir.github.io/reflowR/reference/reflow_preview.md)
+  writes a complete HTML document (document type, language and UTF-8
+  declaration) and escapes the family label, so “Learning & inference”
+  is valid markup.
+- Generated plotting helpers (`code/utils.R`, `code/plot_helpers.R`):
+  `wf_distributions(type = "both")` draws the histogram on the density
+  scale, so the density curve is no longer a flat line under count bars;
+  `wf_roc_plot()` maps each curve to a colour legend (argument names
+  label the curves) and warns about inputs it cannot draw instead of
+  dropping them silently; `wf_forest_plot()` no longer calls
+  `geom_errorbarh()`, which ‘ggplot2’ 4.0.0 deprecated;
+  `wf_volcano_plot()` drops the text glyph and the raw column name from
+  its legend; `wf_boxjitter()` hides a legend that only repeats the x
+  axis; `wf_cor_heatmap()` uses a longer colour bar so its tick labels
+  do not touch. Projects created earlier keep their generated files.
+- The
+  [`reflow_figure_recipe()`](https://cttir.github.io/reflowR/reference/reflow_figure_recipe.md)
+  and
+  [`reflow_figure_plot()`](https://cttir.github.io/reflowR/reference/reflow_figure_plot.md)
+  examples label their axes, and the help of
+  [`reflow_figure_plot()`](https://cttir.github.io/reflowR/reference/reflow_figure_plot.md)
+  shows how to add the colour legend and a colour-blind-safe palette to
+  an effect-point plot, which hides the legend by default.
+- The generated `analysis/index.Rmd` no longer repeats the project name
+  as a numbered level-one heading under the page title, and author,
+  contact and scheme are separate paragraphs instead of one run-together
+  line.
+- Generated analysis helpers (`code/formulary.R`,
+  `code/table_helpers.R`): unpaired two-group `wf_compare_groups()`
+  computes Cohen’s d (Welch branch, standard deviations not pooled) or
+  the rank-biserial correlation (rank-sum branch) from the two samples;
+  it used to stop in the rank-sum branch because the data of the test
+  could not be retrieved, and to return an approximation with a warning
+  in the Welch branch. `wf_inline(type = "ci")` prints estimate, lower
+  and upper bound; it used to repeat the estimate as the lower bound and
+  show the lower bound as the upper one. Two values are read as the
+  bounds and printed as the interval alone. `wf_tbl_summary()` works
+  with its default column selection, which failed with “`everything()`
+  must be used within a selecting function”.
+- The documentation site inherits the navigation bar of the ‘themakR’
+  template; its own list repeated the reference, articles and news
+  links. The reference index lists the artifact functions in a group of
+  their own.
 
 ## reflowR 0.2.1
 

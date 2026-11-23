@@ -173,7 +173,8 @@ recipe <- reflow_figure_recipe(
   row_key = "id",
   levels = list(x = c("s1", "s2"), y = c("CD3", "CD8")),
   midpoint = 0,
-  labels = list(title = "Finalized scores", fill = "z-score")
+  labels = list(title = "Finalized scores", x = "Sample", y = "Marker",
+                fill = "z-score")
 )
 recipe$type
 #> [1] "tile_heatmap"

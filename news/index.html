@@ -23,16 +23,11 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/getting-started.html">Getting started</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/index.html">Vignettes</a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
-<li class="active nav-item"><a class="nav-link" href="../news/index.html">News</a></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+      <ul class="navbar-nav me-auto"></ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/CTTIR/reflowR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
@@ -57,6 +52,15 @@
 <li>The examples of <code><a href="../reference/reflow_artifact_run.html">reflow_artifact_run()</a></code> and <code><a href="../reference/reflow_artifact_plan_run.html">reflow_artifact_plan_run()</a></code> ran their pipelines on every check, which fingerprints the installed packages involved and took up to a minute of CPU time; the running and resuming parts are now in <code>\donttest{}</code>.</li>
 <li>
 <code>CITATION.cff</code> and <code>.zenodo.json</code> carry the package version, and the spelling word list covers the technical terms in the documentation.</li>
+<li>
+<code><a href="../reference/reflow_scheme.html">reflow_scheme()</a></code>, <code><a href="../reference/reflow_preset.html">reflow_preset()</a></code> and <code><a href="../reference/reflow_preview.html">reflow_preview()</a></code> refuse a missing, <code>NULL</code>, <code>NA</code>, non-character or vector name with an error that names the argument and lists the accepted values. <code>reflow_scheme(NULL)</code> and <code>reflow_preset(NULL)</code> used to return the first family and the minimal preset without saying so (a bug); unique abbreviations such as <code>"clin"</code> still resolve. <code><a href="../reference/reflow_icon_base64.html">reflow_icon_base64()</a></code> reports unusable input the same way instead of failing with “the condition has length &gt; 1”.</li>
+<li>
+<code><a href="../reference/reflow_preview.html">reflow_preview()</a></code> writes a complete HTML document (document type, language and UTF-8 declaration) and escapes the family label, so “Learning &amp; inference” is valid markup.</li>
+<li>Generated plotting helpers (<code>code/utils.R</code>, <code>code/plot_helpers.R</code>): <code>wf_distributions(type = "both")</code> draws the histogram on the density scale, so the density curve is no longer a flat line under count bars; <code>wf_roc_plot()</code> maps each curve to a colour legend (argument names label the curves) and warns about inputs it cannot draw instead of dropping them silently; <code>wf_forest_plot()</code> no longer calls <code>geom_errorbarh()</code>, which ‘ggplot2’ 4.0.0 deprecated; <code>wf_volcano_plot()</code> drops the text glyph and the raw column name from its legend; <code>wf_boxjitter()</code> hides a legend that only repeats the x axis; <code>wf_cor_heatmap()</code> uses a longer colour bar so its tick labels do not touch. Projects created earlier keep their generated files.</li>
+<li>The <code><a href="../reference/reflow_figure_recipe.html">reflow_figure_recipe()</a></code> and <code><a href="../reference/reflow_figure_plot.html">reflow_figure_plot()</a></code> examples label their axes, and the help of <code><a href="../reference/reflow_figure_plot.html">reflow_figure_plot()</a></code> shows how to add the colour legend and a colour-blind-safe palette to an effect-point plot, which hides the legend by default.</li>
+<li>The generated <code>analysis/index.Rmd</code> no longer repeats the project name as a numbered level-one heading under the page title, and author, contact and scheme are separate paragraphs instead of one run-together line.</li>
+<li>Generated analysis helpers (<code>code/formulary.R</code>, <code>code/table_helpers.R</code>): unpaired two-group <code>wf_compare_groups()</code> computes Cohen’s d (Welch branch, standard deviations not pooled) or the rank-biserial correlation (rank-sum branch) from the two samples; it used to stop in the rank-sum branch because the data of the test could not be retrieved, and to return an approximation with a warning in the Welch branch. <code>wf_inline(type = "ci")</code> prints estimate, lower and upper bound; it used to repeat the estimate as the lower bound and show the lower bound as the upper one. Two values are read as the bounds and printed as the interval alone. <code>wf_tbl_summary()</code> works with its default column selection, which failed with “<code>everything()</code> must be used within a selecting function”.</li>
+<li>The documentation site inherits the navigation bar of the ‘themakR’ template; its own list repeated the reference, articles and news links. The reference index lists the artifact functions in a group of their own.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="reflowr-021">reflowR 0.2.1<a class="anchor" aria-label="anchor" href="#reflowr-021"></a></h2>

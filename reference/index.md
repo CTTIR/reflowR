@@ -23,6 +23,12 @@ Declare package calls and execute or resume verified object workflows.
 - [`reflow_imaging_run()`](https://cttir.github.io/reflowR/reference/reflow_imaging_run.md)
   [`reflow_imaging_resume()`](https://cttir.github.io/reflowR/reference/reflow_imaging_run.md)
   : Execute or resume a recorded imaging plan
+
+## Artifact pipelines
+
+Run file-producing steps as fingerprinted, resumable pipelines with
+verified receipts.
+
 - [`reflow_artifact_spec()`](https://cttir.github.io/reflowR/reference/reflow_artifact_spec.md)
   : Declare one immutable file-producing bundle
 - [`reflow_artifact_run()`](https://cttir.github.io/reflowR/reference/reflow_artifact_run.md)
@@ -92,7 +98,7 @@ Explore available color schemes and pipeline depth presets.
 
 ## Utilities
 
-Internal helpers for icon embedding.
+Embed a family icon as a data URI.
 
 - [`reflow_icon_base64()`](https://cttir.github.io/reflowR/reference/reflow_icon_base64.md)
   : Get Base64-Encoded SVG Icon for a Scheme

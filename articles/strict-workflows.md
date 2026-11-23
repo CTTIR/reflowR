@@ -13,14 +13,6 @@ a reason. A stage name does not prescribe a statistical method.
 ``` r
 
 library(reflowR)
-```
-
-    ## reflowR v0.3.0 — Themed Workflowr Extensions (CTTIR v5)
-    ## Use reflow_init() to get started.
-    ## See reflow_schemes() and reflow_presets() for options.
-
-``` r
-
 profile <- reflow_profile("clinical", "secondary", "observational", seed = 104L)
 profile[c("domain", "data_origin", "design", "scheme", "primary_color", "badge")]
 ```
