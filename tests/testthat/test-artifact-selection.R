@@ -139,10 +139,14 @@ test_that("same registry real contenders cannot both dispatch", {
   skip_on_cran()
   gate <- file.path(f$root, "release")
   reached <- file.path(f$root, "reached")
+  # Both waits only keep a broken run from hanging. Between taking the lock
+  # and PENDING the owner fingerprints the installed package closure, which
+  # takes seconds even with cached hashes and longer on a slow or busy runner.
+  patience <- 120
   local_mocked_bindings(rfs_checkpoint = function(point) {
     if (identical(point, "PENDING")) {
       file.create(reached)
-      deadline <- Sys.time() + 10
+      deadline <- Sys.time() + patience
       while (!file.exists(gate) && Sys.time() < deadline) Sys.sleep(0.02)
       if (!file.exists(gate)) stop("Owned contender timed out")
     }
@@ -155,8 +159,16 @@ test_that("same registry real contenders cannot both dispatch", {
       parallel::mccollect(job, wait = TRUE)
     }
   }, add = TRUE)
-  deadline <- Sys.time() + 5
-  while (!file.exists(reached) && Sys.time() < deadline) Sys.sleep(0.02)
+  # Wait until the owner holds the lock at PENDING, or has ended without it.
+  ended <- NULL
+  deadline <- Sys.time() + patience
+  while (!file.exists(reached) && is.null(ended) && Sys.time() < deadline) {
+    ended <- parallel::mccollect(job, wait = FALSE, timeout = 0.05)
+  }
+  collected <- !is.null(ended)
+  if (collected) {
+    cli::cli_abort("The owner ended before PENDING: {format(ended[[1L]])}")
+  }
   expect_true(file.exists(reached))
   before <- selector_snapshot(f$registry)
   expect_error(reflow_artifact_select(f$make(), f$registry), "Registry locked")
