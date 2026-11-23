@@ -83,6 +83,6 @@ reference:
       - reflow_preview
 
   - title: "Utilities"
-    desc: "Internal helpers for icon embedding."
+    desc: "Embed a family icon as a data URI."
     contents:
       - reflow_icon_base64
