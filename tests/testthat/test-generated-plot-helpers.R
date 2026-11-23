@@ -40,6 +40,11 @@ test_that("generated forest plot draws horizontal intervals without deprecated g
     p <- env$wf_forest_plot(c(1.4, 0.8), c(1.1, 0.5), c(1.9, 1.2), c("a", "b"))
   )
   expect_no_warning(built <- ggplot2::ggplot_build(p))
+  # The deprecation is silent when the call comes from generated code, so the
+  # geom and the generated source are checked as well.
+  expect_identical(class(p$layers[[2]]$geom)[[1]], "GeomErrorbar")
+  expect_no_match(generate_plot_helpers_content(reflow_scheme("clinical")),
+                  "geom_errorbarh", fixed = TRUE)
   bars <- built$data[[2]]
   expect_equal(bars$xmin, c(1.1, 0.5))
   expect_equal(bars$xmax, c(1.9, 1.2))
