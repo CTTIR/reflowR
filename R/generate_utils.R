@@ -49,17 +49,22 @@ wf_cor_heatmap <- function(df, vars = NULL, method = "pearson", ...) {{
                        size = 3, color = wf_colors$dark) +
     ggplot2::labs(x = NULL, y = NULL) +
     theme_wf() +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+    # A longer bar keeps the five tick labels of the bottom legend apart.
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+                   legend.key.width = grid::unit(1.5, "cm"))
 }}
 
 #\' Box + jitter plot
 wf_boxjitter <- function(df, x, y, fill = x, ...) {{
-  ggplot2::ggplot(df, ggplot2::aes(.data[[x]], .data[[y]], fill = .data[[fill]])) +
+  p <- ggplot2::ggplot(df, ggplot2::aes(.data[[x]], .data[[y]], fill = .data[[fill]])) +
     ggplot2::geom_boxplot(alpha = 0.7, outlier.shape = NA) +
     ggplot2::geom_jitter(width = 0.2, alpha = 0.4, size = 1.5) +
     scale_fill_wf() +
     theme_wf() +
     ggplot2::labs(...)
+  # A legend that only repeats the x axis adds nothing.
+  if (identical(fill, x)) p <- p + ggplot2::guides(fill = "none")
+  p
 }}
 
 #\' Histograms for all numeric vars

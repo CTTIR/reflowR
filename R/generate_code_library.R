@@ -580,8 +580,9 @@ wf_forest_plot <- function(estimates, ci_lower, ci_upper, labels,
   p <- ggplot2::ggplot(df, ggplot2::aes(x = estimate, y = label)) +
     ggplot2::geom_vline(xintercept = null_value, linetype = "dashed",
                         color = wf_colors$grey) +
-    ggplot2::geom_errorbarh(ggplot2::aes(xmin = ci_lower, xmax = ci_upper),
-                            height = 0.2, color = wf_colors$primary, linewidth = 0.8) +
+    ggplot2::geom_errorbar(ggplot2::aes(xmin = ci_lower, xmax = ci_upper),
+                           orientation = "y", width = 0.2,
+                           color = wf_colors$primary, linewidth = 0.8) +
     ggplot2::geom_point(size = 3, color = wf_colors$primary, fill = wf_colors$primary_light,
                         shape = 21) +
     theme_wf() +
@@ -609,24 +610,39 @@ wf_km_plot <- function(survfit_obj, risk_table = TRUE, title = NULL,
 }}
 
 # ── ROC Curve ──
+# Each argument is a data frame with columns specificity and sensitivity.
+# Named arguments label the curves, e.g. wf_roc_plot(Logistic = roc1, Forest = roc2).
 wf_roc_plot <- function(..., title = "ROC Curve") {{
   roc_data <- list(...)
-  colors <- wf_palette[seq_along(roc_data)]
+  usable <- vapply(roc_data, function(rd) {{
+    inherits(rd, "data.frame") && all(c("specificity", "sensitivity") %in% names(rd))
+  }}, logical(1))
+  if (!all(usable)) {{
+    cli::cli_warn("Ignoring {{sum(!usable)}} input{{?s}} without specificity and sensitivity columns.")
+  }}
+  roc_data <- roc_data[usable]
+  curve_names <- names(roc_data)
+  if (is.null(curve_names)) curve_names <- rep("", length(roc_data))
+  unnamed <- !nzchar(curve_names)
+  curve_names[unnamed] <- paste("Curve", seq_along(roc_data))[unnamed]
+  curve_names <- make.unique(curve_names)
+  colors <- stats::setNames(rep_len(wf_palette, length(roc_data)), curve_names)
 
   p <- ggplot2::ggplot() +
     ggplot2::geom_abline(slope = 1, intercept = 0, linetype = "dashed",
                          color = wf_colors$grey)
 
   for (i in seq_along(roc_data)) {{
-    rd <- roc_data[[i]]
-    if (inherits(rd, "data.frame") && all(c("specificity", "sensitivity") %in% names(rd))) {{
-      p <- p + ggplot2::geom_line(data = rd,
-        ggplot2::aes(x = 1 - specificity, y = sensitivity),
-        color = colors[i], linewidth = 1)
-    }}
+    rd <- as.data.frame(roc_data[[i]])
+    rd$curve <- factor(curve_names[i], levels = curve_names)
+    p <- p + ggplot2::geom_line(data = rd,
+      ggplot2::aes(x = 1 - specificity, y = sensitivity, color = curve),
+      linewidth = 1)
   }}
 
-  p + theme_wf() +
+  p + ggplot2::scale_color_manual(values = colors, name = NULL, drop = FALSE,
+                                  guide = if (length(roc_data) > 1) "legend" else "none") +
+    theme_wf() +
     ggplot2::labs(x = "1 - Specificity", y = "Sensitivity", title = title) +
     ggplot2::coord_equal()
 }}
@@ -663,8 +679,14 @@ wf_distributions <- function(df, vars = NULL, fill_var = NULL,
 
   plots <- lapply(vars, function(v) {{
     p <- ggplot2::ggplot(df, ggplot2::aes(.data[[v]]))
-    if (type %in% c("histogram", "both")) {{
+    if (type == "histogram") {{
       p <- p + ggplot2::geom_histogram(fill = wf_colors$primary, color = wf_colors$white,
+                                       alpha = 0.7, bins = 30)
+    }}
+    if (type == "both") {{
+      # Bars on the density scale, so that the curve drawn over them is visible.
+      p <- p + ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
+                                       fill = wf_colors$primary, color = wf_colors$white,
                                        alpha = 0.7, bins = 30)
     }}
     if (type %in% c("density", "both")) {{
@@ -710,7 +732,7 @@ wf_volcano_plot <- function(results, fc_col = "log2fc", p_col = "p_value",
                                         color = significance)) +
     ggplot2::geom_point(alpha = 0.6, size = 1.5) +
     ggplot2::scale_color_manual(values = c("Significant" = wf_colors$accent,
-                                           "NS" = wf_colors$grey)) +
+                                           "NS" = wf_colors$grey), name = NULL) +
     ggplot2::geom_hline(yintercept = -log10(p_threshold), linetype = "dashed",
                         color = wf_colors$grey) +
     ggplot2::geom_vline(xintercept = c(-fc_threshold, fc_threshold),
@@ -723,7 +745,7 @@ wf_volcano_plot <- function(results, fc_col = "log2fc", p_col = "p_value",
     p <- p + ggrepel::geom_text_repel(
       data = sig_df,
       ggplot2::aes(label = .data[[label_col]]),
-      size = 3, max.overlaps = 20
+      size = 3, max.overlaps = 20, show.legend = FALSE
     )
   }}
 

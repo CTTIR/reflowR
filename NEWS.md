@@ -17,6 +17,16 @@
 * `reflow_preview()` writes a complete HTML document (doctype, language and
   UTF-8 declaration) and escapes the family label, so "Learning & inference"
   is valid markup.
+* Generated plotting helpers (`code/utils.R`, `code/plot_helpers.R`):
+  `wf_distributions(type = "both")` draws the histogram on the density scale,
+  so the density curve is no longer a flat line under count bars;
+  `wf_roc_plot()` maps each curve to a colour legend (argument names label the
+  curves) and warns about inputs it cannot draw instead of dropping them
+  silently; `wf_forest_plot()` no longer calls `geom_errorbarh()`, which
+  'ggplot2' 4.0.0 deprecated; `wf_volcano_plot()` drops the text glyph and the
+  raw column name from its legend; `wf_boxjitter()` hides a legend that only
+  repeats the x axis; `wf_cor_heatmap()` uses a longer colour bar so its tick
+  labels do not touch. Projects created earlier keep their generated files.
 
 # reflowR 0.2.1
 
