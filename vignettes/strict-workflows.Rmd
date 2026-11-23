@@ -38,7 +38,7 @@ validation, cleaning, descriptive analysis, primary analysis, diagnostics,
 sensitivity analysis, exploration, report and reproducibility. An inapplicable
 stage requires a reason. A stage name does not prescribe a statistical method.
 
-```{r profile}
+```{r profile, message = FALSE}
 library(reflowR)
 profile <- reflow_profile("clinical", "secondary", "observational", seed = 104L)
 profile[c("domain", "data_origin", "design", "scheme", "primary_color", "badge")]
