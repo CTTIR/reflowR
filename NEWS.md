@@ -14,7 +14,7 @@
   without saying so (a bug); unique abbreviations such as `"clin"` still
   resolve. `reflow_icon_base64()` reports unusable input the same way instead
   of failing with "the condition has length > 1".
-* `reflow_preview()` writes a complete HTML document (doctype, language and
+* `reflow_preview()` writes a complete HTML document (document type, language and
   UTF-8 declaration) and escapes the family label, so "Learning & inference"
   is valid markup.
 * Generated plotting helpers (`code/utils.R`, `code/plot_helpers.R`):
@@ -31,6 +31,9 @@
   axes, and the help of `reflow_figure_plot()` shows how to add the colour
   legend and a colour-blind-safe palette to an effect-point plot, which hides
   the legend by default.
+* The generated `analysis/index.Rmd` no longer repeats the project name as a
+  numbered level-one heading under the page title, and author, contact and
+  scheme are separate paragraphs instead of one run-together line.
 
 # reflowR 0.2.1
 

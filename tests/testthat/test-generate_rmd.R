@@ -179,3 +179,23 @@ test_that("the about page links to the repository named in DESCRIPTION", {
   rmd <- paste(readLines(path, warn = FALSE), collapse = "\n")
   expect_match(rmd, paste0("[reflowR](", repo, ")"), fixed = TRUE)
 })
+
+test_that("generate_index_rmd keeps one title and separate identity paragraphs", {
+  root <- withr::local_tempdir()
+  dir.create(file.path(root, "analysis"))
+  ret <- generate_index_rmd(root, name = "MyProj", author = "A. Author",
+                            email = "a@example.org",
+                            scheme = reflow_scheme("brand"),
+                            preset = reflow_preset("minimal"))
+  lines <- readLines(ret, warn = FALSE)
+  # The YAML title is the page title; a repeated level-one heading showed the
+  # project name twice and numbered it as section 1.
+  expect_identical(sum(grepl("^(title:|# ).*MyProj", lines)), 1L)
+  expect_false(any(grepl("^# ", lines)))
+  author <- which(startsWith(lines, "**Author:**"))
+  contact <- which(startsWith(lines, "**Contact:**"))
+  scheme <- which(startsWith(lines, "**Scheme:**"))
+  expect_length(c(author, contact, scheme), 3L)
+  # Blank lines make three paragraphs; adjacent lines render as one.
+  expect_identical(lines[c(author + 1L, contact - 1L, contact + 1L, scheme - 1L)], rep("", 4))
+})

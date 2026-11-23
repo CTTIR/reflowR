@@ -91,8 +91,10 @@ generate_index_rmd <- function(project_dir, name, author, email, scheme, preset)
   }, character(1))
   table_yaml <- paste(table_rows, collapse = "\n")
 
+  # A paragraph of its own: glue() trims the surrounding newlines of a nested
+  # template, which used to join author, contact and scheme into one line.
   email_line <- if (!is.null(email)) {
-    glue::glue("\n**Contact:** [{email}](mailto:{email})\n")
+    paste0("\n**Contact:** [", email, "](mailto:", email, ")\n")
   } else ""
 
   rmd <- glue::glue('---
@@ -104,8 +106,6 @@ output:
 editor_options:
   chunk_output_type: console
 ---
-
-# {name}
 
 **Author:** {author}
 {email_line}
