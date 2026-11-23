@@ -73,7 +73,9 @@ figure$rows
 figure$payload_sha256
 figure$plot
 
-# Effect points: add the colour legend and an Okabe-Ito palette to the plot
+# Effect points: add the colour legend and an Okabe-Ito palette to the plot.
+# Blue (#0072B2) and vermillion (#D55E00) are tabulated in Wong (2011),
+# Nature Methods 8(6), Figure 2, p. 441, doi:10.1038/nmeth.1618
 effects <- data.frame(
   id = c("e1", "e2", "e3", "e4"),
   estimate = c(-0.4, 0.2, 0.7, 0.5),
