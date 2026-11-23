@@ -17,8 +17,13 @@
 #'
 #' @export
 reflow_icon_base64 <- function(scheme_name) {
-  if (is.character(scheme_name) && length(scheme_name) == 1L &&
-      scheme_name %in% names(.scheme_aliases)) {
+  if (!is.character(scheme_name) || length(scheme_name) != 1L ||
+      is.na(scheme_name)) {
+    cli::cli_abort(
+      "{.arg scheme_name} must be one scheme name, not {.obj_type_friendly {scheme_name}}."
+    )
+  }
+  if (scheme_name %in% names(.scheme_aliases)) {
     scheme_name <- scheme_family(scheme_name)
   }
   icon_path <- system.file("icons", paste0("icon_", scheme_name, ".svg"),

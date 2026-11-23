@@ -15,7 +15,7 @@
 #' @seealso [reflow_presets()] for listing all available presets.
 #' @export
 reflow_preset <- function(name) {
-  name <- match.arg(name, names(.presets))
+  name <- .reflow_choice(name, names(.presets), "name")
   .presets[[name]]
 }
 

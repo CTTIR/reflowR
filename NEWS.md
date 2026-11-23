@@ -7,6 +7,13 @@
   resuming parts are now in `\donttest{}`.
 * `CITATION.cff` and `.zenodo.json` carry the package version, and the
   spelling word list covers the technical terms in the documentation.
+* `reflow_scheme()`, `reflow_preset()` and `reflow_preview()` refuse a
+  missing, `NULL`, `NA`, non-character or vector name with an error that names
+  the argument and lists the accepted values. `reflow_scheme(NULL)` and
+  `reflow_preset(NULL)` used to return the first family and the minimal preset
+  without saying so (a bug); unique abbreviations such as `"clin"` still
+  resolve. `reflow_icon_base64()` reports unusable input the same way instead
+  of failing with "the condition has length > 1".
 
 # reflowR 0.2.1
 

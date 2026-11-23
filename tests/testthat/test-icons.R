@@ -50,3 +50,10 @@ test_that("reflow_icon_base64 decodes back to the original SVG text", {
 test_that("reflow_icon_base64 errors for a scheme with no icon file", {
   expect_error(reflow_icon_base64("nonexistent_scheme"), "Icon not found")
 })
+
+test_that("reflow_icon_base64 names the argument for unusable input", {
+  expect_error(reflow_icon_base64(c("clinical", "brand")), "`scheme_name` must be one scheme name")
+  expect_error(reflow_icon_base64(NULL), "`scheme_name` must be one scheme name")
+  expect_error(reflow_icon_base64(NA_character_), "`scheme_name` must be one scheme name")
+  expect_error(reflow_icon_base64(1), "`scheme_name` must be one scheme name")
+})

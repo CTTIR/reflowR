@@ -47,3 +47,13 @@ test_that("preset definitions are stable (snapshot of all presets)", {
   names(all_presets) <- c("minimal", "standard", "extended")
   expect_snapshot_value(all_presets, style = "json2")
 })
+
+test_that("reflow_preset refuses a missing, vector or non-character name", {
+  # match.arg() returned the minimal preset for NULL without saying so.
+  expect_error(reflow_preset(NULL), "`name` must be one of")
+  expect_error(reflow_preset(NA), "`name` must be one of")
+  expect_error(reflow_preset(3), "`name` must be one of")
+  expect_error(reflow_preset(c("minimal", "standard")), "`name` must be one of")
+  expect_error(reflow_preset("mega"), "\"mega\"")
+  expect_identical(reflow_preset("ext"), reflow_preset("extended"))
+})

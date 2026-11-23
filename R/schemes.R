@@ -111,8 +111,31 @@ reflow_scheme <- function(name) {
   (l[1] + 0.05) / (l[2] + 0.05)
 }
 
-scheme_family <- function(name) {
-  name <- match.arg(name, c(names(.cttir_family_labels), names(.scheme_aliases)))
+# One of the choices, by exact or unique partial match as in match.arg(), with
+# an error that names the argument and lists what is accepted.
+.reflow_choice <- function(x, choices, arg, call = rlang::caller_env()) {
+  hit <- if (is.character(x) && length(x) == 1L && !is.na(x) && nzchar(x)) {
+    pmatch(x, choices)
+  } else {
+    NA_integer_
+  }
+  if (is.na(hit)) {
+    given <- if (is.character(x) && length(x) == 1L && !is.na(x)) {
+      cli::format_inline("{.val {x}}")
+    } else {
+      cli::format_inline("{.obj_type_friendly {x}}")
+    }
+    cli::cli_abort(
+      "{.arg {arg}} must be one of {.val {choices}}, not {given}.",
+      call = call
+    )
+  }
+  choices[[hit]]
+}
+
+scheme_family <- function(name, arg = "name", call = rlang::caller_env()) {
+  name <- .reflow_choice(name, c(names(.cttir_family_labels), names(.scheme_aliases)),
+                         arg, call)
   if (!name %in% names(.scheme_aliases)) return(name)
   family <- .scheme_aliases[[name]]
   if (!name %in% .cttir_cache$aliases_noted) {

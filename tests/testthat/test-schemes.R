@@ -171,3 +171,17 @@ test_that("scheme definitions are stable (snapshot of all schemes)", {
   names(all_schemes) <- v5_families
   expect_snapshot_value(all_schemes, style = "json2")
 })
+
+test_that("reflow_scheme refuses a missing, vector or non-character name", {
+  # match.arg() returned the first family for NULL without saying so.
+  expect_error(reflow_scheme(NULL), "`name` must be one of")
+  expect_error(reflow_scheme(NA), "`name` must be one of")
+  expect_error(reflow_scheme(NA_character_), "`name` must be one of")
+  expect_error(reflow_scheme(1), "`name` must be one of")
+  expect_error(reflow_scheme(c("clinical", "brand")), "`name` must be one of")
+  expect_error(reflow_scheme(""), "`name` must be one of")
+  expect_error(reflow_scheme("neon"), "\"neon\"")
+  # An ambiguous abbreviation is refused, a unique one still resolves.
+  expect_error(reflow_scheme("s"), "`name` must be one of")
+  expect_identical(reflow_scheme("clin"), reflow_scheme("clinical"))
+})
