@@ -2,6 +2,9 @@
 
 > Themed extensions for workflowr research workflows
 
+Zenodo DOI reserved for the release: `10.5281/zenodo.21889956` (not yet
+published).
+
 ## Overview
 
 **reflowR** extends the
